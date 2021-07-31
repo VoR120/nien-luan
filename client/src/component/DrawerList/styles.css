@@ -1,0 +1,5 @@
+a.active .MuiListItem-root {
+    background-color: var(--bg);
+    color: var(--blackText);
+    padding-left: 46px;
+}
