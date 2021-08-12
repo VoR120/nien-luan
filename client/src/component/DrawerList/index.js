@@ -26,29 +26,33 @@ const useStyleBase = makeStyles(theme => ({
         color: theme.palette.grey[200],
     }
 }), { name: 'MuiListItem' })
+
 const DrawerList = () => {
+    
     const classes = useStyles();
     useStyleBase();
     return (
         <>
             <div className={classes.toolbar} />
             <List>
-                <NavLink to="/admin">
+                <NavLink to={"/admin"}>
                     <ListItem button>
                         <HomeIcon className={classes.icon} />
                         <ListItemText primary="Dashboard" />
                     </ListItem>
                 </NavLink>
-                <NavLink to="/product">
+                <NavLink to={"/product"}>
                     <ListItem button>
                         <ListIcon className={classes.icon} />
                         <ListItemText primary="Product" />
                     </ListItem>
                 </NavLink>
-                <ListItem button>
-                    <CategoryIcon className={classes.icon} />
-                    <ListItemText primary="Category" />
-                </ListItem>
+                <NavLink to={"/category"}>
+                    <ListItem button>
+                        <CategoryIcon className={classes.icon} />
+                        <ListItemText primary="Category" />
+                    </ListItem>
+                </NavLink>
                 <ListItem button>
                     <ShoppingCartIcon className={classes.icon} />
                     <ListItemText primary="Order" />

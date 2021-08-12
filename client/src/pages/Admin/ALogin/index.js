@@ -1,3 +1,4 @@
+import { FormHelperText } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -13,8 +14,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React, { useContext, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { adminLogin } from '../../../action/authAction';
+import { getAllCategory } from '../../../action/categoryAction';
 import Layout from '../../../component/Layout/Layout';
 import { AuthContext } from '../../../contextAPI/AuthContext';
+import { CategoryContext } from '../../../contextAPI/CategoryContext';
+import { ProductContext } from '../../../contextAPI/ProductContext';
+import { getAllProduct } from '../../../action/productAction';
+import { getInitialData } from '../../../action/initialData';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,13 +40,21 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  errorMsg: {
+    fontSize: '0.9rem'
+  }
 }));
+
 
 export const ALogin = () => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const { user, dispatch } = useContext(AuthContext);
+  const { categoryDispatch } = useContext(CategoryContext);
+  const { productDispatch } = useContext(ProductContext);
   const history = useHistory();
 
   const handleLogin = async (e) => {
@@ -48,8 +62,17 @@ export const ALogin = () => {
     const res = await adminLogin(dispatch, { email, password });
     if (res == undefined) return;
     if (!res.user) return;
-    history.push('/admin')
+    history.push('/admin');
   }
+
+  useEffect(() => {
+    if (user.isAuthenticated == true)
+      return <Redirect to="/admin" />
+    if (user.error != null) {
+      setError(true);
+      setErrorMsg(user.error.msg);
+    }
+  }, [user])
 
   return (
     <Container component="main" maxWidth="xs">
@@ -71,8 +94,9 @@ export const ALogin = () => {
             label="Email"
             name="email"
             autoComplete="email"
-            autoFocus
             onChange={e => setEmail(e.target.value)}
+          // helperText={errorMsg}
+          // error={error}
           />
           <TextField
             variant="outlined"
@@ -85,11 +109,20 @@ export const ALogin = () => {
             id="password"
             autoComplete="current-password"
             onChange={e => setPassword(e.target.value)}
+          // helperText={errorMsg}
+          // error={error}
           />
           <FormControlLabel
             control={<Checkbox value="remenber" color="primary" />}
             label="Nhớ mật khẩu"
           />
+          <FormHelperText
+            className={classes.errorMsg}
+            error={error}
+            variant="outlined"
+          >
+            {errorMsg}
+          </FormHelperText>
           <Button
             type="submit"
             fullWidth

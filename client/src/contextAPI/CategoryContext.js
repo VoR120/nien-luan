@@ -1,18 +1,12 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useReducer, useState } from 'react';
+import CategoryReducer, { initialState } from '../reducer/CategoryReducer';
 
 export const CategoryContext = createContext();
 
 const CategoryContextProvider = (props) => {
-    const [category, setCategory] = useState([
-        {
-            name: 'Giày',
-        },
-        {
-            name: 'Quần áo'
-        }
-    ])
+    const [category, categoryDispatch] = useReducer(CategoryReducer, initialState)
     return (
-        <CategoryContext.Provider value={{ category }}>
+        <CategoryContext.Provider value={{ category, categoryDispatch }}>
             {props.children}
         </CategoryContext.Provider>
     );

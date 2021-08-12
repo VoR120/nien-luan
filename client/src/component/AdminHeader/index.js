@@ -14,6 +14,8 @@ import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { adminLogout } from '../../action/authAction';
 import { AuthContext } from '../../contextAPI/AuthContext';
+import { CategoryContext } from '../../contextAPI/CategoryContext';
+import { ProductContext } from '../../contextAPI/ProductContext';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -41,6 +43,11 @@ const useStyles = makeStyles(theme => ({
     menuList: {
         color: theme.palette.primary.light,
     },
+    icon: {
+        color: theme.palette.primary.light,
+        marginLeft: theme.spacing(2.5),
+        paddingRight: theme.spacing(1.2),
+    }
 }))
 
 const useStyleBase = makeStyles(theme => ({
@@ -53,6 +60,8 @@ const useStyleBase = makeStyles(theme => ({
 
 const AdminHeader = (props) => {
     const { dispatch } = useContext(AuthContext);
+    const { categoryDispatch } = useContext(CategoryContext);
+    const { productDispatch } = useContext(ProductContext);
     const history = useHistory();
 
     const [open, setOpen] = React.useState(false);
@@ -72,7 +81,7 @@ const AdminHeader = (props) => {
     const handleLogout = (e) => {
         e.preventDefault();
         setOpen(false);
-        adminLogout(dispatch);
+        adminLogout(dispatch, categoryDispatch, productDispatch);
         history.push('/admin/login');
     }
 

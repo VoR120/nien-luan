@@ -8,9 +8,9 @@ export const routes = [
         isPrivate: true,
     },
     {
-        path: '/admin',
-        exact: true,
-        component: lazy(() => import('./Admin/ADashboard')),
+        path: '/category',
+        exact: false,
+        component: lazy(() => import('./Admin/ACategory')),
         isPrivate: true,
     },
     {
@@ -22,5 +22,11 @@ export const routes = [
         path: '/admin/register',
         exact: false,
         component: lazy(() => import('./Admin/ARegister'))
+    },
+    {
+        path: '/admin',
+        exact: true,
+        component: lazy(() => import('./Admin/ADashboard')),
+        isPrivate: true,
     },
 ]

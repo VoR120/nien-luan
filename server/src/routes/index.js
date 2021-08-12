@@ -8,6 +8,7 @@ const route = (app) => {
     app.use('/api', require('./categoryRouter'));
     app.use('/api', require('./productRouter'));
     app.use('/api', require('./cartRouter'));
+    app.use('/api', require('./initialDataRouter'));
 }
 
 module.exports = route;

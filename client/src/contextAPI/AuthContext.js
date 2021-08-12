@@ -1,6 +1,5 @@
-import React, { createContext, useEffect, useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
-import AuthReducer, { initialState } from '../reducer/authReducer';
+import React, { createContext, useReducer } from 'react';
+import AuthReducer, { initialState } from '../reducer/AuthReducer';
 
 export const AuthContext = createContext();
 

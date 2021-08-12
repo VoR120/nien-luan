@@ -19,6 +19,7 @@ const createChildCategory = (categories, parentId = null) => {
             _id: c._id,
             name: c.name,
             slug: c.slug,
+            categoryImage: c.categoryImage,
             parentId: c.parentId,
             children: createChildCategory(categories, c._id),
         })
@@ -29,8 +30,8 @@ const createChildCategory = (categories, parentId = null) => {
 exports.getCategory = async (req, res) => {
     try {
         const cate_db = await Category.find();
-        const cateList_db = createChildCategory(cate_db);
-        res.status(200).json({ cateList_db });
+        const category_db = createChildCategory(cate_db);
+        res.status(200).json({ category_db });
     } catch (error) {
         return res.status(400).json({ msg: error.message });
     }
@@ -41,7 +42,6 @@ exports.addCategory = async (req, res) => {
         const { name, parentId } = req.body;
         const slug = slugify(name);
         let categoryImage;
-
         if (req.file) {
             const categoryUrl = process.env.APP_URL + 'public/' + req.file.filename;
             categoryImage = categoryUrl;
@@ -61,6 +61,7 @@ exports.addCategory = async (req, res) => {
             if (data) {
                 return res.status(201).json({
                     msg: "Thành công!",
+                    category: data
                 })
             }
         })

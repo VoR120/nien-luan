@@ -6,14 +6,14 @@ import React from 'react';
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#212121',
-            dark: '#000',
+            main: '#333333',
+            dark: '#000000',
             light: '#424242' //text
         },
         secondary: {
             main: '#fff',
             light: '#fff',
-            dark: '#F5F5F5' //background
+            dark: '#f5f5f5' //background
         },
     },
     typography: {

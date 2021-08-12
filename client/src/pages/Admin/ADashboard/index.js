@@ -13,7 +13,6 @@ const ADashboard = () => {
         <Layout sidebar>
             <div>
                 <Typography className={classes.title} variant="h3" color="initial">Dashboard</Typography>
-                <Divider />
             </div>
         </Layout>
     );

@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
-import AuthReducer from '../reducer/authReducer';
 import AuthContextProvider from './AuthContext';
 import CategoryContextProvider from './CategoryContext';
+import ProductContextProvider from './ProductContext';
 import ThemeContextProvider from './ThemeContext';
 
 const AppContextProvider = (props) => {
@@ -9,7 +9,9 @@ const AppContextProvider = (props) => {
         <ThemeContextProvider>
             <AuthContextProvider>
                 <CategoryContextProvider>
-                    {props.children}
+                    <ProductContextProvider>
+                        {props.children}
+                    </ProductContextProvider>
                 </CategoryContextProvider>
             </AuthContextProvider>
         </ThemeContextProvider>

@@ -1,5 +1,26 @@
 a.active .MuiListItem-root {
     background-color: var(--bg);
-    color: var(--blackText);
+    color: var(--text);
     padding-left: 46px;
+}
+
+a.active .MuiListItem-root::after, a.active .MuiListItem-root::before { 
+    content: "";
+    position: absolute;
+    height: 48px;
+    width: 48px;
+    right: 9.5px;
+    border-radius: 48px;
+    background: #424242;
+    z-index: -1;
+}
+
+a.active .MuiListItem-root::after {
+    top: -48px;
+    box-shadow: 24px 24px 0 var(--bg);
+}
+
+a.active .MuiListItem-root::before {
+    bottom: -48px;
+    box-shadow: 24px -24px 0 var(--bg);
 }

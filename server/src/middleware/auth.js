@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 exports.requireLogin = (req, res, next) => {
     try {
         const token = req.header('Authorization');
-        if (!token) return res.status(400).json({ msg: "Yêu cầu xác thực!"});
+        if (!token) return res.status(400).json({ msg: "Không có token!"});
 
         jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
             if(err) return res.status(400).json({ msg: "Yêu cầu xác thực!"});
