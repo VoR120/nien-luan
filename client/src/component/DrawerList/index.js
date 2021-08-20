@@ -1,4 +1,5 @@
 import List from '@material-ui/core/List';
+import Paper from '@material-ui/core/Paper';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import CategoryIcon from '@material-ui/icons/Category';
@@ -12,11 +13,18 @@ import { NavLink } from 'react-router-dom';
 import './styles.css';
 
 const useStyles = makeStyles(theme => ({
-    toolbar: theme.mixins.toolbar,
+    toolbarMixins: theme.mixins.toolbar,
+    toolbar: {
+        backgroundColor: theme.palette.primary.light,
+    },
     icon: {
         marginRight: theme.spacing(1),
         color: theme.palette.grey[500]
     },
+    list: {
+        overflow: 'hidden',
+        paddingTop: '20px'
+    }
 }))
 const useStyleBase = makeStyles(theme => ({
     root: {
@@ -28,13 +36,15 @@ const useStyleBase = makeStyles(theme => ({
 }), { name: 'MuiListItem' })
 
 const DrawerList = () => {
-    
+
     const classes = useStyles();
     useStyleBase();
     return (
         <>
-            <div className={classes.toolbar} />
-            <List>
+            <Paper className={classes.paper} elevation={0} square>
+                <div className={`${classes.toolbarMixins} + ${classes.toolbar}`}>ABC</div>
+            </Paper>
+            <List className={classes.list}>
                 <NavLink to={"/admin"}>
                     <ListItem button>
                         <HomeIcon className={classes.icon} />

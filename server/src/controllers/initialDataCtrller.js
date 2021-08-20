@@ -3,6 +3,7 @@ const Product = require("../models/productModel");
 
 // Hàm tạo Category có thêm key chidren chứa các obj có parentId == _id
 const createChildCategory = (categories, parentId = null) => {
+
     const categoryList = [];
     let category;
 

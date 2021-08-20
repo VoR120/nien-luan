@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { addCategory } from '../../action/categoryAction';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
+import { ProductContext } from '../../contextAPI/ProductContext';
 const useStyles = makeStyles(theme => ({
     button: {
         marginBottom: theme.spacing(2),
@@ -32,41 +33,41 @@ const createCategoryList = (categories, options = []) => {
     return options;
 };
 
-const AddCategoryForm = () => {
+const AddProductForm = () => {
     const classes = useStyles();
-    const { category, categoryDispatch } = useContext(CategoryContext);
+    const { product, productDispatch } = useContext(ProductContext);
     const [open, setOpen] = useState(false);
     const [name, setName] = useState('');
-    const [categoryParent, setCategoryParent] = useState('');
-    const [categoryImage, setCategoryImage] = useState(null)
+    const [category, setCategory] = useState('');
+    const [productImage, setProductImage] = useState(null)
     const handleClose = () => {
         setOpen(false);
     }
     const handleSubmit = () => {
         let formData = new FormData();
         formData.append("name", name);
-        formData.append("parentId", categoryParent);
-        formData.append("categoryImage", categoryImage);
-        addCategory(categoryDispatch, formData);
+        formData.append("parentId", category);
+        formData.append("categoryImage", productImage);
+        addCategory(productDispatch, formData);
         handleClose();
     }
     return (
         <>
             <Button onClick={() => setOpen(true)} color="primary" className={classes.button} variant="contained">Thêm </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add Category</DialogTitle>
+                <DialogTitle id="form-dialog-title">Add Product</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <FormControl margin="dense" fullWidth>
                         <InputLabel htmlFor="my-input">Name</InputLabel>
                         <Input value={name} onChange={e => { setName(e.target.value) }} />
                     </FormControl>
                     <FormControl fullWidth margin="dense">
-                        <InputLabel>Category Parent</InputLabel>
+                        <InputLabel>Category</InputLabel>
                         <Select
                             labelId="demo-simple-select-outlined-label"
                             id="demo-simple-select-outlined"
-                            value={categoryParent}
-                            onChange={(e) => setCategoryParent(e.target.value)}
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
                             label="Category Parent"
                         >
                             <MenuItem value="">
@@ -83,7 +84,7 @@ const AddCategoryForm = () => {
                     </FormControl>
                     <FormControl margin="dense" fullWidth>
                         <InputLabel htmlFor="my-input">Image</InputLabel>
-                        <Input type="file" onChange={e => setCategoryImage(e.target.files[0])} />
+                        <Input type="file" onChange={e => setProductImage(e.target.files[0])} />
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
@@ -99,4 +100,4 @@ const AddCategoryForm = () => {
     );
 };
 
-export default AddCategoryForm;
+export default AddProductForm;

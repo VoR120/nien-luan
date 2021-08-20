@@ -5,26 +5,26 @@ export const getInitialData = async (categoryDispatch, productDispatch) => {
         const res = await axios.get('/api/initialData/get');
 
         if (res.status === 200) {
-            categoryDispatch({
+            await categoryDispatch({
                 type: 'GET_ALL_CATEGORY_SUCCESS',
                 payload: {
                     categories: res.data.category
                 }
             })
-            productDispatch({
+            await productDispatch({
                 type: 'GET_ALL_PRODUCT_SUCCESS',
                 payload: {
                     products: res.data.product
                 }
             })
         } else {
-            categoryDispatch({
+            await categoryDispatch({
                 type: 'GET_ALL_CATEGORY_FAILED',
                 payload: {
                     error: res.data.error
                 }
             })
-            productDispatch({
+            await productDispatch({
                 type: 'GET_ALL_PRODUCT_FAILED',
                 payload: {
                     error: res.data.error

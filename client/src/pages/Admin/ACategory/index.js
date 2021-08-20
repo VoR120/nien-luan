@@ -1,14 +1,15 @@
-import { Box, makeStyles, Typography } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
 import { DataGrid } from '@material-ui/data-grid';
-import React, { useContext, useState } from 'react';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import React, { useContext, useEffect, useState } from 'react';
 import AddCategoryForm from '../../../component/AddCategoryForm';
+import AddProductForm from '../../../component/AddProductForm';
+import DeleteCategoryForm from '../../../component/DeleteCategoryForm';
+import EditCategoryForm from '../../../component/EditCategoryForm';
 import Layout from '../../../component/Layout/Layout';
 import { CategoryContext } from '../../../contextAPI/CategoryContext';
-import TestImage from '../../../public/img/V-logos.jpeg';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -43,39 +44,80 @@ const ACategory = () => {
     const classes = useStyles();
     const { category, categoryDispatch } = useContext(CategoryContext);
     const [imageOpen, setImageOpen] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
     const [image, setImage] = useState('');
-    const handleClose = () => {
-        setImageOpen(false);
-    }
-
+    
     const handleOpen = (img) => {
         setImage('http://' + img);
         setImageOpen(true);
     }
+    
+    let index = 0;
+    let parent;
+    const getParentName = (parentId, category) => {
+        for (let cate of category) {
+            const { name, children, _id } = cate;
+            if (_id == parentId) {
+                parent = name;
+                return parent;
+            } else {
+                if (children.length > 0) {
+                    parent = getParentName(parentId, children)
+                }
+            }
+        }
+        return parent;
+    }
+
+    const getAllCate = (categoryPass, rowsList = []) => {
+        for (let cate of categoryPass) {
+            const { name, children, parentId, _id } = cate;
+            if (parentId == undefined) {
+                rowsList.push({
+                    _id,
+                    id: index + 1,
+                    name,
+                    parent: '',
+                    image: cate.categoryImage,
+                    children: children
+                })
+            } else {
+                rowsList.push({
+                    _id,
+                    id: index + 1,
+                    name,
+                    parentId: parentId,
+                    parent: getParentName(parentId, category.categories),
+                    // parent: parentId,
+                    image: cate.categoryImage,
+                    children: children
+                })
+            }
+            ++index;
+            if (children.length > 0) {
+                getAllCate(children, rowsList)
+            }
+        }
+        return rowsList;
+    }
+
 
     const renderCategory = () => {
+
+        let rows = getAllCate(category.categories)
 
         const columns = [
             { field: 'id', headerName: 'STT', width: 120 },
             { field: 'name', headerName: 'Name', width: 150 },
             {
-                field: 'button',
-                headerName: 'Button',
-                width: 150,
-                renderCell: (params) => {
-                    return (
-                        <>
-                            <EditIcon className={classes.icon} />
-                            <DeleteIcon className={classes.icon} />
-                        </>
-                    )
-                }
+                field: 'parent',
+                headerName: 'Category',
+                width: 150
             },
             {
                 field: 'image',
                 headerName: 'Image',
                 width: 150,
-
                 renderCell: (params) => {
                     return (
                         <>
@@ -86,11 +128,16 @@ const ACategory = () => {
                                             onClick={() => handleOpen(params.row.image)}
                                             className={classes.image}
                                             src={'http://' + params.row.image}
-                                            alt="text-image"
+                                            alt="text"
                                         />
-                                        <Dialog maxWidth="lg" className={classes.dialog} open={imageOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
-                                            <div style={{ height: '648px' }}>
-                                                <img className={classes.zoomImage} src={image} alt="text-image" />
+                                        <Dialog
+                                            maxWidth="lg"
+                                            className={classes.dialog}
+                                            open={imageOpen}
+                                            onClose={() => setImageOpen(false)} aria-labelledby="form-dialog-title"
+                                        >
+                                            <div style={{ height: '646px' }}>
+                                                <img className={classes.zoomImage} src={image} alt="text" />
                                             </div>
                                         </Dialog>
                                     </div>)
@@ -99,17 +146,22 @@ const ACategory = () => {
                         </>
                     )
                 }
-            }
+            },
+            {
+                field: 'button',
+                headerName: 'Button',
+                width: 150,
+                renderCell: (params) => {
+                    const { name, parentId, _id } = params.row
+                    return (
+                        <>
+                            <DeleteCategoryForm form={{ name, _id }} />
+                            <EditCategoryForm form={{ parentId, name, _id }} />
+                        </>
+                    )
+                }
+            },
         ];
-
-        const rows = category.categories.map((cate, index) => {
-            const { name } = cate;
-            return {
-                id: index + 1,
-                name,
-                image: cate.categoryImage
-            };
-        });
         return (
             <>
                 <DataGrid
@@ -125,11 +177,12 @@ const ACategory = () => {
         )
     }
 
+
     return (
         <Layout sidebar>
             <Typography className={classes.title} variant="h3" color="primary">Category</Typography>
-            <AddCategoryForm />
-            <div style={{ height: 440, width: '100%' }}>
+            <AddProductForm />
+            <div style={{ height: 430, width: '100%' }}>
                 {renderCategory()}
             </div>
         </Layout>

@@ -8,7 +8,6 @@ export const getAllCategory = async (dispatch) => {
             url: '/api/category/get',
         }
         const res = await axios(config);
-        console.log(res);
 
         if (res.status === 200) {
             dispatch({
@@ -30,13 +29,14 @@ export const getAllCategory = async (dispatch) => {
 
 export const addCategory = async (dispatch, payload) => {
     try {
-        dispatch({ type: 'ADD_NEW_CATEGORY_REQUEST'});
+        dispatch({ type: 'ADD_NEW_CATEGORY_REQUEST' });
         let config = {
             method: 'POST',
             url: '/api/category/add',
             data: payload,
         }
         const res = await axios(config);
+        console.log("Res: ", res);
         if (res.status === 201) {
             dispatch({
                 type: 'ADD_NEW_CATEGORY_SUCCESS',
@@ -50,5 +50,44 @@ export const addCategory = async (dispatch, payload) => {
                 error: error.response.data
             }
         })
+    }
+}
+
+export const updateCategory = async (dispatch, payload) => {
+    let data = {};
+    payload.forEach((value, key) => {
+        data[key] = value
+    })
+    try {
+        let config = {
+            method: 'PUT',
+            url: '/api/category/' + data._id,
+            data: data,
+        }
+        const res = await axios(config);
+        dispatch({
+            type: 'UPDATE_CATEGORY_SUCCESS',
+            payload: { category: res.data.category }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const deleteCategory = async (dispatch, payload) => {
+    try {
+        let config = {
+            method: 'DELETE',
+            url: '/api/category/' + payload,
+        }
+        const res = await axios(config);
+        console.log(res);
+        if (res.status === 200)
+            dispatch({
+                type: 'DELETE_CATEGORY_SUCCESS',
+                payload: { _id: res.data.data._id }
+            })
+    } catch (error) {
+        console.log(error);
     }
 }

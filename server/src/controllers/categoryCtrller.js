@@ -41,13 +41,14 @@ exports.addCategory = async (req, res) => {
     try {
         const { name, parentId } = req.body;
         const slug = slugify(name);
+        let cate;
         let categoryImage;
         if (req.file) {
             const categoryUrl = process.env.APP_URL + 'public/' + req.file.filename;
             categoryImage = categoryUrl;
         }
+        cate = new Category(parentId === '' ? { name, slug, categoryImage } : { name, slug, categoryImage, parentId });
 
-        const cate = new Category({ name, slug, categoryImage, parentId });
         await cate.save((error, data) => {
             if (error) {
                 if (req.file) {
@@ -70,21 +71,25 @@ exports.addCategory = async (req, res) => {
     }
 }
 
-exports.deleteCategory = async (req, res) => {
+exports.updateCategory = async (req, res) => {
+    const { name, parentId } = req.body;
     try {
-        await Category.findByIdAndDelete({ _id: req.params.id });
-        res.status(200).json({ msg: "Thành công!" })
+        const slug = slugify(name);
+        const cate_db = await Category.findByIdAndUpdate(
+            { _id: req.params.id },
+            parentId === "" ? { name, slug } : { name, slug, parentId },
+            { new: true }
+        )
+        res.status(200).json({ msg: "Thành công!", category: cate_db });
     } catch (error) {
         return res.status(400).json({ msg: error.message });
     }
 }
 
-exports.updateCategory = async (req, res) => {
+exports.deleteCategory = async (req, res) => {
     try {
-        const { name } = req.body;
-        const slug = slugify(name);
-        await Category.findByIdAndUpdate({ _id: req.params.id }, { name, slug })
-        res.status(200).json({ msg: "Thành công!" })
+        const cate_db = await Category.findByIdAndDelete({ _id: req.params.id });
+        res.status(200).json({ msg: "Thành công!", data: cate_db })
     } catch (error) {
         return res.status(400).json({ msg: error.message });
     }
