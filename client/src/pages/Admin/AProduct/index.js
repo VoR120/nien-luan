@@ -3,6 +3,7 @@ import Dialog from '@material-ui/core/Dialog';
 import { DataGrid } from '@material-ui/data-grid';
 import React, { useContext, useState } from 'react';
 import AddCategoryForm from '../../../component/AddCategoryForm';
+import AddProductForm from '../../../component/AddProductForm';
 import DeleteCategoryForm from '../../../component/DeleteCategoryForm';
 import EditCategoryForm from '../../../component/EditCategoryForm';
 import Layout from '../../../component/Layout/Layout';
@@ -42,10 +43,11 @@ const AProduct = () => {
     const { product, productDispatch } = useContext(ProductContext);
     const [imageOpen, setImageOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
-    const [image, setImage] = useState('');
-    
+    const [image, setImage] = useState([]);
+
     const handleOpen = (img) => {
-        setImage('http://' + img);
+        // setImage('http://' + img);
+        setImage(img)
         setImageOpen(true);
     }
 
@@ -67,12 +69,12 @@ const AProduct = () => {
                     return (
                         <>
                             {
-                                params.row.image ? (
+                                params.row.image.length > 0 ? (
                                     <div style={{ height: '100%' }}>
                                         <img
                                             onClick={() => handleOpen(params.row.image)}
                                             className={classes.image}
-                                            src={'http://' + params.row.image}
+                                            src={'http://' + params.row.image[0].img}
                                             alt="text"
                                         />
                                         <Dialog
@@ -81,8 +83,10 @@ const AProduct = () => {
                                             open={imageOpen}
                                             onClose={() => setImageOpen(false)} aria-labelledby="form-dialog-title"
                                         >
-                                            <div style={{ height: '646px' }}>
-                                                <img className={classes.zoomImage} src={image} alt="text" />
+                                            <div style={{ height: '646px', display: 'flex'}}>
+                                                {image.map(i => {
+                                                    return <img className={classes.zoomImage} src={'http://' + i.img} alt="text" />
+                                                })}
                                             </div>
                                         </Dialog>
                                     </div>)
@@ -109,11 +113,13 @@ const AProduct = () => {
         ];
 
         const rows = product.products.map((product, index) => {
-            const { name, category } = product;
+            const { name, category, productImages } = product;
+            // console.log(productImages);
             return {
                 id: index + 1,
                 name,
-                category: category.name
+                category: category.name,
+                image: productImages,
             };
         });
         return (
@@ -135,7 +141,7 @@ const AProduct = () => {
     return (
         <Layout sidebar>
             <Typography className={classes.title} variant="h3" color="primary">Product</Typography>
-            <AddCategoryForm />
+            <AddProductForm />
             <div style={{ height: 430, width: '100%' }}>
                 {renderCategory()}
             </div>

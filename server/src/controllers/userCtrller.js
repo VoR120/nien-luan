@@ -13,7 +13,8 @@ exports.userRegister = async (req, res) => {
         await user.save((error, data) => {
             if (error) return res.json(error);
             if (data) {
-                const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1d' })
+                // , { expiresIn: '1d' }
+                const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET)
                 res.cookie('token', token);
                 return res.status(201).json({
                     msg: "Đăng ký tài khoản thành công!",
@@ -36,7 +37,7 @@ exports.userLogin = async (req, res) => {
         const isMatch = await bcrypt.compareSync(password, user_db.password);
         if (!isMatch) return res.status(400).json({ msg: "Mật khẩu không chính xác!" });
 
-        const token = jwt.sign({ id: user_db._id }, process.env.TOKEN_SECRET, { expiresIn: '1d' })
+        const token = jwt.sign({ id: user_db._id }, process.env.TOKEN_SECRET)
         res.cookie('token', token);
 
         res.status(200).json({ msg: "Đã đăng nhập!", user: user_db, token: token });

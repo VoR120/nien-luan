@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { addCategory } from '../../action/categoryAction';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
 import { ProductContext } from '../../contextAPI/ProductContext';
+import { addProduct } from '../../action/productAction';
 const useStyles = makeStyles(theme => ({
     button: {
         marginBottom: theme.spacing(2),
@@ -17,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     },
     addBtn: {
         backgroundColor: theme.palette.success.main,
-        '&:hover' : {
+        '&:hover': {
             backgroundColor: theme.palette.success.dark,
         }
     }
@@ -36,19 +37,20 @@ const createCategoryList = (categories, options = []) => {
 const AddProductForm = () => {
     const classes = useStyles();
     const { product, productDispatch } = useContext(ProductContext);
+    const { category, categoryDispatch } = useContext(CategoryContext);
     const [open, setOpen] = useState(false);
     const [name, setName] = useState('');
-    const [category, setCategory] = useState('');
-    const [productImage, setProductImage] = useState(null)
+    const [categoryName, setCategoryName] = useState('');
+    const [productImage, setProductImage] = useState([])
     const handleClose = () => {
         setOpen(false);
     }
     const handleSubmit = () => {
         let formData = new FormData();
         formData.append("name", name);
-        formData.append("parentId", category);
-        formData.append("categoryImage", productImage);
-        addCategory(productDispatch, formData);
+        formData.append("category", categoryName);
+        formData.append("productImages", productImage);
+        addProduct(productDispatch, formData);
         handleClose();
     }
     return (
@@ -66,8 +68,8 @@ const AddProductForm = () => {
                         <Select
                             labelId="demo-simple-select-outlined-label"
                             id="demo-simple-select-outlined"
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
+                            value={categoryName}
+                            onChange={(e) => setCategoryName(e.target.value)}
                             label="Category Parent"
                         >
                             <MenuItem value="">
@@ -84,7 +86,7 @@ const AddProductForm = () => {
                     </FormControl>
                     <FormControl margin="dense" fullWidth>
                         <InputLabel htmlFor="my-input">Image</InputLabel>
-                        <Input type="file" onChange={e => setProductImage(e.target.files[0])} />
+                        <Input type="file" inputProps={{ multiple: true }} onChange={e => setProductImage(e.target.files)} />
                     </FormControl>
                 </DialogContent>
                 <DialogActions>

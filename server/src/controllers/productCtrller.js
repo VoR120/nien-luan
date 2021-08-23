@@ -39,6 +39,7 @@ exports.addProduct = async (req, res) => {
             if (data) {
                 return res.status(201).json({
                     msg: "Thành công!",
+                    product: data
                 })
             }
         })

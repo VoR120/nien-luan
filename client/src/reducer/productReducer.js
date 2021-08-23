@@ -31,7 +31,7 @@ const ProductReducer = (state, action) => {
         case 'ADD_NEW_PRODUCT_SUCCESS':
             return {
                 ...state,
-                products: action.payload.product,
+                products: [...state.products, action.payload.product],
                 loading: false,
             }
         case 'ADD_NEW_PRODUCT_FAILED':
