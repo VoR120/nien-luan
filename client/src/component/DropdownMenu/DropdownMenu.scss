@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+li {
+    list-style: none;
+}
+
+.menu-bar {
+    height: 72px;
+    top: 0;
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        & > li {
+            padding: 0 20px;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            &:hover .menu-dropdown__wrapper {
+                display: block;
+            }
+            &:hover {
+                border-bottom: 2px solid black;
+            }
+            .menu-dropdown {
+                &__wrapper {
+                    display: none;
+                    position: absolute;
+                    background-color: #fff;
+                    top: 108px;
+                    left: 0;
+                    width: 100%;
+                    z-index: 10000;
+                }
+                &__list {
+                    display: flex;
+                    margin: 0 auto;
+                    color: #203a4a;
+                    max-width: 700px;
+                    animation: Slide-Down 0.4s ease-in-out;
+                    ul {
+                        padding: 40px 0;
+                        b {
+                            display: block;
+                            padding-bottom: 15px;
+                            font-size: 1.1rem;
+                        }
+                        li {
+                            padding: 4px 0;
+                        }
+                    }
+                    &.flex-3 {
+                        ul {
+                            width: 33.3333%;
+                        }
+                    }
+                    &.flex-4 {
+                        ul {
+                            width: 25%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes Slide-Down {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes Slide_up {
+    0% {
+        transform: translateY(250px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}

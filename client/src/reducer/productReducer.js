@@ -39,6 +39,33 @@ const ProductReducer = (state, action) => {
                 ...initialState,
                 error: action.payload.error
             }
+        case 'UPDATE_PRODUCT_REQUEST':
+            return {
+                ...state,
+                loading: true,
+            }
+        case 'UPDATE_PRODUCT_SUCCESS':
+            const { productImages, category, name, _id } = action.payload.product
+            console.log(action.payload.product);
+            let productState = [...state.products];
+            const index = productState.findIndex(p => p._id === _id);
+            productState[index] = { ...productState[index], name, category, productImages }
+            return {
+                ...state,
+                products: productState,
+                loading: false,
+            }
+        case 'DELETE_PRODUCT_REQUEST':
+            return {
+                ...state,
+                loading: true,
+            }
+        case 'DELETE_PRODUCT_SUCCESS':
+            return {
+                ...state,
+                products: state.products.filter(product => product._id !== action.payload._id),
+                loading: false,
+            }
         default:
             return initialState;
     }

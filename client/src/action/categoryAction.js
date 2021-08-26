@@ -28,12 +28,16 @@ export const getAllCategory = async (dispatch) => {
 }
 
 export const addCategory = async (dispatch, payload) => {
+    let data = {};
+    payload.forEach((value, key) => {
+        data[key] = value
+    })
     try {
         dispatch({ type: 'ADD_NEW_CATEGORY_REQUEST' });
         let config = {
             method: 'POST',
             url: '/api/category/add',
-            data: payload,
+            data: data,
         }
         const res = await axios(config);
         console.log("Res: ", res);
@@ -78,15 +82,18 @@ export const deleteCategory = async (dispatch, payload) => {
     try {
         let config = {
             method: 'DELETE',
-            url: '/api/category/' + payload,
+            url: '/api/category/' + payload._id,
         }
         const res = await axios(config);
         console.log(res);
-        if (res.status === 200)
+        if (res.status === 200) {
+
             dispatch({
                 type: 'DELETE_CATEGORY_SUCCESS',
                 payload: { _id: res.data.data._id }
             })
+        }
+
     } catch (error) {
         console.log(error);
     }

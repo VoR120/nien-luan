@@ -5,13 +5,13 @@ export const initialState = {
 }
 
 const createNewCategory = (parentId, categories, category) => {
-    const { _id, name, slug, categoryImage } = category
+    const { _id, name, slug } = category
     if (parentId == undefined) {
         // Add root category
         return [
             ...categories,
             {
-                _id, name, slug, categoryImage, children: []
+                _id, name, slug, children: []
             }
         ]
     }
@@ -19,7 +19,7 @@ const createNewCategory = (parentId, categories, category) => {
     for (let cate of categories) {
         if (cate._id === parentId) {
             // Add chilren of parentId
-            const newCate = { _id, name, slug, categoryImage, parentId, children: [] }
+            const newCate = { _id, name, slug, parentId, children: [] }
             myCategories.push({
                 ...cate,
                 children: cate.children.length > 0 ? [...cate.children, newCate] : [newCate]

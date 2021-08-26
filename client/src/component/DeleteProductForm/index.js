@@ -8,6 +8,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { addCategory, updateCategory, deleteCategory } from '../../action/categoryAction';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { ProductContext } from '../../contextAPI/ProductContext';
+import { deleteProduct } from '../../action/productAction';
 const useStyles = makeStyles(theme => ({
     dialogContent: {
         marginBottom: theme.spacing(2),
@@ -33,16 +35,16 @@ const createCategoryList = (categories, options = []) => {
 };
 
 
-const DeleteCategoryForm = (props) => {
+const DeleteProductForm = (props) => {
     const classes = useStyles();
-    const { category, categoryDispatch } = useContext(CategoryContext);
-    const { name, _id } = props.form;
+    const { product, productDispatch } = useContext(ProductContext);
+    const { name, _id, image } = props.form;
     const [open, setOpen] = useState(false);
     const handleClose = () => {
         setOpen(false);
     }
     const handleSubmit = () => {
-        deleteCategory(categoryDispatch, { _id })
+        deleteProduct(productDispatch, { _id, image })
         handleClose();
     }
     return (
@@ -51,7 +53,7 @@ const DeleteCategoryForm = (props) => {
             <Dialog fullWidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Edit Category</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
-                    Do you want delete "{name}" category and all subcategory?
+                    Do you want delete "{name}" product?
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary" >
@@ -66,4 +68,4 @@ const DeleteCategoryForm = (props) => {
     );
 };
 
-export default DeleteCategoryForm;
+export default DeleteProductForm;

@@ -1,12 +1,13 @@
 import { makeStyles, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import { DataGrid } from '@material-ui/data-grid';
-import React, { useContext, useState } from 'react';
-import AddCategoryForm from '../../../component/AddCategoryForm';
+import React, { useContext, useEffect, useState } from 'react';
+import { getAllProduct } from '../../../action/productAction';
 import AddProductForm from '../../../component/AddProductForm';
-import DeleteCategoryForm from '../../../component/DeleteCategoryForm';
-import EditCategoryForm from '../../../component/EditCategoryForm';
+import DeleteProductForm from '../../../component/DeleteProductForm';
+import EditProductForm from '../../../component/EditProductForm';
 import Layout from '../../../component/Layout/Layout';
+import { CategoryContext } from '../../../contextAPI/CategoryContext';
 import { ProductContext } from '../../../contextAPI/ProductContext';
 
 const useStyles = makeStyles(theme => ({
@@ -38,9 +39,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
+
 const AProduct = () => {
     const classes = useStyles();
     const { product, productDispatch } = useContext(ProductContext);
+    const { category, categoryDispatch } = useContext(CategoryContext);
     const [imageOpen, setImageOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [image, setImage] = useState([]);
@@ -74,7 +77,7 @@ const AProduct = () => {
                                         <img
                                             onClick={() => handleOpen(params.row.image)}
                                             className={classes.image}
-                                            src={'http://' + params.row.image[0].img}
+                                            src={params.row.image[0].url}
                                             alt="text"
                                         />
                                         <Dialog
@@ -83,9 +86,9 @@ const AProduct = () => {
                                             open={imageOpen}
                                             onClose={() => setImageOpen(false)} aria-labelledby="form-dialog-title"
                                         >
-                                            <div style={{ height: '646px', display: 'flex'}}>
+                                            <div style={{ height: '646px', display: 'flex' }}>
                                                 {image.map(i => {
-                                                    return <img className={classes.zoomImage} src={'http://' + i.img} alt="text" />
+                                                    return <img className={classes.zoomImage} src={i.url} alt="text" />
                                                 })}
                                             </div>
                                         </Dialog>
@@ -101,11 +104,11 @@ const AProduct = () => {
                 headerName: 'Button',
                 width: 150,
                 renderCell: (params) => {
-                    const { name, parentId, _id } = params.row
+                    const { name, categoryId, _id, image } = params.row
                     return (
                         <>
-                            <DeleteCategoryForm form={{ name, _id }} />
-                            <EditCategoryForm form={{ parentId, name, _id }} />
+                            <DeleteProductForm form={{ name, _id, image }} />
+                            <EditProductForm form={{ categoryId, name, _id, image }} />
                         </>
                     )
                 }
@@ -113,12 +116,13 @@ const AProduct = () => {
         ];
 
         const rows = product.products.map((product, index) => {
-            const { name, category, productImages } = product;
-            // console.log(productImages);
+            const { _id, name, category, productImages } = product;
             return {
                 id: index + 1,
+                _id,
                 name,
                 category: category.name,
+                categoryId: category._id,
                 image: productImages,
             };
         });
@@ -132,6 +136,7 @@ const AProduct = () => {
                     pageSize={5}
                     disableSelectionOnClick
                     rowHeight={64}
+                    loading={rows.length === 0}
                 />
             </>
         )

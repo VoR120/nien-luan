@@ -1,7 +1,5 @@
 const Category = require("../models/categoryModel");
 const slugify = require('slugify');
-const fs = require('fs');
-const path = require('path');
 
 // Hàm tạo Category có thêm key chidren chứa các obj có parentId == _id
 const createChildCategory = (categories, parentId = null) => {
@@ -19,7 +17,6 @@ const createChildCategory = (categories, parentId = null) => {
             _id: c._id,
             name: c.name,
             slug: c.slug,
-            categoryImage: c.categoryImage,
             parentId: c.parentId,
             children: createChildCategory(categories, c._id),
         })
@@ -41,22 +38,10 @@ exports.addCategory = async (req, res) => {
     try {
         const { name, parentId } = req.body;
         const slug = slugify(name);
-        let cate;
-        let categoryImage;
-        if (req.file) {
-            const categoryUrl = process.env.APP_URL + 'public/' + req.file.filename;
-            categoryImage = categoryUrl;
-        }
-        cate = new Category(parentId === '' ? { name, slug, categoryImage } : { name, slug, categoryImage, parentId });
+        const cate = new Category(parentId === '' ? { name, slug } : { name, slug, parentId });
 
         await cate.save((error, data) => {
             if (error) {
-                if (req.file) {
-                    fs.unlink(path.join('public/uploads', req.file.filename), err => {
-                        if (err)
-                            return res.json({ err });
-                    })
-                }
                 return res.json(error);
             }
             if (data) {

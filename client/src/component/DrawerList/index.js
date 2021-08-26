@@ -42,7 +42,7 @@ const DrawerList = () => {
     return (
         <>
             <Paper className={classes.paper} elevation={0} square>
-                <div className={`${classes.toolbarMixins} + ${classes.toolbar}`}>ABC</div>
+                <div className={`${classes.toolbarMixins} + ${classes.toolbar}`}></div>
             </Paper>
             <List className={classes.list}>
                 <NavLink to={"/admin"}>

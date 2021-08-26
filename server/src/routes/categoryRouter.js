@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 Router.get('/category/get', getCategory);
-Router.post('/category/add', requireLogin, requireAdmin, upload.single('categoryImage'), addCategory)
+Router.post('/category/add', requireLogin, requireAdmin, addCategory)
 Router.delete('/category/:id', requireLogin, requireAdmin, deleteCategory);
 Router.put('/category/:id', requireLogin, requireAdmin, updateCategory);
 

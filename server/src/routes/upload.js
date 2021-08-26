@@ -4,7 +4,7 @@ const { requireLogin, requireAdmin } = require('../middleware/auth');
 const cloudinary = require('cloudinary');
 const cloudUploader = require('../configs/upload');
 
-Router.post('/upload', requireLogin, requireAdmin, cloudUploader.array('file'), (req, res) => {
+Router.post('/upload', cloudUploader.array('file'), (req, res) => {
     try {
         if (req.files.length === 0)
             return res.status(400).json({ msg: 'No file uploaded' });
@@ -31,6 +31,7 @@ Router.post('/upload', requireLogin, requireAdmin, cloudUploader.array('file'), 
 Router.post('/delete', requireLogin, requireAdmin, (req, res) => {
     try {
         const { public_id } = req.body;
+        console.log(public_id);
         if (public_id.length === 0) return res.status(400).json({ msg: 'No file selected' });
         for (let id of public_id) {
             cloudinary.v2.uploader.destroy(id, async (error, result) => {

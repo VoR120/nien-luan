@@ -19,11 +19,6 @@ const useStyles = makeStyles(theme => ({
     table: {
         backgroundColor: theme.palette.secondary.light,
     },
-    image: {
-        height: '100%',
-        padding: '2px 0',
-        cursor: 'pointer'
-    },
     icon: {
         cursor: 'pointer',
         marginRight: theme.spacing(1),
@@ -34,24 +29,13 @@ const useStyles = makeStyles(theme => ({
     flexItem: {
         width: '50%'
     },
-    zoomImage: {
-        height: '100%'
-    }
 }))
 
 
 const ACategory = () => {
     const classes = useStyles();
     const { category, categoryDispatch } = useContext(CategoryContext);
-    const [imageOpen, setImageOpen] = useState(false);
-    const [editOpen, setEditOpen] = useState(false);
-    const [image, setImage] = useState('');
-    
-    const handleOpen = (img) => {
-        setImage('http://' + img);
-        setImageOpen(true);
-    }
-    
+
     let index = 0;
     let parent;
     const getParentName = (parentId, category) => {
@@ -78,7 +62,6 @@ const ACategory = () => {
                     id: index + 1,
                     name,
                     parent: '',
-                    image: cate.categoryImage,
                     children: children
                 })
             } else {
@@ -88,8 +71,6 @@ const ACategory = () => {
                     name,
                     parentId: parentId,
                     parent: getParentName(parentId, category.categories),
-                    // parent: parentId,
-                    image: cate.categoryImage,
                     children: children
                 })
             }
@@ -113,39 +94,6 @@ const ACategory = () => {
                 field: 'parent',
                 headerName: 'Category',
                 width: 150
-            },
-            {
-                field: 'image',
-                headerName: 'Image',
-                width: 150,
-                renderCell: (params) => {
-                    return (
-                        <>
-                            {
-                                params.row.image ? (
-                                    <div style={{ height: '100%' }}>
-                                        <img
-                                            onClick={() => handleOpen(params.row.image)}
-                                            className={classes.image}
-                                            src={'http://' + params.row.image}
-                                            alt="text"
-                                        />
-                                        <Dialog
-                                            maxWidth="lg"
-                                            className={classes.dialog}
-                                            open={imageOpen}
-                                            onClose={() => setImageOpen(false)} aria-labelledby="form-dialog-title"
-                                        >
-                                            <div style={{ height: '646px' }}>
-                                                <img className={classes.zoomImage} src={image} alt="text" />
-                                            </div>
-                                        </Dialog>
-                                    </div>)
-                                    : ''
-                            }
-                        </>
-                    )
-                }
             },
             {
                 field: 'button',
@@ -172,6 +120,7 @@ const ACategory = () => {
                     pageSize={5}
                     disableSelectionOnClick
                     rowHeight={64}
+                    loading={rows.length === 0}
                 />
             </>
         )
@@ -181,7 +130,7 @@ const ACategory = () => {
     return (
         <Layout sidebar>
             <Typography className={classes.title} variant="h3" color="primary">Category</Typography>
-            <AddProductForm />
+            <AddCategoryForm />
             <div style={{ height: 430, width: '100%' }}>
                 {renderCategory()}
             </div>

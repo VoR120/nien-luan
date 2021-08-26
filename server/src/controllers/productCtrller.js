@@ -1,18 +1,14 @@
 const Product = require('../models/productModel');
+const Category = require("../models/categoryModel");
 const slugify = require('slugify');
 const fs = require('fs');
 const path = require('path');
 
 exports.addProduct = async (req, res) => {
     try {
-        const { name, category, } = req.body;
+        const { name, category, productImages } = req.body;
         const slug = slugify(name);
-        let productImages = [];
-        if (req.files.length > 0) {
-            productImages = req.files.map(file => {
-                return { img: path.join(process.env.APP_URL, 'public', file.filename) }
-            })
-        }
+        const categoryFull = await Category.findById(category);
 
         const product = new Product({
             name,
@@ -20,20 +16,12 @@ exports.addProduct = async (req, res) => {
             // price,
             // description,
             // quantity,
-            category,
-            productImages,
+            category: categoryFull,
+            productImages: JSON.parse(productImages),
             createdBy: req.user._id
         })
         await product.save((error, data) => {
             if (error) {
-                if (req.files) {
-                    req.files.map(file => {
-                        fs.unlink(path.join('public/uploads', file.filename), err => {
-                            if (err)
-                                return res.json({ err });
-                        })
-                    })
-                }
                 return res.json(error);
             }
             if (data) {
@@ -59,10 +47,21 @@ exports.getProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
     try {
-        const { name } = req.body;
+        const { name, category, productImages } = req.body;
+        const categoryFull = await Category.findById(category);
         const slug = slugify(name);
-        await Product.findByIdAndUpdate({ _id: req.params.id }, { name, slug });
-        res.status(200).json({ msg: "Thành công!" })
+        const product = await Product.findByIdAndUpdate(
+            { _id: req.params.id },
+            { name, slug, category: categoryFull , productImages: JSON.parse(productImages) },
+            { new: true }
+        );
+        let pro = new Object(product)
+        pro.category = categoryFull;
+        console.log(pro);
+        res.status(200).json({
+            msg: "Thành công!",
+            product: pro
+        })
     } catch (error) {
         return res.status(400).json({ msg: error.message });
     }
@@ -70,8 +69,8 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
     try {
-        await Product.findByIdAndDelete({ _id: req.params.id });
-        res.status(200).json({ msg: "Thành công!" })
+        const product_db = await Product.findByIdAndDelete({ _id: req.params.id });
+        res.status(200).json({ msg: "Thành công!",data: product_db })
     } catch (error) {
         return res.status(400).json({ msg: error.message });
     }

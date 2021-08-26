@@ -29,4 +29,9 @@ export const routes = [
         component: lazy(() => import('./Admin/ADashboard')),
         isPrivate: true,
     },
+    {
+        path: '/',
+        exact: true,
+        component: lazy(() => import('./User/Home')),
+    }
 ]
