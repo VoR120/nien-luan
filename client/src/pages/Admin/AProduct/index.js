@@ -6,7 +6,7 @@ import { getAllProduct } from '../../../action/productAction';
 import AddProductForm from '../../../component/AddProductForm';
 import DeleteProductForm from '../../../component/DeleteProductForm';
 import EditProductForm from '../../../component/EditProductForm';
-import Layout from '../../../component/Layout/Layout';
+import LayoutAdmin from '../../../component/LayoutAdmin/LayoutAdmin';
 import { CategoryContext } from '../../../contextAPI/CategoryContext';
 import { ProductContext } from '../../../contextAPI/ProductContext';
 
@@ -144,13 +144,13 @@ const AProduct = () => {
 
 
     return (
-        <Layout sidebar>
+        <LayoutAdmin sidebar>
             <Typography className={classes.title} variant="h3" color="primary">Product</Typography>
             <AddProductForm />
             <div style={{ height: 430, width: '100%' }}>
                 {renderCategory()}
             </div>
-        </Layout>
+        </LayoutAdmin>
     );
 };
 

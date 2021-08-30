@@ -33,5 +33,25 @@ export const routes = [
         path: '/',
         exact: true,
         component: lazy(() => import('./User/Home')),
-    }
+    },
+    {
+        path: '/productdetail',
+        exact: true,
+        component: lazy(() => import('./User/Product')),
+    },
+    {
+        path: '/collection',
+        exact: true,
+        component: lazy(() => import('./User/ProductCollection')),
+    },
+    {
+        path: '/cart',
+        exact: true,
+        component: lazy(() => import('./User/Cart')),
+    },
+    {
+        path: '/order',
+        exact: true,
+        component: lazy(() => import('./User/Order')),
+    },
 ]

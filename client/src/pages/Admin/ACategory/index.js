@@ -8,7 +8,7 @@ import AddCategoryForm from '../../../component/AddCategoryForm';
 import AddProductForm from '../../../component/AddProductForm';
 import DeleteCategoryForm from '../../../component/DeleteCategoryForm';
 import EditCategoryForm from '../../../component/EditCategoryForm';
-import Layout from '../../../component/Layout/Layout';
+import LayoutAdmin from '../../../component/LayoutAdmin/LayoutAdmin';
 import { CategoryContext } from '../../../contextAPI/CategoryContext';
 
 const useStyles = makeStyles(theme => ({
@@ -128,13 +128,13 @@ const ACategory = () => {
 
 
     return (
-        <Layout sidebar>
+        <LayoutAdmin sidebar>
             <Typography className={classes.title} variant="h3" color="primary">Category</Typography>
             <AddCategoryForm />
             <div style={{ height: 430, width: '100%' }}>
                 {renderCategory()}
             </div>
-        </Layout>
+        </LayoutAdmin>
     );
 };
 

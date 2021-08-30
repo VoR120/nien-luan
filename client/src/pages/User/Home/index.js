@@ -1,14 +1,14 @@
 import React from 'react';
-import Banner from '../../../component/Banner';
+import Footer from '../../../component/Footer';
 import Header from '../../../component/Header';
-import banner1 from '../../../public/img/banner1.jpg'
+import Layout from '../../../component/Layout';
+import Main from '../../../component/Main';
 
 const Home = () => {
     return (
-        <div>
-            <Header />
-            <Banner backgroundImage={banner1} />
-        </div>
+        <Layout headfoot>
+            <Main />
+        </Layout>
     );
 };
 

@@ -1,4 +1,4 @@
-import { makeStyles, Toolbar } from '@material-ui/core';
+import { Link, makeStyles, Toolbar } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
@@ -62,7 +62,9 @@ const Header = () => {
                 </Toolbar>
                 <header className={classes.menuBar}>
                     <div className={classes.logoWrapper}>
-                        <img className={classes.logo} src={logo} alt="" />
+                        <Link href="/">
+                            <img className={classes.logo} src={logo} alt="" />
+                        </Link>
                     </div>
                     <DropdownMenu />
                     <RightHeaderBar />

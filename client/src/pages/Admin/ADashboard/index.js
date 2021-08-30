@@ -1,6 +1,6 @@
 import { Divider, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
-import Layout from '../../../component/Layout/Layout';
+import LayoutAdmin from '../../../component/LayoutAdmin/LayoutAdmin';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -10,11 +10,11 @@ const useStyles = makeStyles(theme => ({
 const ADashboard = () => {
     const classes = useStyles();
     return (
-        <Layout sidebar>
+        <LayoutAdmin sidebar>
             <div>
                 <Typography className={classes.title} variant="h3" color="initial">Dashboard</Typography>
             </div>
-        </Layout>
+        </LayoutAdmin>
     );
 };
 

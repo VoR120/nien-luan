@@ -7,7 +7,7 @@ const theme = createTheme({
     palette: {
         primary: {
             main: '#333333',
-            dark: '#000000',
+            dark: '#18181a',
             light: '#424242' //text
         },
         secondary: {
@@ -24,7 +24,7 @@ const theme = createTheme({
             fontSize: '1.75rem'
         },
         h3: {
-            fontSize: '1.5rem'
+            fontSize: '1.6rem'
         },
         h4: {
             fontSize: '1.25rem'

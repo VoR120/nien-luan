@@ -10,7 +10,7 @@ const useStyle = makeStyles(theme => ({
     },
 }))
 
-const Layout = (props) => {
+const LayoutAdmin = (props) => {
     const classes = useStyle();
     return (
         <>
@@ -34,4 +34,4 @@ const Layout = (props) => {
     );
 };
 
-export default Layout;
+export default LayoutAdmin;

@@ -1,4 +1,6 @@
+import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
 import React, { useContext, useEffect } from "react";
+import { Suspense } from "react";
 import { BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 import { isAdminLogin } from "./action/authAction";
 import { getAllCategory } from "./action/categoryAction";
@@ -9,7 +11,16 @@ import { CategoryContext } from "./contextAPI/CategoryContext";
 import { ProductContext } from "./contextAPI/ProductContext";
 import { routes } from "./pages/routes";
 
+const useStyles = makeStyles((theme) => ({
+  backdrop: {
+    background: '#fff',
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+}));
+
 function App() {
+  const classes = useStyles();
   const { user, dispatch } = useContext(AuthContext);
   const { category, categoryDispatch } = useContext(CategoryContext);
   const { productDispatch } = useContext(ProductContext);
@@ -30,9 +41,15 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <React.Suspense fallback={"Loading..."}>
+          <Suspense
+            fallback={
+              <Backdrop className={classes.backdrop} open={true}>
+                <CircularProgress color="primary" />
+              </Backdrop>
+            }
+          >
             <RouteList routes={routes} />
-          </React.Suspense>
+          </Suspense>
         </Switch>
       </Router>
     </div>

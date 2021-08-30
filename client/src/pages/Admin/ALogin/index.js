@@ -15,7 +15,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { adminLogin } from '../../../action/authAction';
 import { getAllCategory } from '../../../action/categoryAction';
-import Layout from '../../../component/Layout/Layout';
 import { AuthContext } from '../../../contextAPI/AuthContext';
 import { CategoryContext } from '../../../contextAPI/CategoryContext';
 import { ProductContext } from '../../../contextAPI/ProductContext';
