@@ -1,25 +1,19 @@
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import React from 'react';
 import ProductItem from '../ProductItem';
 
-const ProductList = () => {
+const ProductList = (props) => {
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={3}>
-                <ProductItem />
-            </Grid>
-            <Grid item xs={3}>
-                <ProductItem />
-            </Grid>
-            <Grid item xs={3}>
-                <ProductItem />
-            </Grid>
-            <Grid item xs={3}>
-                <ProductItem />
-            </Grid>
-            <Grid item xs={3}>
-                <ProductItem />
-            </Grid>
+        <Grid container spacing = { 2} >
+        {
+            props.product.map((p, index) => {
+                return (
+                    <Grid item xs={3}>
+                        <ProductItem key={index} products={p} />
+                    </Grid>
+                )
+            })
+        }
         </Grid>
     );
 };

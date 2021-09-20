@@ -1,8 +1,9 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import TwitterIcon from '@mui/icons-material/Twitter';
 import React from 'react';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import InstagramIcon from '@material-ui/icons/Instagram';
 
 const useStyles = makeStyles(theme => ({
     footer: {
@@ -44,23 +45,23 @@ const Footer = () => {
                 <div className={classes.container}>
                     <Grid container>
                         <Grid item sm={6}>
-                            <Typography className={classes.header} variant="button" color="initial">Về chúng tôi</Typography>
+                            <Typography className={classes.header} variant="button">Về chúng tôi</Typography>
                             <ul>
-                                <li><Typography color="initial">VShop</Typography></li>
-                                <li><Typography color="initial">Địa chỉ: Đường 30/4, p.Xuân Khánh, q.Ninh Kiều, tp.Cần Thơ</Typography></li>
-                                <li><Typography color="initial">Điện thoại: 0981343200</Typography></li>
-                                <li><Typography color="initial">Email: vshop@gmail.com</Typography></li>
+                                <li><Typography>VShop</Typography></li>
+                                <li><Typography>Địa chỉ: Đường 30/4, p.Xuân Khánh, q.Ninh Kiều, tp.Cần Thơ</Typography></li>
+                                <li><Typography>Điện thoại: 0981343200</Typography></li>
+                                <li><Typography>Email: vshop@gmail.com</Typography></li>
                             </ul>
                         </Grid>
                         <Grid item sm={3}>
-                            <Typography className={classes.header} variant="button" color="initial">Thông tin</Typography>
+                            <Typography className={classes.header} variant="button">Thông tin</Typography>
                             <ul>
-                                <li><Typography color="initial">Chính sách</Typography></li>
-                                <li><Typography color="initial">Điều khoản</Typography></li>
+                                <li><Typography>Chính sách</Typography></li>
+                                <li><Typography>Điều khoản</Typography></li>
                             </ul>
                         </Grid>
                         <Grid item sm={3}>
-                            <Typography className={classes.header} variant="button" color="initial">Kết nối với chúng tôi</Typography>
+                            <Typography className={classes.header} variant="button">Kết nối với chúng tôi</Typography>
                             <ul className="icon-social">
                                 <FacebookIcon className={classes.icon} fontSize="large" />
                                 <TwitterIcon className={classes.icon} fontSize="large" />

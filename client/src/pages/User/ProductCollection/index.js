@@ -1,10 +1,27 @@
-import { Button, Checkbox, Divider, FormControl, FormControlLabel, FormLabel, FormGroup, Grid, makeStyles, Menu, MenuItem, Typography } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import React, { useState } from 'react';
+import {
+    Button,
+    Checkbox,
+    Divider,
+    FormControl,
+    FormControlLabel,
+    FormGroup,
+    FormLabel,
+    Grid,
+    Menu,
+    MenuItem,
+    Typography,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import React, { useContext, useEffect, useState } from 'react';
 import BreadcrumbsDiv from '../../../component/BreadcrumbsDiv';
 import Layout from '../../../component/Layout';
-import ProductItem from '../../../component/ProductItem';
 import ProductList from '../../../component/ProductList';
+import Loading from '../../../component/Loading'
+import { ProductContext } from '../../../contextAPI/ProductContext';
+import { getAllProduct, getProduct } from '../../../action/productAction';
+import { useLocation } from 'react-router';
+
 const useStyles = makeStyles(theme => ({
     header: {
         width: '100%',
@@ -41,13 +58,30 @@ const useStyles = makeStyles(theme => ({
 
 const ProductCollection = () => {
     const classes = useStyles();
+    const { product, productDispatch } = useContext(ProductContext);
     const [sortExpand, setSortExpand] = useState(null);
     const [magnetSl, setMagnetSl] = useState(null);
     const [priceSl, setPriceSl] = useState(null);
     const [brandSl, setBrandSl] = useState(null);
+    const location = useLocation();
+    const category = location.pathname.slice(12);
+    console.log(category);
+
+    useEffect(() => {
+        let filterArr = [];
+        filterArr.push({ category: category })
+        getProduct(productDispatch, { filterArr: filterArr })
+    }, [])
+
+    useEffect(() => {
+        let filterArr = [];
+        filterArr.push({ magnet: magnetSl }, { price: priceSl }, { brand: brandSl }, { category: category })
+        getProduct(productDispatch, { filterArr })
+    }, [magnetSl, priceSl, brandSl])
+
     const magnetList = [
-        { value: 'no', label: 'Không' },
-        { value: 'yes', label: 'Có' }
+        { value: "0", label: 'Không' },
+        { value: "1", label: 'Có' }
     ]
     const priceList = [
         { value: 'lt1', label: 'Dưới 100.000 VND' },
@@ -117,7 +151,7 @@ const ProductCollection = () => {
                                     {magnetList.map((m) => {
                                         return (<FormControlLabel
                                             key={m.value}
-                                            control={<Checkbox color="primary" value={m.value} checked={brandSl === m.value} onChange={(e) => handleChangeValue(e, setBrandSl)} />}
+                                            control={<Checkbox color="primary" value={m.value} checked={magnetSl === m.value} onChange={(e) => handleChangeValue(e, setMagnetSl)} />}
                                             label={m.label}
                                             color="primary"
                                         />)
@@ -155,7 +189,7 @@ const ProductCollection = () => {
                                     {brandList.map((brand) => {
                                         return (<FormControlLabel
                                             key={brand.value}
-                                            control={<Checkbox color="primary" value={brand.value} checked={magnetSl === brand.value} onChange={(e) => handleChangeValue(e, setMagnetSl)} />}
+                                            control={<Checkbox color="primary" value={brand.value} checked={brandSl === brand.value} onChange={(e) => handleChangeValue(e, setBrandSl)} />}
                                             label={brand.label}
                                             color="primary"
                                         />)
@@ -166,7 +200,13 @@ const ProductCollection = () => {
                         </div>
                     </Grid>
                     <Grid item xs={10} style={{ paddingLeft: '40px', marginTop: '24px' }}>
-                        <ProductList />
+                        {
+                            product.loading ? (
+                                <Loading loading={true} />
+                            ) : (
+                                <ProductList product={product.products} />
+                            )
+                        }
                     </Grid>
                 </Grid>
             </div>

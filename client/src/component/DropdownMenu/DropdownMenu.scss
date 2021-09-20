@@ -8,6 +8,7 @@ li {
     list-style: none;
 }
 
+
 .menu-bar {
     height: 72px;
     top: 0;
@@ -54,9 +55,28 @@ li {
                             display: block;
                             padding-bottom: 15px;
                             font-size: 1.1rem;
+                            &:hover {
+                                color: #000;
+                                text-decoration: underline;
+                            }
                         }
                         li {
                             padding: 4px 0;
+                            &:hover {
+                                color: #000;
+                                text-decoration: underline;
+                            }
+                        }   
+                    }
+                    a {
+                        color: #203a4a;
+                        &:hover {
+                            color: #000
+                        }
+                    }
+                    &.flex-2 {
+                        ul {
+                            width: 50%;
                         }
                     }
                     &.flex-3 {

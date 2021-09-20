@@ -1,15 +1,14 @@
+import { FormControl, Input, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import EditIcon from '@mui/icons-material/Edit';
 import React, { useContext, useState } from 'react';
-import { FormControl, Input, InputLabel, makeStyles, Select, MenuItem, IconButton, CircularProgress } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { addCategory, updateCategory } from '../../action/categoryAction';
+import { updateCategory } from '../../action/categoryAction';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
-import DeleteIcon from '@material-ui/icons/Delete';
-import axios from '../../helper/axios';
-import EditIcon from '@material-ui/icons/Edit';
 const useStyles = makeStyles(theme => ({
     editBtn: {
         backgroundColor: theme.palette.success.main,
@@ -94,24 +93,22 @@ const EditCategoryForm = (props) => {
         <>
             <EditIcon onClick={() => setOpen(true)} className={classes.icon} />
             <Dialog PaperProps={{ style: { minWidth: '500px' } }} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add Category</DialogTitle>
+                <DialogTitle id="form-dialog-title">Sửa nhóm hàng hóa</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.content}>
                         <FormControl margin="dense" fullWidth>
-                            <InputLabel htmlFor="my-input">Name</InputLabel>
-                            <Input value={nameUpdate} onChange={e => { setNameUpdate(e.target.value) }} />
+                            <TextField size="small" label="Tên" value={nameUpdate} onChange={e => { setNameUpdate(e.target.value) }} />
                         </FormControl>
                         <FormControl fullWidth margin="dense">
-                            <InputLabel>Category Parent</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-outlined-label"
-                                id="demo-simple-select-outlined"
+                            <TextField
+                                select
+                                size="small"
                                 value={categoryParent}
                                 onChange={(e) => setCategoryParent(e.target.value)}
-                                label="Category Parent"
+                                label="Nhóm hàng hóa cha"
                             >
                                 <MenuItem value="">
-                                    <em>None</em>
+                                    <em>Không</em>
                                 </MenuItem>
                                 {createCategoryList(category.categories).map(
                                     (option, index) => (
@@ -120,20 +117,20 @@ const EditCategoryForm = (props) => {
                                         </MenuItem>
                                     ),
                                 )}
-                            </Select>
+                            </TextField>
                         </FormControl>
                     </div>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary" >
-                        Cancel
+                        Hủy
                     </Button>
                     <Button className={classes.addBtn} onClick={handleSubmit} color="secondary" autoFocus>
-                        Add
+                        Lưu
                     </Button>
                 </DialogActions>
             </Dialog>
-            
+
         </>
     );
 };

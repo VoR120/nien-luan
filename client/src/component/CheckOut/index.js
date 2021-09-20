@@ -1,6 +1,15 @@
-import { Button, FormControl, FormControlLabel, Grid, makeStyles, Paper, Radio, RadioGroup, Typography } from '@material-ui/core';
-import React from 'react';
-import { useState } from 'react';
+import {
+    Button,
+    FormControl,
+    FormControlLabel,
+    Grid,
+    Paper,
+    Radio,
+    RadioGroup,
+    Typography,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import React, { useState } from 'react';
 import OrderSummary from '../OrderSummary';
 
 const useStyles = makeStyles(theme => ({
@@ -28,8 +37,9 @@ const useStyles = makeStyles(theme => ({
 
 const CheckOut = (props) => {
     const classes = useStyles();
-    const [value, setValue] = useState("nhanhang");
+    const [checkOut, setCheckOut] = useState("paymentAfterArrival")
     const handleSubmit = () => {
+        props.setCheckout(checkOut);
         props.nextStep();
     }
     return (
@@ -41,9 +51,9 @@ const CheckOut = (props) => {
             </Grid>
             <Grid item xs={8} fullWidth>
                 <FormControl component="fieldset">
-                    <RadioGroup aria-label="checkout" name="checkout" value={value} onChange={e => setValue(e.target.value)}>
+                    <RadioGroup aria-label="checkout" name="checkout" value={checkOut} onChange={e => setCheckOut(e.target.value)}>
                         <FormControlLabel
-                            value="nhanhang"
+                            value="paymentAfterArrival"
                             control={<Radio color="primary" />}
                             label={
                                 <Paper className={classes.paper} square variant="outlined">
@@ -64,7 +74,7 @@ const CheckOut = (props) => {
                 </FormControl>
             </Grid>
             <Grid item xs={4}>
-                <OrderSummary />
+                <OrderSummary delivery />
                 <Button onClick={handleSubmit} className={classes.mainBtn} fullWidth>Đặt hàng</Button>
             </Grid>
         </Grid>

@@ -1,14 +1,13 @@
-import { CircularProgress, FormControl, IconButton, Input, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { FormControl, Input, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import React, { useContext, useState } from 'react';
 import { addCategory } from '../../action/categoryAction';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
-import axios from '../../helper/axios';
 const useStyles = makeStyles(theme => ({
     button: {
         marginBottom: theme.spacing(2),
@@ -83,24 +82,22 @@ const AddCategoryForm = () => {
         <>
             <Button onClick={() => setOpen(true)} color="primary" className={classes.button} variant="contained">Thêm </Button>
             <Dialog PaperProps={{ style: { minWidth: '500px' } }} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add Category</DialogTitle>
+                <DialogTitle id="form-dialog-title">Thêm nhóm hàng hóa</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.content}>
                         <FormControl margin="dense" fullWidth>
-                            <InputLabel htmlFor="my-input">Name</InputLabel>
-                            <Input value={name} onChange={e => { setName(e.target.value) }} />
+                            <TextField value={name} size="small" label="Tên" onChange={e => { setName(e.target.value) }} />
                         </FormControl>
                         <FormControl fullWidth margin="dense">
-                            <InputLabel>Category Parent</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-outlined-label"
-                                id="demo-simple-select-outlined"
+                            <TextField
+                                select
                                 value={categoryParent}
                                 onChange={(e) => setCategoryParent(e.target.value)}
-                                label="Category Parent"
+                                label="Nhóm hàng hóa"
+                                size="small"
                             >
                                 <MenuItem value="">
-                                    <em>None</em>
+                                    <em>Không</em>
                                 </MenuItem>
                                 {createCategoryList(category.categories).map(
                                     (option, index) => (
@@ -109,16 +106,16 @@ const AddCategoryForm = () => {
                                         </MenuItem>
                                     ),
                                 )}
-                            </Select>
+                            </TextField>
                         </FormControl>
                     </div>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary" >
-                        Cancel
+                        Hủy 
                     </Button>
                     <Button className={classes.addBtn} onClick={handleSubmit} color="secondary" autoFocus>
-                        Add
+                        Thêm
                     </Button>
                 </DialogActions>
             </Dialog>

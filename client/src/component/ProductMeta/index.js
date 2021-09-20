@@ -1,4 +1,5 @@
-import { Grid, Link, makeStyles, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 const useStyles = makeStyles(theme => ({
     label: {
@@ -8,12 +9,6 @@ const useStyles = makeStyles(theme => ({
     value: {
         fontSize: '0.9rem'
     },
-    link: {
-        color: theme.palette.primary.main,
-        '&:hover' :{
-            textDecorationStyle: 'underline'
-        }
-    }
 }))
 
 const ProductMeta = (props) => {
@@ -24,9 +19,7 @@ const ProductMeta = (props) => {
                 <Typography className={classes.label}>{props.label}</Typography>
             </Grid>
             <Grid item>
-                <Link className={classes.link} href="#">
-                    <Typography>{props.value}</Typography>
-                </Link>
+                <Typography>{props.value}</Typography>
             </Grid>
         </Grid>
     );

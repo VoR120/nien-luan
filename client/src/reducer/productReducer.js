@@ -15,13 +15,36 @@ const ProductReducer = (state, action) => {
         case 'GET_ALL_PRODUCT_SUCCESS':
             return {
                 ...state,
-                products: action.payload.products
+                products: action.payload.products,
+                loading: false
             };
         case 'GET_ALL_PRODUCT_FAILED':
             return {
                 ...state,
                 loading: false,
                 error: action.payload.error
+            }
+        case 'GET_PRODUCT_REQUEST':
+            return {
+                ...state,
+                loading: true
+            }
+        case 'GET_PRODUCT_SUCCESS':
+            return {
+                ...state,
+                products: action.payload.products,
+                loading: false
+            }
+        case 'GET_PRODUCT_RELATE_REQUEST':
+            return {
+                ...state,
+                loading: true
+            }
+        case 'GET_PRODUCT_RELATE_SUCCESS':
+            return {
+                ...state,
+                products: action.payload.products,
+                loading: false
             }
         case 'ADD_NEW_PRODUCT_REQUEST':
             return {
@@ -45,11 +68,10 @@ const ProductReducer = (state, action) => {
                 loading: true,
             }
         case 'UPDATE_PRODUCT_SUCCESS':
-            const { productImages, category, name, _id } = action.payload.product
-            console.log(action.payload.product);
+            const { productImages, category, name, _id, slug, price, quantity, description, size, weight, brand, magnet, } = action.payload.product
             let productState = [...state.products];
             const index = productState.findIndex(p => p._id === _id);
-            productState[index] = { ...productState[index], name, category, productImages }
+            productState[index] = { ...productState[index], name, category, productImages, slug, price, quantity, description, size, weight, brand, magnet, }
             return {
                 ...state,
                 products: productState,

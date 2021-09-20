@@ -1,15 +1,15 @@
-import { AppBar, FormControl, Input, makeStyles, Toolbar } from '@material-ui/core';
-import Badge from '@material-ui/core/Badge';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import SearchIcon from '@material-ui/icons/Search';
+import { AppBar, FormControl, Input, Toolbar, Badge } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MailIcon from '@mui/icons-material/Mail';
+import SearchIcon from '@mui/icons-material/Search';
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { adminLogout } from '../../action/authAction';
@@ -59,7 +59,7 @@ const useStyleBase = makeStyles(theme => ({
 }), { name: 'MuiMenuItem' })
 
 const AdminHeader = (props) => {
-    const { dispatch } = useContext(AuthContext);
+    const { aDispatch } = useContext(AuthContext);
     const { categoryDispatch } = useContext(CategoryContext);
     const { productDispatch } = useContext(ProductContext);
     const history = useHistory();
@@ -81,7 +81,7 @@ const AdminHeader = (props) => {
     const handleLogout = (e) => {
         e.preventDefault();
         setOpen(false);
-        adminLogout(dispatch, categoryDispatch, productDispatch);
+        adminLogout(aDispatch, categoryDispatch, productDispatch);
         history.push('/admin/login');
     }
 
@@ -113,20 +113,21 @@ const AdminHeader = (props) => {
                 </div>
                 <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
-                    <IconButton color="primary">
+                    <IconButton color="primary" size="large">
                         <Badge badgeContent={4} color="error">
                             <MailIcon />
                         </Badge>
                     </IconButton>
-                    <IconButton color="primary">
+                    <IconButton color="primary" size="large">
                         <MailIcon />
                     </IconButton>
-                    <IconButton color="primary"
+                    <IconButton
+                        color="primary"
                         ref={anchorRef}
                         aria-controls={open ? 'menu-list-grow' : undefined}
                         aria-haspopup="true"
                         onClick={handleToggle}
-                    >
+                        size="large">
                         <AccountCircleIcon />
                     </IconButton>
                     <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>

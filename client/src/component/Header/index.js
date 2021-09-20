@@ -1,10 +1,16 @@
-import { Link, makeStyles, Toolbar } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Typography from '@material-ui/core/Typography';
-import React from 'react';
-import logo from '../../public/img/V-logos_transparent.png'
+import { Toolbar } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import AppBar from '@mui/material/AppBar';
+import Typography from '@mui/material/Typography';
+import React, { useContext } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { CartContext } from '../../contextAPI/CartContext';
+import logo from '../../public/img/V-logos_transparent.png';
 import DropdownMenu from '../DropdownMenu';
 import RightHeaderBar from '../RightHeaderBar';
+import { UserContext } from '../../contextAPI/UserContext';
+import { adminLogout } from '../../action/authAction';
+import { userLogout } from '../../action/userAction';
 
 const useStyles = makeStyles(theme => ({
     headerBar: {
@@ -50,24 +56,52 @@ const useStyles = makeStyles(theme => ({
 
 const Header = () => {
     const classes = useStyles();
+    const { cart } = useContext(CartContext);
+    const { user, dispatch } = useContext(UserContext);
+    const history = useHistory()
+    const quantityCart = cart.cartObj.reduce((sum, next) => {
+        return Number(sum) + Number(next.quantity);
+    }, 0);
+
+    const handleLogout = () => {
+        userLogout(dispatch);
+        // history.push('/login');
+    }
+
+    const handleLogin = () => {
+        history.push('/login');
+    }
+
     return (
         <div>
             <AppBar position="fixed" className={classes.headerBar}>
                 <Toolbar className={classes.topHeaderBar}>
                     <div className={classes.headerWrapper}>
-                        <Typography className={classes.typo} color="primary">Đăng nhập</Typography>
-                        <Typography className={classes.typo} color="primary">Đăng ký</Typography>
+                        {user.isAuthenticated  ?
+                            (
+                                <>
+                                    <Typography color="primary" className={classes.typo}>{user.userDetails.fullName}</Typography>
+                                    <Typography onClick={handleLogout} color="primary" className={classes.typo}>Đăng xuất</Typography>
+                                </>
+                            )
+                            : (
+                                <>
+                                    <Typography onClick={handleLogin} className={classes.typo} color="primary">Đăng nhập</Typography>
+                                    <Typography className={classes.typo} color="primary">Đăng ký</Typography>
+                                </>
+                            )
+                        }
                         <Typography className={classes.typo} color="primary">Giúp đỡ</Typography>
                     </div>
                 </Toolbar>
                 <header className={classes.menuBar}>
                     <div className={classes.logoWrapper}>
-                        <Link href="/">
+                        <Link to="/">
                             <img className={classes.logo} src={logo} alt="" />
                         </Link>
                     </div>
                     <DropdownMenu />
-                    <RightHeaderBar />
+                    <RightHeaderBar quantityCart={!cart.loading ? quantityCart: 0} />
                 </header>
             </AppBar>
         </div>

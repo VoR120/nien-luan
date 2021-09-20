@@ -1,4 +1,6 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Skeleton } from '@mui/material';
 import React from 'react';
 import ProductContent from '../ProductContent';
 
@@ -27,19 +29,38 @@ const useStyles = makeStyles({
 const Section = (props) => {
 
     const classes = useStyles();
-
+    const { title, products, loading } = props;
     return (
         <div className={classes.section}>
             <Typography
                 variant="h3"
                 className={classes.header}
             >
-                {props.title}
+                {title}
             </Typography>
             <div className={classes.separatorHolder} />
-            <ProductContent />
+            {!loading ? (
+                <ProductContent products={products} />
+            ) :
+                (
+                    <Grid container spacing={2}>
+                        <Grid item>
+                            <Skeleton variant="rectangular" width="329px" height="284px"></Skeleton>
+                        </Grid>
+                        <Grid item>
+                            <Skeleton variant="rectangular" width="329px" height="284px"></Skeleton>
+                        </Grid>
+                        <Grid item>
+                            <Skeleton variant="rectangular" width="329px" height="284px"></Skeleton>
+                        </Grid>
+                        <Grid item>
+                            <Skeleton variant="rectangular" width="329px" height="284px"></Skeleton>
+                        </Grid>
+                    </Grid>
+                )
+            }
         </div>
-    )
+    );
 }
 
 export default Section;

@@ -78,7 +78,8 @@ const CategoryReducer = (state, action) => {
         case 'GET_ALL_CATEGORY_SUCCESS':
             return {
                 ...state,
-                categories: action.payload.categories
+                categories: action.payload.categories,
+                loading: false
             };
         case 'GET_ALL_CATEGORY_FAILED':
             return {

@@ -1,7 +1,9 @@
-import { alpha, IconButton, InputBase, makeStyles, Typography } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import { Badge, IconButton, InputBase } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import SearchIcon from '@mui/icons-material/Search';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     rightBarWrapper: {
@@ -49,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('sm')]: {
@@ -61,7 +63,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const RightHeaderBar = () => {
+const getCartBadge = () => {
+
+}
+
+const RightHeaderBar = (props) => {
     const classes = useStyles();
     return (
         <div className={classes.rightBarWrapper}>
@@ -79,9 +85,13 @@ const RightHeaderBar = () => {
                     inputProps={{ 'aria-label': 'search' }}
                 />
             </div>
-            <IconButton>
-                <ShoppingCartIcon />
-            </IconButton>
+            <NavLink to="/cart">
+                <IconButton size="large">
+                    <Badge badgeContent={props.quantityCart} color="primary">
+                        <ShoppingCartIcon />
+                    </Badge>
+                </IconButton>
+            </NavLink>
         </div>
     );
 };

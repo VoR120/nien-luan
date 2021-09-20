@@ -1,25 +1,25 @@
-import React from 'react';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import React, { useContext } from 'react';
 import { Carousel } from 'react-responsive-carousel';
-import img from '../../public/img/GAN-11-M-Pro-Mini-3x3-Stickerless-Bright_1024x1024.jpg';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { ProductDetailContext } from '../../contextAPI/ProductDetailContext';
+import './styles.css';
 
 const ProductImageSlider = () => {
+    const { productDetail } = useContext(ProductDetailContext);
     return (
-        <div style={{ width: '100%' }}>
+        <div className="product-detail-slider" style={{ width: '100%' }}>
             <Carousel
                 showStatus={false}
                 showArrows={false}
                 showIndicators={false}
             >
-                <div>
-                    <img src={img} />
-                </div>
-                <div>
-                    <img src={img} />
-                </div>
-                <div>
-                    <img src={img} />
-                </div>
+                {productDetail.product.productImages.map(image => {
+                    return (
+                        <div>
+                            <img src={image.url} />
+                        </div>
+                    )
+                })}
             </Carousel>
         </div>
     );

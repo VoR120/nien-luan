@@ -1,23 +1,30 @@
+import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
 import React from 'react';
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@material-ui/core';
-import ProductImage from '../../public/img/GAN-11-M-Pro-Mini-3x3-Stickerless-Bright_1024x1024.jpg'
+import NumberFormat from 'react-number-format';
+import { useHistory } from 'react-router-dom';
 
-const ProductItem = () => {
+const ProductItem = (props) => {
+    const { name, productImages, slug, price } = props.products;
+    const history = useHistory();
+    const handleRedirect = () => {
+        history.push('/productdetail/' + slug);
+    }
+
     return (
-        <Card>
+        <Card onClick={handleRedirect} >
             <CardActionArea>
                 <CardMedia
                     component="img"
                     alt="Sản phẩm"
-                    image={ProductImage}
+                    image={productImages[0].url}
                     title="product"
                 />
                 <CardContent>
                     <Typography style={{ fontWeight: '500' }} color="textPrimary" gutterBottom variant="h5">
-                        GAN 11 M Pro Mini 3x3
+                        {name}
                     </Typography>
                     <Typography color="primary" variant="h5">
-                        1.000.000đ
+                        <NumberFormat value={price} displayType="text" thousandSeparator={true} suffix="₫" />
                     </Typography>
                 </CardContent>
             </CardActionArea>

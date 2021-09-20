@@ -35,12 +35,12 @@ export const routes = [
         component: lazy(() => import('./User/Home')),
     },
     {
-        path: '/productdetail',
-        exact: true,
+        path: '/productdetail/:slug',
+        exact: false,
         component: lazy(() => import('./User/Product')),
     },
     {
-        path: '/collection',
+        path: '/collection/:category',
         exact: true,
         component: lazy(() => import('./User/ProductCollection')),
     },
@@ -53,5 +53,15 @@ export const routes = [
         path: '/order',
         exact: true,
         component: lazy(() => import('./User/Order')),
+    },
+    {
+        path: '/login',
+        exact: true,
+        component: lazy(() => import('./User/Login')),
+    },
+    {
+        path: '/register',
+        exact: true,
+        component: lazy(() => import('./User/Register')),
     },
 ]

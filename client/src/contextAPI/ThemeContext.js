@@ -1,9 +1,8 @@
 
-import { createTheme } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/styles';
+import { createTheme, adaptV4Theme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import React from 'react';
 
-const theme = createTheme({
+const theme = createTheme(adaptV4Theme({
     palette: {
         primary: {
             main: '#333333',
@@ -36,13 +35,15 @@ const theme = createTheme({
             fontSize: '0.75rem'
         },
     }
-})
+}))
 
 const ThemeContextProvider = (props) => {
     return (
-        <ThemeProvider theme={theme}>
-            {props.children}
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
+                {props.children}
+            </ThemeProvider>
+        </StyledEngineProvider>
     );
 };
 

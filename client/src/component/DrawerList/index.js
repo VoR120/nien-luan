@@ -1,16 +1,18 @@
-import List from '@material-ui/core/List';
-import Paper from '@material-ui/core/Paper';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import CategoryIcon from '@material-ui/icons/Category';
-import HomeIcon from '@material-ui/icons/Home';
-import ListIcon from '@material-ui/icons/List';
-import LocalAtmIcon from '@material-ui/icons/LocalAtm';
-import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import { makeStyles } from '@material-ui/styles';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Paper from '@mui/material/Paper';
+import CategoryIcon from '@mui/icons-material/Category';
+import HomeIcon from '@mui/icons-material/Home';
+import ListIcon from '@mui/icons-material/List';
+import LocalAtmIcon from '@mui/icons-material/LocalAtm';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { makeStyles } from '@mui/styles';
 import { NavLink } from 'react-router-dom';
 import './styles.css';
+import { createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@emotion/react';
 
 const useStyles = makeStyles(theme => ({
     toolbarMixins: theme.mixins.toolbar,
@@ -26,19 +28,32 @@ const useStyles = makeStyles(theme => ({
         paddingTop: '20px'
     }
 }))
-const useStyleBase = makeStyles(theme => ({
-    root: {
-        marginLeft: theme.spacing(1.2),
-        borderTopLeftRadius: '24px',
-        borderBottomLeftRadius: '24px',
-        color: theme.palette.grey[200],
-    }
-}), { name: 'MuiListItem' })
+// const useStyleBase = makeStyles(theme => ({
+//     root: {
+//         marginLeft: theme.spacing(1.2),
+//         borderTopLeftRadius: '24px',
+//         borderBottomLeftRadius: '24px',
+//         color: theme.palette.grey[200],
+//     }
+// }), { name: 'MuiListItem' })
 
+const muiListTheme = createTheme(theme => ({
+    components: {
+        MuiListItem: {
+            styleOverrides: {
+                root: {
+                    marginLeft: theme.spacing(1.2),
+                    borderTopLeftRadius: '24px',
+                    borderBottomLeftRadius: '24px',
+                    color: theme.palette.grey[200],
+                }
+            }
+        }
+    }
+}))
 const DrawerList = () => {
 
     const classes = useStyles();
-    useStyleBase();
     return (
         <>
             <Paper className={classes.paper} elevation={0} square>

@@ -24,3 +24,10 @@ a.active .MuiListItem-root::before {
     bottom: -48px;
     box-shadow: 24px -24px 0 var(--bg);
 }
+
+.MuiListItem-root {
+    margin-left: 9.6px;
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+    color: #eee
+}

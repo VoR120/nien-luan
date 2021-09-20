@@ -1,25 +1,21 @@
-import { FormHelperText } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import Container from '@material-ui/core/Container';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { FormHelperText } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import makeStyles from '@mui/styles/makeStyles';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import React, { useContext, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Redirect, useHistory } from 'react-router-dom';
 import { adminLogin } from '../../../action/authAction';
-import { getAllCategory } from '../../../action/categoryAction';
 import { AuthContext } from '../../../contextAPI/AuthContext';
-import { CategoryContext } from '../../../contextAPI/CategoryContext';
-import { ProductContext } from '../../../contextAPI/ProductContext';
-import { getAllProduct } from '../../../action/productAction';
-import { getInitialData } from '../../../action/initialData';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -47,31 +43,49 @@ const useStyles = makeStyles((theme) => ({
 
 export const ALogin = () => {
   const classes = useStyles();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-  const { user, dispatch } = useContext(AuthContext);
-  const { categoryDispatch } = useContext(CategoryContext);
-  const { productDispatch } = useContext(ProductContext);
+  const { aUser, aDispatch } = useContext(AuthContext);
   const history = useHistory();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    const res = await adminLogin(dispatch, { email, password });
-    if (res == undefined) return;
-    if (!res.user) return;
-    history.push('/admin');
-  }
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors }
+  } = useForm();
 
   useEffect(() => {
-    if (user.isAuthenticated == true)
-      return <Redirect to="/admin" />
-    if (user.error != null) {
-      setError(true);
-      setErrorMsg(user.error.msg);
+    if (aUser.isAuthenticated == true)
+        history.push('/admin')
+  }, [aUser.isAuthenticated])
+
+  useEffect(() => {
+    if (aUser.error != 'null') {
+      if (aUser.error == "email") {
+        setError("email", {
+          type: 'manual',
+          message: aUser.message
+        })
+      }
+      if (aUser.error == "password") {
+        setError("password", {
+          type: 'manual',
+          message: aUser.message
+        })
+      }
     }
-  }, [user])
+  }, [aUser])
+
+  useEffect(() => {
+    if (aUser.loading) {
+      clearErrors("email");
+      clearErrors("password");
+    }
+  }, [aUser.loading])
+
+  const onSubmit = (data) => {
+    adminLogin(aDispatch, data);
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -83,51 +97,55 @@ export const ALogin = () => {
         <Typography component="h1" variant="h3">
           Đăng nhập Admin
         </Typography>
-        <form className={classes.form} onSubmit={handleLogin} noValidate>
+        <form className={classes.form} noValidate>
           <TextField
+            {...register("email", {
+              required: "Vui lòng nhập email",
+              pattern: {
+                value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                message: 'Email không hợp lệ!'
+              }
+            })}
             variant="outlined"
             margin="normal"
             required
             fullWidth
             id="email"
             label="Email"
+            value="gionguyen@gmail.com"
             name="email"
             autoComplete="email"
-            onChange={e => setEmail(e.target.value)}
-          // helperText={errorMsg}
-          // error={error}
+            error={Boolean(errors.email)}
+            helperText={errors.email?.message}
           />
           <TextField
+            {...register("password", {
+              required: "Vui lòng nhập mật khẩu!",
+            })}
             variant="outlined"
             margin="normal"
             required
             fullWidth
             name="password"
+            // value=""
             label="Mật khẩu"
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={e => setPassword(e.target.value)}
-          // helperText={errorMsg}
-          // error={error}
+            error={Boolean(errors.password)}
+            helperText={errors.password?.message}
           />
           <FormControlLabel
             control={<Checkbox value="remenber" color="primary" />}
             label="Nhớ mật khẩu"
           />
-          <FormHelperText
-            className={classes.errorMsg}
-            error={error}
-            variant="outlined"
-          >
-            {errorMsg}
-          </FormHelperText>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit(onSubmit)}
           >
             Đăng nhập
           </Button>
@@ -145,24 +163,8 @@ export const ALogin = () => {
           </Grid>
         </form>
       </div>
-      {/* <Box mt={8}>
-        <Copyright />
-      </Box> */}
     </Container>
   );
 }
-
-// const Copyright = () => {
-//     return (
-//       <Typography variant="body2" color="textSecondary" align="center">
-//         {'Copyright © '}
-//         <Link color="inherit" href="https://material-ui.com/">
-//           Your Website
-//         </Link>{' '}
-//         {new Date().getFullYear()}
-//         {'.'}
-//       </Typography>
-//     );
-//   }
 
 export default ALogin;

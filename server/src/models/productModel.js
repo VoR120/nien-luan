@@ -12,34 +12,38 @@ const productSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    // price: {
-    //   type: Number,
-    //   required: true,
-    //   trim: true,
-    // },
-    // description: {
-    //   type: String,
-    //   required: true,
-    //   trim: true,
-    // },
-    // offer: {
-    //   type: Number,
-    // },
-    // quantity: {
-    //   type: Number,
-    // },
+    price: {
+      type: Number,
+      required: true,
+      trim: true,
+    },
+      brand: { type: String },
+      weight: { type: Number },
+      size: { type: Number },
+      magnet: { type: Boolean },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    offer: {
+      type: Number,
+    },
+    quantity: {
+      type: Number,
+    },
     productImages: [
       {
         public_id: { type: String },
         url: { type: String },
       },
     ],
-    // reviews: [
-    //   {
-    //     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    //     review: String,
-    //   },
-    // ],
+    reviews: [
+      {
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        review: String,
+      },
+    ],
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',

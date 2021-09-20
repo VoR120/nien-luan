@@ -1,15 +1,29 @@
+import {
+    CircularProgress,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Grid,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Radio,
+    RadioGroup,
+    Select,
+    TextField,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useContext, useState } from 'react';
-import { FormControl, Input, InputLabel, makeStyles, Select, MenuItem, IconButton, CircularProgress, TextField } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import { addProduct } from '../../action/productAction';
-import { ProductContext } from '../../contextAPI/ProductContext';
-import DeleteIcon from '@material-ui/icons/Delete';
-import axios from '../../helper/axios';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
+import { ProductContext } from '../../contextAPI/ProductContext';
+import axios from '../../helper/axios';
 const useStyles = makeStyles(theme => ({
     button: {
         marginBottom: theme.spacing(2),
@@ -31,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     },
     imageWrapper: {
         position: 'relative',
-        minWidth: '450px',   
+        minWidth: '450px',
         height: '280px',
         background: 'white',
 
@@ -94,10 +108,20 @@ const AddCategoryForm = () => {
     const { product, productDispatch } = useContext(ProductContext);
     const { category, categoryDispatch } = useContext(CategoryContext);
     const [open, setOpen] = useState(false);
+
     const [name, setName] = useState('');
     const [categoryId, setCategoryId] = useState('');
+    const [price, setPrice] = useState(0);
+    const [quantity, setQuantity] = useState(0);
+    const [brand, setBrand] = useState('');
+    const [des, setDes] = useState('');
+    const [size, setSize] = useState(56);
+    const [weight, setWeight] = useState(63);
+    const [magnet, setMagnet] = useState(0);
     const [imageUpload, setImageUpload] = useState([]);
     const [loading, setLoading] = useState(false)
+
+
     const handleClose = () => {
         setOpen(false);
     }
@@ -139,6 +163,13 @@ const AddCategoryForm = () => {
         let formData = new FormData();
         formData.append("name", name);
         formData.append("category", categoryId);
+        formData.append("price", price);
+        formData.append("quantity", quantity);
+        formData.append("brand", brand);
+        formData.append("size", size);
+        formData.append("weight", weight);
+        formData.append("magnet", magnet);
+        formData.append("description", des);
         formData.append("productImages", JSON.stringify(imageUpload));
         addProduct(productDispatch, formData);
         handleClose();
@@ -147,7 +178,7 @@ const AddCategoryForm = () => {
         <>
             <Button onClick={() => setOpen(true)} color="primary" className={classes.button} variant="contained">Thêm </Button>
             <Dialog PaperProps={{ style: { minWidth: '900px' } }} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add Product</DialogTitle>
+                <DialogTitle id="form-dialog-title">Thêm sản phẩm</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.imageWrapper} >
                         {imageUpload.length > 0 ?
@@ -176,22 +207,20 @@ const AddCategoryForm = () => {
                         }
                     </div>
                     <div className={classes.content}>
-                        <FormControl  margin="dense" fullWidth>
-                            {/* <InputLabel htmlFor="my-input">Tên</InputLabel>
-                            <Input value={name} onChange={e => { setName(e.target.value) }} /> */}
-                            <TextField label="Tên" variant="outlined" size="small" value={name} onChange={e => { setName(e.target.value) }}/>
+                        <FormControl margin="dense" fullWidth>
+                            <TextField label="Tên" variant="outlined" size="small" value={name} onChange={e => { setName(e.target.value) }} />
                         </FormControl>
-                        <FormControl variant="outlined"  fullWidth margin="dense">
-                            <InputLabel>Category</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-outlined-label"
+                        <FormControl variant="outlined" fullWidth margin="dense">
+                            <TextField
+                                select
                                 id="demo-simple-select-outlined"
                                 value={categoryId}
                                 onChange={(e) => setCategoryId(e.target.value)}
                                 label="Category Parent"
+                                size="small"
                             >
                                 <MenuItem value="">
-                                    <em>None</em>
+                                    <em>Không</em>
                                 </MenuItem>
                                 {createCategoryList(category.categories).map(
                                     (option, index) => (
@@ -200,23 +229,38 @@ const AddCategoryForm = () => {
                                         </MenuItem>
                                     ),
                                 )}
-                            </Select>
+                            </TextField>
                         </FormControl>
-                        <FormControl  margin="dense" fullWidth>
-                            {/* <InputLabel htmlFor="my-input">Giá</InputLabel> */}
-                            <TextField label="Giá" variant="outlined" size="small" value={name} onChange={e => { setName(e.target.value) }} />
+                        <FormControl margin="dense" fullWidth>
+                            <TextField type="number" label="Giá" variant="outlined" size="small" value={price} onChange={e => { setPrice(e.target.value) }} />
                         </FormControl>
-                        <FormControl  margin="dense" fullWidth>
-                            {/* <InputLabel htmlFor="my-input">Số lượng</InputLabel> */}
-                            <TextField label="Số lượng" variant="outlined" size="small" value={name} onChange={e => { setName(e.target.value) }} />
+                        <FormControl margin="dense" fullWidth>
+                            <TextField type="number" label="Số lượng" variant="outlined" size="small" value={quantity} onChange={e => { setQuantity(e.target.value) }} />
                         </FormControl>
-                        <FormControl  margin="dense" fullWidth>
-                            {/* <InputLabel htmlFor="my-input">Thương hiệu</InputLabel> */}
-                            <TextField label="Thương hiệu" variant="outlined" size="small" value={name} onChange={e => { setName(e.target.value) }} />
+                        <FormControl margin="dense" fullWidth>
+                            <TextField label="Thương hiệu" variant="outlined" size="small" value={brand} onChange={e => { setBrand(e.target.value) }} />
                         </FormControl>
-                        <FormControl  margin="dense" fullWidth>
-                            {/* <InputLabel htmlFor="my-input">Mô tả</InputLabel> */}
-                            <TextField label="Mô tả" variant="outlined" size="small" multiline minRows={3} inputComponent="textarea" value={name} onChange={e => { setName(e.target.value) }} />
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <FormControl margin="dense" fullWidth>
+                                    <TextField label="Kích thước" variant="outlined" size="small" value={size} onChange={e => { setSize(e.target.value) }} />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <FormControl margin="dense" fullWidth>
+                                    <TextField label="Khối lượng" variant="outlined" size="small" value={weight} onChange={e => { setWeight(e.target.value) }} />
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        <FormControl margin="dense" component="fieldset">
+                            <FormLabel component="legend">Nam châm</FormLabel>
+                            <RadioGroup style={{ display: 'inline' }} aria-label="magnet" name="magnet" value={magnet} onChange={e => { setMagnet(e.target.value) }}>
+                                <FormControlLabel value="1" control={<Radio color="primary" />} label="Có" />
+                                <FormControlLabel value="0" control={<Radio color="primary" />} label="Không" />
+                            </RadioGroup>
+                        </FormControl>
+                        <FormControl margin="dense" fullWidth>
+                            <TextField label="Mô tả" variant="outlined" size="small" multiline minRows={3} inputComponent="textarea" value={des} onChange={e => { setDes(e.target.value) }} />
                         </FormControl>
                     </div>
                 </DialogContent>

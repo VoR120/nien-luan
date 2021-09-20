@@ -1,5 +1,7 @@
 import React from 'react';
-import { Breadcrumbs, Grid, Link, makeStyles } from '@material-ui/core';
+import { Breadcrumbs, Grid } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
     breadcrumbs: {
@@ -13,13 +15,12 @@ const BreadcrumbsDiv = (props) => {
     const classes = useStyles();
     return (
         <Breadcrumbs className={classes.breadcrumbs} aria-label="breadcrumb">
-            <Link color="inherit" href="/" onClick={""}>
+            <Link color="inherit" to="/" onClick={""}>
                 Home
             </Link>
             <Link
                 color="textPrimary"
-                href={props.link}
-                onClick={""}
+                to={props.link}
                 aria-current="page"
             >
                 {props.content}

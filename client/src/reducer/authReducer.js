@@ -1,5 +1,5 @@
-let user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : '';
-let token = localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : '';
+let user = localStorage.getItem('a_user') ? JSON.parse(localStorage.getItem('a_user')) : '';
+let token = localStorage.getItem('a_token') ? JSON.parse(localStorage.getItem('a_token')) : '';
 
 export const initialState = {
     isAuthenticated: false,
@@ -7,6 +7,7 @@ export const initialState = {
     token: token,
     loading: false,
     error: null,
+    message: null,
 }
 
 const AuthReducer = (state, action) => {
@@ -15,6 +16,7 @@ const AuthReducer = (state, action) => {
         case 'LOGIN_REQUEST':
             return {
                 ...state,
+                isAuthenticated: false,
                 loading: true,
             }
         case 'LOGIN_SUCCESS':
@@ -24,14 +26,16 @@ const AuthReducer = (state, action) => {
                 userDetails: action.payload.user,
                 token: action.payload.token,
                 loading: false,
-                error: false,
+                error: null,
+                message: null,
             }
         case 'LOGIN_FAILED':
             return {
                 ...state,
                 isAuthenticated: false,
                 loading: false,
-                error: action.error,
+                error: action.error.type,
+                message: action.error.msg
             }
         case 'LOGOUT':
             return {
@@ -39,6 +43,25 @@ const AuthReducer = (state, action) => {
                 isAuthenticated: false,
                 userDetails: '',
                 token: ''
+            }
+        case 'REGISTER_REQUEST':
+            return {
+                ...state,
+                loading: true
+            }
+        case 'REGISTER_SUCCESS':
+            return {
+                ...state,
+                error: null,
+                message: action.payload,
+                loading: false,
+            }
+        case 'REGISTER_FAILED':
+            return {
+                ...state,
+                error: action.payload.error.type ,
+                message: action.payload.error.msg,
+                loading: false,
             }
         default: {
             return state;

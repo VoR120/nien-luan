@@ -6,7 +6,7 @@ export const adminLogin = async (dispatch, payload) => {
         dispatch({ type: 'LOGIN_REQUEST' });
         let config = {
             method: 'POST',
-            url: '/user/login',
+            url: '/admin/login',
             data: payload
         }
         const res = await axios(config);
@@ -15,24 +15,46 @@ export const adminLogin = async (dispatch, payload) => {
             const { token, user } = res.data
             console.log(res.data);
             dispatch({ type: 'LOGIN_SUCCESS', payload: { token, user } });
-            localStorage.setItem('token', JSON.stringify(token));
-            localStorage.setItem('user', JSON.stringify(user));
-            return res.data;
+            localStorage.setItem('a_token', JSON.stringify(token));
+            localStorage.setItem('a_user', JSON.stringify(user));
+            axios.defaults.headers.common['Authorization'] = token;
         }
     } catch (error) {
-        console.log(error.response);
         dispatch({ type: 'LOGIN_FAILED', error: error.response.data });
     }
 };
 
+export const adminRegister = async (dispatch, payload) => {
+    payload.role = "admin"
+    try {
+        dispatch({ type: 'REGISTER_REQUEST' });
+        let config = {
+            method: 'POST',
+            url: '/admin/register',
+            data: payload
+        }
+        const res = await axios(config);
+        console.log(res);
+        if (res.status === 201) {
+            dispatch({
+                type: 'REGISTER_SUCCESS',
+                payload: res.data.msg
+            })
+        }
+    } catch (error) {
+        dispatch({ type: 'REGISTER_FAILED', payload: { error: error.response.data } });
+    }
+}
+
 export const isAdminLogin = (dispatch) => {
     try {
-        const token = localStorage.getItem('token');
+        const token = JSON.parse(localStorage.getItem('a_token'));
         if (token) {
-            const user = JSON.parse(localStorage.getItem('user'));
+            const user = JSON.parse(localStorage.getItem('a_user'));
             dispatch({ type: 'LOGIN_SUCCESS', payload: { token, user } });
+            axios.defaults.headers.common['Authorization'] = token;
         } else {
-            dispatch({ type: 'LOGIN_FAILED', payload: { error: 'Failed to login!' } })
+            // dispatch({ type: 'LOGIN_FAILED', payload: { error: { msg: 'Failed to login!', type: '' } } })
         }
     } catch (error) {
         dispatch({ type: 'LOGIN_FAILED', error: error.response.data });
@@ -43,5 +65,6 @@ export const adminLogout = async (dispatch, categoryDispatch, productDispatch) =
     dispatch({ type: 'LOGOUT' });
     categoryDispatch({ type: 'undefined' });
     productDispatch({ type: 'undefined' });
-    localStorage.clear();
+    localStorage.removeItem("a_token");
+    localStorage.removeItem("a_user");
 }

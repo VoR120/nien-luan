@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import { Button, Grid, IconButton } from '@material-ui/core';
-import { Link, Redirect, useHistory } from 'react-router-dom';
-import Delivery from '../Delivery';
+import { Grid } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import makeStyles from '@mui/styles/makeStyles';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Typography from '@mui/material/Typography';
+import React, { useContext, useEffect, useState } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
+import { CartContext } from '../../contextAPI/CartContext';
 import CheckOut from '../CheckOut';
+import Delivery from '../Delivery';
 import OrderSuccess from '../OrderSuccess';
 
 const TabPanel = (props) => {
@@ -59,6 +59,15 @@ const ProcessTab = () => {
     const history = useHistory();
     const classes = useStyles();
     const [value, setValue] = useState(1);
+    const { cart } = useContext(CartContext);
+    const [info, setInfo] = useState('');
+    const [checkout, setCheckout] = useState('');
+    const [data, setData] = useState({ cart: cart.cartObj, info, checkout });
+    console.log(data);
+
+    useEffect(() => {
+        setData({ cart: cart.cartObj, info, checkout });
+    }, [cart, info, checkout])
 
     const nextStep = () => {
         setValue(value + 1);
@@ -85,6 +94,10 @@ const ProcessTab = () => {
         };
     }
 
+    const handleRedirect = () => {
+        history.push('/cart')
+    }
+
     return (
         <Grid container>
             <Grid item xs={1} />
@@ -97,7 +110,7 @@ const ProcessTab = () => {
                             aria-label="simple tabs example"
                             TabIndicatorProps={{ className: classes.indicator }}
                         >
-                            <Tab onClick={() => history.push('/cart')} label={contentTab(1, "Giỏ hàng")} {...a11yProps(0)} />
+                            <Tab onClick={handleRedirect} label={contentTab(1, "Giỏ hàng")} {...a11yProps(0)} />
                             <Tab label={contentTab(2, "Giao hàng")} {...a11yProps(1)} />
                             <Tab label={contentTab(3, "Thanh toán")} {...a11yProps(2)} />
                             <Tab label={contentTab(4, "Hoàn thành đơn hàng")} {...a11yProps(3)} />
@@ -106,13 +119,13 @@ const ProcessTab = () => {
                     <TabPanel onClick={<Redirect to="/cart" />} value={value} index={0}>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        <Delivery setValue={setValue} nextStep={nextStep} />
+                        <Delivery info={info} setInfo={setInfo} nextStep={nextStep} />
                     </TabPanel>
                     <TabPanel value={value} index={2}>
-                        <CheckOut setValue={setValue} nextStep={nextStep} />
+                        <CheckOut setCheckout={setCheckout} nextStep={nextStep} />
                     </TabPanel>
                     <TabPanel value={value} index={3}>
-                        <OrderSuccess setValue={setValue} nextStep={nextStep} />
+                        <OrderSuccess />
                     </TabPanel>
                 </div>
             </Grid>

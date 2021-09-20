@@ -1,5 +1,6 @@
-import { Divider, Link, makeStyles } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
+import { Divider, Link } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import AppBar from '@mui/material/AppBar';
 import React from 'react';
 import ProcessTab from '../../../component/ProcessTab';
 import logo from '../../../public/img/V-logos_transparent.png';

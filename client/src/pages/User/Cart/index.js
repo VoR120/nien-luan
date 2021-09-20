@@ -1,17 +1,21 @@
-import React from 'react';
-import BreadcrumbsDiv from '../../../component/BreadcrumbsDiv';
-import Layout from '../../../component/Layout';
-import Typography from '@material-ui/core/Typography';
-import { Button, Grid, makeStyles } from '@material-ui/core';
-import CartList from '../../../component/CartList';
-import OrderSummary from '../../../component/OrderSummary';
+import { Button, Grid } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import Typography from '@mui/material/Typography';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import BreadcrumbsDiv from '../../../component/BreadcrumbsDiv';
+import CartList from '../../../component/CartList';
+import Layout from '../../../component/Layout';
+import OrderSummary from '../../../component/OrderSummary';
+import { isUserLogin } from '../../../action/userAction';
+import { getCart } from '../../../action/cartAction';
+import { CartContext } from '../../../contextAPI/CartContext';
 const useStyles = makeStyles(theme => ({
     header: {
         textTransform: 'uppercase',
         fontWeight: '500',
         letterSpacing: '3px',
-        marginBottom: '40px',
+        marginBottom: theme.spacing(5),
     },
     mainBtn: {
         margin: '20px 0',
@@ -28,6 +32,12 @@ const useStyles = makeStyles(theme => ({
 const Cart = () => {
     const history = useHistory();
     const classes = useStyles();
+    const { cart, cartDispatch } = useContext(CartContext);
+
+    const handleRedirect = () => {
+        history.push('/order')
+    }
+
     return (
         <Layout headfoot>
             <BreadcrumbsDiv link={"/cart"} content={"Giỏ hàng"} />
@@ -38,11 +48,11 @@ const Cart = () => {
                         <Typography className={classes.header} variant="h3" color="initial">Giỏ hàng</Typography>
                         <Grid container spacing={2}>
                             <Grid item xs={8}>
-                                <CartList />
+                                <CartList cart={cart} cartDispatch={cartDispatch} />
                             </Grid>
                             <Grid item xs={4}>
                                 <OrderSummary />
-                                <Button onClick={() => history.push('/order')} className={classes.mainBtn} fullWidth>Tiến hành đặt hàng</Button>
+                                <Button onClick={handleRedirect} className={classes.mainBtn} fullWidth>Tiến hành đặt hàng</Button>
                             </Grid>
                         </Grid>
                     </Grid>

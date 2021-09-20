@@ -1,0 +1,9 @@
+
+.product-detail-slider .slider-wrapper {
+    max-height: 400px
+}
+
+.product-detail-slider .slide.selected img,.product-detail-slider .slide img{
+    width: auto;
+    max-height: 400px
+}    

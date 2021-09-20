@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
+import makeStyles from '@mui/styles/makeStyles';
+import Drawer from '@mui/material/Drawer';
+import Hidden from '@mui/material/Hidden';
 import React, { useState } from 'react';
 import DrawerList from '../DrawerList';
 
@@ -76,7 +76,7 @@ const AdminDrawer = (props) => {
                     <DrawerList />
                 </Drawer>
             </Hidden>
-            <Hidden xsDown implementation="css">
+            <Hidden mdDown implementation="css">
                 <Drawer
                     classes={{
                         paper: classes.drawerPaper,

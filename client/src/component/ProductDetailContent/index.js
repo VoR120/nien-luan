@@ -1,6 +1,12 @@
-import { Box, Button, Divider, FormControl, Grid, Input, makeStyles, TextField, Typography } from '@material-ui/core';
-import { Rating } from '@material-ui/lab';
-import React, { useState } from 'react';
+import { Button, Divider, TextField, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Rating } from '@mui/material';
+import React, { useContext, useState } from 'react';
+import NumberFormat from 'react-number-format';
+import { addToCart } from '../../action/cartAction';
+import { CartContext } from '../../contextAPI/CartContext';
+import { ProductDetailContext } from '../../contextAPI/ProductDetailContext';
+import AddToCartDialog from '../AddToCartDialog';
 import ProductMeta from '../ProductMeta';
 
 const useStyle = makeStyles(theme => ({
@@ -40,14 +46,32 @@ const useStyle = makeStyles(theme => ({
 }))
 
 const ProductDetailContent = () => {
-
+    const { productDetail } = useContext(ProductDetailContext);
+    const [open, setOpen] = useState(false);
+    const { _id, slug, name, category, price, quantity, description, size, weight, brand, magnet, productImages } = productDetail.product
     const classes = useStyle();
     const [value, setValue] = useState(3);
+    const [quantityOrder, setQuantityOrder] = useState(1);
+    const { cart, cartDispatch } = useContext(CartContext);
+    const cartItem = { product: { _id, slug, name, price, productImages }, price: price * quantityOrder, quantity: quantityOrder }
+    
+    const handleAddToCart = () => {
+        addToCart(cartDispatch, { cartItem: cartItem });
+        setOpen(true)
+    }
+
+    const getM = (magnet) => {
+        let M;
+        if (magnet == "undefined") M = "";
+        if (magnet == true) M = "Có";
+        if (magnet == false) M = "Không";
+        return M;
+    }
 
     return (
         <div>
             <Typography className={classes.header} gutterBottom variant="h4" component="h2">
-                GAN 11 M Pro 3x3 Mini
+                {name}
             </Typography>
             <div className={classes.starrating}>
                 <Rating size="small" name="read-only" value={value} readOnly />
@@ -56,27 +80,38 @@ const ProductDetailContent = () => {
                 </Typography>
             </div>
             <Typography className={classes.price} variant="h3" component="h2" color="primary">
-                50.000đ
+                <NumberFormat value={price} displayType="text" thousandSeparator={true} suffix="₫" />
             </Typography>
-            <div className={classes.quantity}>
-                <TextField defaultValue={1} size="small" type="number" className={classes.number} />
+            {quantity > 0 ? (
+                <div className={classes.quantity}>
+                    <TextField value={quantityOrder} onChange={(e) => setQuantityOrder(e.target.value)} size="small" type="number" className={classes.number} />
+                    <Button
+                        onClick={handleAddToCart}
+                        variant="outlined"
+                        color="primary"
+                    >
+                        Thêm vào giỏ hàng
+                    </Button>
+                </div>
+            ) : (
                 <Button
+                    disabled
                     variant="outlined"
                     color="primary"
                 >
-                    Thêm vào giỏ hàng
+                    Hết hàng
                 </Button>
-            </div>
+            )}
             <div>
                 <Divider className={classes.divider} />
                 <Typography className={classes.headerInfo} variant="h5">
                     Thông tin
                 </Typography>
-                <ProductMeta label={"Thương hiệu"} value={"GAN"} />
-                <ProductMeta label={"Loại"} value={"3x3"} />
-                <ProductMeta label={"Nam châm"} value={"Có"} />
-                <ProductMeta label={"Kích cỡ"} value={"55mm"} />
-                <ProductMeta label={"Cân nặng"} value={"63g"} />
+                <ProductMeta label={"Thương hiệu"} value={brand} />
+                <ProductMeta label={"Loại"} value={category.name} />
+                <ProductMeta label={"Nam châm"} value={getM(magnet)} />
+                <ProductMeta label={"Kích cỡ"} value={size} />
+                <ProductMeta label={"Cân nặng"} value={weight} />
             </div>
             <div>
                 <Divider className={classes.divider} />
@@ -84,10 +119,10 @@ const ProductDetailContent = () => {
                     Mô tả
                 </Typography>
                 <Typography className={classes.description} variant="h5" color="textPrimary">
-                    GAN 11 M Pro 3x3 is GAN cube's 2020 flagship model and has continued to be the choice of many speedcubers since its release.
-                    The great thing about the GAN 11 M Pro is that it is great for any cuber, beginner or advanced since the overall feel can be adjusted to your exact preferences as your times continue to decrease rather than purchasing new speedcubes.
+                    {description}
                 </Typography>
             </div>
+            <AddToCartDialog cartItem={cartItem} open={open} setOpen={setOpen} />
         </div>
     )
 }

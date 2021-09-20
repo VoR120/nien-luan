@@ -28,6 +28,6 @@ const createChildCategory = (categories, parentId = null) => {
 
 exports.getInitialData = async (req, res) => {
     const category_db = await Category.find();
-    const product_db = await Product.find().select('_id name slug productImages').populate('category');
+    const product_db = await Product.find().populate('category');
     res.status(200).json({ category: createChildCategory(category_db), product: product_db });
 }

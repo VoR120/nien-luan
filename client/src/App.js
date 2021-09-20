@@ -1,14 +1,21 @@
-import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
+import { Backdrop, CircularProgress } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useContext, useEffect } from "react";
 import { Suspense } from "react";
 import { BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 import { isAdminLogin } from "./action/authAction";
 import { getAllCategory } from "./action/categoryAction";
 import { getInitialData } from "./action/initialData";
+import { getAllProduct } from "./action/productAction";
+import { clearCart, getCart } from "./action/cartAction";
+import { isUserLogin } from "./action/userAction";
+import ScrollToTop from "./component/HOC/ScrollToTop";
 import RouteList from "./config/routesConfig";
 import { AuthContext } from "./contextAPI/AuthContext";
+import { CartContext } from "./contextAPI/CartContext";
 import { CategoryContext } from "./contextAPI/CategoryContext";
 import { ProductContext } from "./contextAPI/ProductContext";
+import { UserContext } from "./contextAPI/UserContext";
 import { routes } from "./pages/routes";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,25 +28,43 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const { user, dispatch } = useContext(AuthContext);
+  const { aUser, aDispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const { category, categoryDispatch } = useContext(CategoryContext);
+  const { cart, cartDispatch } = useContext(CartContext);
   const { productDispatch } = useContext(ProductContext);
 
   useEffect(() => {
-    isAdminLogin(dispatch)
-    if (!user.isAuthenticated) {
+    isAdminLogin(aDispatch)
+    if (!aUser.isAuthenticated) {
       return <Redirect to="/admin/login" />
     }
   }, [])
 
   useEffect(() => {
-    if (user.isAuthenticated)
+    isUserLogin(dispatch)
+    getCart(cartDispatch)
+    if (!user.isAuthenticated) {
+      return <Redirect to="/login" />
+    }
+  }, [])
+
+  useEffect(() => {
+    if (aUser.isAuthenticated)
       getInitialData(categoryDispatch, productDispatch);
-  }, [user])
+  }, [aUser.isAuthenticated])
+
+  // useEffect(() => {
+  //   if (user.isAuthenticated) {
+  //     getCart(cartDispatch)
+  //   } else
+  //     localStorage.setItem('cart', JSON.stringify(cart.cartObj));
+  // }, [cart])
 
   return (
     <div className="App">
       <Router>
+        <ScrollToTop />
         <Switch>
           <Suspense
             fallback={

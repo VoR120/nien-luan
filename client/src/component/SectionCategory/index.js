@@ -1,5 +1,7 @@
-import { Button, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Button, Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
+import { useHistory} from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
     imageWrapper: props => ({
@@ -33,6 +35,10 @@ const useStyles = makeStyles(theme => ({
 
 const SectionCategory = (props) => {
     const classes = useStyles(props);
+    const history = useHistory();
+    const handleRedirect = () => {
+        history.push(props.link)
+    }
     return (
         <Grid container>
             {props.imageLeft ?
@@ -54,7 +60,7 @@ const SectionCategory = (props) => {
                         >
                             {props.content}
                         </Typography>
-                        <Button className={classes.button}>
+                        <Button onClick={handleRedirect} className={classes.button}>
                             Mua ngay
                         </Button>
                     </Grid>

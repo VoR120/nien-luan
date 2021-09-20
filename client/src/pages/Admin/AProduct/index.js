@@ -1,13 +1,14 @@
-import { makeStyles, Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import { DataGrid } from '@material-ui/data-grid';
-import React, { useContext, useEffect, useState } from 'react';
-import { getAllProduct } from '../../../action/productAction';
+import { Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import { AgGridReact } from 'ag-grid-react';
+import React, { useContext, useState } from 'react';
 import AddProductForm from '../../../component/AddProductForm';
 import DeleteProductForm from '../../../component/DeleteProductForm';
 import EditProductForm from '../../../component/EditProductForm';
+import ImageZoom from '../../../component/ImageZoom';
 import LayoutAdmin from '../../../component/LayoutAdmin/LayoutAdmin';
-import { CategoryContext } from '../../../contextAPI/CategoryContext';
 import { ProductContext } from '../../../contextAPI/ProductContext';
 
 const useStyles = makeStyles(theme => ({
@@ -16,10 +17,13 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(4)
     },
     table: {
+        height: '450px',
+        width: '100%',
         backgroundColor: theme.palette.secondary.light,
+        marginTop: '20px',
     },
     image: {
-        height: '100%',
+        height: '52px',
         padding: '2px 0',
         cursor: 'pointer'
     },
@@ -43,112 +47,88 @@ const useStyles = makeStyles(theme => ({
 const AProduct = () => {
     const classes = useStyles();
     const { product, productDispatch } = useContext(ProductContext);
-    const { category, categoryDispatch } = useContext(CategoryContext);
-    const [imageOpen, setImageOpen] = useState(false);
-    const [editOpen, setEditOpen] = useState(false);
-    const [image, setImage] = useState([]);
 
-    const handleOpen = (img) => {
-        // setImage('http://' + img);
-        setImage(img)
-        setImageOpen(true);
+    const [rowData] = useState(product.products.map((product, index) => {
+        const { _id, name, category, price, quantity, brand, description, weight, size, magnet, productImages } = product;
+        return {
+            id: index + 1,
+            _id,
+            name,
+            category: category.name,
+            categoryId: category._id,
+            price, quantity, brand, description, weight, magnet, size,
+            image: productImages,
+        };
+    }));
+    const [columnDefs] = useState([
+        { field: 'id', headerName: 'STT', width: 120 },
+        { field: 'name', headerName: 'Tên', width: 150 },
+        {
+            field: 'category',
+            headerName: 'Danh mục',
+            width: 150
+        },
+        {
+            field: 'brand',
+            headerName: 'Thương hiệu',
+            width: 150
+        },
+        {
+            field: 'image',
+            headerName: 'Hình ảnh',
+            width: 150,
+            cellRendererFramework: (params) => {
+                return (
+                    <>
+                        {
+                            params.data.image.length > 0 ? (
+                                <ImageZoom images={params.data.image} />
+                            )
+                                : ''
+                        }
+                    </>
+                )
+            }
+        },
+        {
+            field: 'button',
+            headerName: 'Chức năng',
+            width: 150,
+            cellRendererFramework: (params) => {
+                const { name, categoryId, _id, image, price, quantity, brand, description, size, weight, magnet } = params.data
+                return (
+                    <>
+                        <DeleteProductForm form={{ name, _id, image }} />
+                        <EditProductForm form={{ categoryId, name, _id, image, price, size, quantity, brand, description, weight, magnet }} />
+                    </>
+                )
+            }
+        },
+    ]);
+
+    const gridOptions = {
+        defaultColDef: {
+            resizable: true,
+        },
+        columnDefs: columnDefs,
+        rowData: rowData,
+        defaultColDef: {
+            sortable: true,
+        },
+        pagination: true,
+        paginationPageSize: "10",
+
     }
-
-    const renderCategory = () => {
-
-        const columns = [
-            { field: 'id', headerName: 'STT', width: 120 },
-            { field: 'name', headerName: 'Name', width: 150 },
-            {
-                field: 'category',
-                headerName: 'Category',
-                width: 150
-            },
-            {
-                field: 'image',
-                headerName: 'Image',
-                width: 150,
-                renderCell: (params) => {
-                    return (
-                        <>
-                            {
-                                params.row.image.length > 0 ? (
-                                    <div style={{ height: '100%' }}>
-                                        <img
-                                            onClick={() => handleOpen(params.row.image)}
-                                            className={classes.image}
-                                            src={params.row.image[0].url}
-                                            alt="text"
-                                        />
-                                        <Dialog
-                                            maxWidth="lg"
-                                            className={classes.dialog}
-                                            open={imageOpen}
-                                            onClose={() => setImageOpen(false)} aria-labelledby="form-dialog-title"
-                                        >
-                                            <div style={{ height: '646px', display: 'flex' }}>
-                                                {image.map(i => {
-                                                    return <img className={classes.zoomImage} src={i.url} alt="text" />
-                                                })}
-                                            </div>
-                                        </Dialog>
-                                    </div>)
-                                    : ''
-                            }
-                        </>
-                    )
-                }
-            },
-            {
-                field: 'button',
-                headerName: 'Button',
-                width: 150,
-                renderCell: (params) => {
-                    const { name, categoryId, _id, image } = params.row
-                    return (
-                        <>
-                            <DeleteProductForm form={{ name, _id, image }} />
-                            <EditProductForm form={{ categoryId, name, _id, image }} />
-                        </>
-                    )
-                }
-            },
-        ];
-
-        const rows = product.products.map((product, index) => {
-            const { _id, name, category, productImages } = product;
-            return {
-                id: index + 1,
-                _id,
-                name,
-                category: category.name,
-                categoryId: category._id,
-                image: productImages,
-            };
-        });
-        return (
-            <>
-                <DataGrid
-                    className={classes.table}
-                    rows={rows}
-                    columns={columns}
-                    pagination
-                    pageSize={5}
-                    disableSelectionOnClick
-                    rowHeight={64}
-                    loading={rows.length === 0}
-                />
-            </>
-        )
-    }
-
 
     return (
         <LayoutAdmin sidebar>
-            <Typography className={classes.title} variant="h3" color="primary">Product</Typography>
+            <Typography className={classes.title} variant="h3" color="primary">Sản phẩm</Typography>
             <AddProductForm />
-            <div style={{ height: 430, width: '100%' }}>
-                {renderCategory()}
+            <div className={`${classes.table} ag-theme-alpine`}>
+                <AgGridReact
+                    gridOptions={gridOptions}
+                    rowHeight={54}
+                />
             </div>
         </LayoutAdmin>
     );

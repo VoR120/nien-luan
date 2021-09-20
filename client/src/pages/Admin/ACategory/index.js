@@ -1,11 +1,10 @@
-import { makeStyles, Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import { DataGrid } from '@material-ui/data-grid';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import React, { useContext, useEffect, useState } from 'react';
+import { Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import { AgGridReact } from 'ag-grid-react';
+import React, { useContext, useState } from 'react';
 import AddCategoryForm from '../../../component/AddCategoryForm';
-import AddProductForm from '../../../component/AddProductForm';
 import DeleteCategoryForm from '../../../component/DeleteCategoryForm';
 import EditCategoryForm from '../../../component/EditCategoryForm';
 import LayoutAdmin from '../../../component/LayoutAdmin/LayoutAdmin';
@@ -17,7 +16,10 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(4)
     },
     table: {
+        height: '450px',
+        width: '100%',
         backgroundColor: theme.palette.secondary.light,
+        marginTop: '20px',
     },
     icon: {
         cursor: 'pointer',
@@ -82,57 +84,55 @@ const ACategory = () => {
         return rowsList;
     }
 
+    const [rowData] = useState(getAllCate(category.categories));
 
-    const renderCategory = () => {
+    const [columnDefs] = useState([
+        { field: 'id', headerName: 'STT', width: 120 },
+        { field: 'name', headerName: 'Name', width: 150 },
+        {
+            field: 'parent',
+            headerName: 'Category',
+            width: 150
+        },
+        {
+            field: 'button',
+            headerName: 'Button',
+            width: 150,
+            cellRendererFramework: (params) => {
+                const { name, parentId, _id } = params.data
+                return (
+                    <>
+                        <DeleteCategoryForm form={{ name, _id }} />
+                        <EditCategoryForm form={{ parentId, name, _id }} />
+                    </>
+                )
+            }
+        },
+    ]);
 
-        let rows = getAllCate(category.categories)
+    const gridOptions = {
+        defaultColDef: {
+            resizable: true,
+        },
+        columnDefs: columnDefs,
+        rowData: rowData,
+        defaultColDef: {
+            sortable: true,
+        },
+        pagination: true,
+        paginationPageSize: "10",
 
-        const columns = [
-            { field: 'id', headerName: 'STT', width: 120 },
-            { field: 'name', headerName: 'Name', width: 150 },
-            {
-                field: 'parent',
-                headerName: 'Category',
-                width: 150
-            },
-            {
-                field: 'button',
-                headerName: 'Button',
-                width: 150,
-                renderCell: (params) => {
-                    const { name, parentId, _id } = params.row
-                    return (
-                        <>
-                            <DeleteCategoryForm form={{ name, _id }} />
-                            <EditCategoryForm form={{ parentId, name, _id }} />
-                        </>
-                    )
-                }
-            },
-        ];
-        return (
-            <>
-                <DataGrid
-                    className={classes.table}
-                    rows={rows}
-                    columns={columns}
-                    pagination
-                    pageSize={5}
-                    disableSelectionOnClick
-                    rowHeight={64}
-                    loading={rows.length === 0}
-                />
-            </>
-        )
     }
-
 
     return (
         <LayoutAdmin sidebar>
-            <Typography className={classes.title} variant="h3" color="primary">Category</Typography>
+            <Typography className={classes.title} variant="h3" color="primary">Nhóm hàng hóa</Typography>
             <AddCategoryForm />
-            <div style={{ height: 430, width: '100%' }}>
-                {renderCategory()}
+            <div className={`${classes.table} ag-theme-alpine`}>
+                <AgGridReact
+                    gridOptions={gridOptions}
+                    rowHeight={54}
+                />
             </div>
         </LayoutAdmin>
     );
