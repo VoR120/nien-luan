@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { api } from '../config/urlConfig';
 
-const token = JSON.parse(window.localStorage.getItem('token'));
+const token = JSON.parse(window.localStorage.getItem('a_token'));
 console.log(token);
 
 const axiosIntance = axios.create({

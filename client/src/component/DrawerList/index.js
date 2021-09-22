@@ -78,10 +78,12 @@ const DrawerList = () => {
                         <ListItemText primary="Category" />
                     </ListItem>
                 </NavLink>
-                <ListItem button>
-                    <ShoppingCartIcon className={classes.icon} />
-                    <ListItemText primary="Order" />
-                </ListItem>
+                <NavLink to={"/aorder"}>
+                    <ListItem button>
+                        <ShoppingCartIcon className={classes.icon} />
+                        <ListItemText primary="Order" />
+                    </ListItem>
+                </NavLink>
                 <ListItem button>
                     <PeopleAltIcon className={classes.icon} />
                     <ListItemText primary="Customer" />

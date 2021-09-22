@@ -2,10 +2,8 @@ const Cart = require('../models/cartModel');
 const Product = require('../models/productModel');
 
 exports.addToCart = async (req, res) => {
-    console.log(req.body);
     try {
         const cart_db = await Cart.findOne({ user: req.user.id });
-        console.log(cart_db);
         if (cart_db) {
             // Nếu tìm thấy giỏ hàng => Cập nhật
             const product = req.body.cartItems.product._id
@@ -86,7 +84,6 @@ exports.deleteCart = async (req, res) => {
             cartObj.cartItems = newCart
         }
         const cart = await Cart.findOneAndUpdate({ user: req.user.id }, { cartItems: cartObj.cartItems })
-        console.log(cart);
         return res.status(200).json({ cart_db: cart });
     } catch (error) {
         return res.status(400).json({ msg: error.message })

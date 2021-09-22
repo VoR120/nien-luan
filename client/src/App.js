@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 import { isAdminLogin } from "./action/authAction";
 import { getAllCategory } from "./action/categoryAction";
+import { getAllOrder } from "./action/orderAction";
 import { getInitialData } from "./action/initialData";
 import { getAllProduct } from "./action/productAction";
 import { clearCart, getCart } from "./action/cartAction";
@@ -15,6 +16,7 @@ import { AuthContext } from "./contextAPI/AuthContext";
 import { CartContext } from "./contextAPI/CartContext";
 import { CategoryContext } from "./contextAPI/CategoryContext";
 import { ProductContext } from "./contextAPI/ProductContext";
+import { OrderAdminContext } from "./contextAPI/OrderAdminContext";
 import { UserContext } from "./contextAPI/UserContext";
 import { routes } from "./pages/routes";
 
@@ -31,6 +33,7 @@ function App() {
   const { aUser, aDispatch } = useContext(AuthContext);
   const { user, dispatch } = useContext(UserContext);
   const { category, categoryDispatch } = useContext(CategoryContext);
+  const { orderAdmin, orderAdminDispatch } = useContext(OrderAdminContext);
   const { cart, cartDispatch } = useContext(CartContext);
   const { productDispatch } = useContext(ProductContext);
 
@@ -52,14 +55,20 @@ function App() {
   useEffect(() => {
     if (aUser.isAuthenticated)
       getInitialData(categoryDispatch, productDispatch);
+      getAllOrder(orderAdminDispatch);
   }, [aUser.isAuthenticated])
 
-  // useEffect(() => {
-  //   if (user.isAuthenticated) {
-  //     getCart(cartDispatch)
-  //   } else
-  //     localStorage.setItem('cart', JSON.stringify(cart.cartObj));
-  // }, [cart])
+  useEffect(() => {
+    if (user.isAuthenticated) {
+      getCart(cartDispatch)
+    } else
+      localStorage.setItem('cart', JSON.stringify(cart.cartObj));
+  }, [user])
+
+  useEffect(() => {
+    if (!user.isAuthenticated)
+      localStorage.setItem("cart", JSON.stringify(cart.cartObj))
+  }, [cart.cartObj])
 
   return (
     <div className="App">

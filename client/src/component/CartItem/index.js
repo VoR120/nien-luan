@@ -50,10 +50,13 @@ const CartItem = (props) => {
     const { product, quantity, price, _id } = props.cartItem;
     const [quantityCart, setQuantityCart] = useState(quantity);
     const { cart, cartDispatch } = useContext(CartContext);
+    const [loading, setLoading] = useState(false);
     const classes = useStyles();
 
     const handleRemoveCart = () => {
+        setLoading(true);
         removeCartItem(cartDispatch, { _id: product._id });
+        setLoading(false);
     }
 
     const handleChangeUpdate = (e) => {
@@ -65,7 +68,7 @@ const CartItem = (props) => {
     return (
         // <Link to="/productdetail/">
         <Grid container className={classes.container}>
-            {!cart.loading ? (
+            {!loading ? (
                 <ClearIcon onClick={handleRemoveCart} className={classes.xBtn} />
             ) : (<LoadingButton className={classes.xBtn} loading></LoadingButton>)
             }

@@ -11,6 +11,8 @@ import { CartContext } from '../../contextAPI/CartContext';
 import CheckOut from '../CheckOut';
 import Delivery from '../Delivery';
 import OrderSuccess from '../OrderSuccess';
+import { getAddress } from '../../action/addressAction';
+import { AddressContext } from '../../contextAPI/AddressContext';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -60,14 +62,19 @@ const ProcessTab = () => {
     const classes = useStyles();
     const [value, setValue] = useState(1);
     const { cart } = useContext(CartContext);
-    const [info, setInfo] = useState('');
-    const [checkout, setCheckout] = useState('');
-    const [data, setData] = useState({ cart: cart.cartObj, info, checkout });
+    const { address, addressDispatch } = useContext(AddressContext);
+    const [addressId, setAddressId] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState("paymentAfterArrival");
+    const [data, setData] = useState({ items: cart.cartObj, addressId, paymentMethod });
     console.log(data);
 
     useEffect(() => {
-        setData({ cart: cart.cartObj, info, checkout });
-    }, [cart, info, checkout])
+        setData({ items: cart.cartObj, addressId, paymentMethod });
+    }, [cart, addressId, paymentMethod])
+
+    useEffect(() => {
+        getAddress(addressDispatch);
+    }, [])
 
     const nextStep = () => {
         setValue(value + 1);
@@ -105,6 +112,7 @@ const ProcessTab = () => {
                 <div className={classes.root}>
                     <AppBar className={classes.appBar} position="static" color="secondary">
                         <Tabs
+                            component="div"
                             value={value}
                             onChange={handleChange}
                             aria-label="simple tabs example"
@@ -116,13 +124,13 @@ const ProcessTab = () => {
                             <Tab label={contentTab(4, "Hoàn thành đơn hàng")} {...a11yProps(3)} />
                         </Tabs>
                     </AppBar>
-                    <TabPanel onClick={<Redirect to="/cart" />} value={value} index={0}>
+                    <TabPanel onClick={() => { history.push('/cart') }} value={value} index={0}>
                     </TabPanel>
-                    <TabPanel value={value} index={1}>
-                        <Delivery info={info} setInfo={setInfo} nextStep={nextStep} />
+                    <TabPanel component="div" value={value} index={1}>
+                        <Delivery addressId={addressId} setAddressId={setAddressId} nextStep={nextStep} />
                     </TabPanel>
                     <TabPanel value={value} index={2}>
-                        <CheckOut setCheckout={setCheckout} nextStep={nextStep} />
+                        <CheckOut data={data} addressId={addressId} setPaymentMethod={setPaymentMethod} nextStep={nextStep} />
                     </TabPanel>
                     <TabPanel value={value} index={3}>
                         <OrderSuccess />

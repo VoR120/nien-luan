@@ -3,7 +3,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
 import React, { useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 import { CartContext } from '../../contextAPI/CartContext';
 import logo from '../../public/img/V-logos_transparent.png';
 import DropdownMenu from '../DropdownMenu';
@@ -39,12 +39,14 @@ const useStyles = makeStyles(theme => ({
 
     },
     logoWrapper: {
-        height: '100%'
+        height: '100%',
+        cursor: 'pointer'
     },
     logo: {
         height: '100%'
     },
     typo: {
+        cursor: 'pointer',
         borderRight: '1px solid #212121',
         fontSize: '0.9rem',
         padding: '0 8px',
@@ -65,7 +67,7 @@ const Header = () => {
 
     const handleLogout = () => {
         userLogout(dispatch);
-        // history.push('/login');
+        history.push('/');
     }
 
     const handleLogin = () => {
@@ -77,11 +79,13 @@ const Header = () => {
             <AppBar position="fixed" className={classes.headerBar}>
                 <Toolbar className={classes.topHeaderBar}>
                     <div className={classes.headerWrapper}>
-                        {user.isAuthenticated  ?
+                        {user.isAuthenticated ?
                             (
                                 <>
                                     <Typography color="primary" className={classes.typo}>{user.userDetails.fullName}</Typography>
-                                    <Typography onClick={handleLogout} color="primary" className={classes.typo}>Đăng xuất</Typography>
+                                    <Typography onClick={handleLogout} color="primary" className={classes.typo} className={classes.typo}>Đăng xuất</Typography>
+                                    <Typography onClick={() => {history.push('/info')}} color="primary" className={classes.typo}>Thông tin</Typography>
+                                    <Typography onClick={() => {history.push('/myorder')}} color="primary" className={classes.typo}>Đơn hàng</Typography>
                                 </>
                             )
                             : (
@@ -91,17 +95,14 @@ const Header = () => {
                                 </>
                             )
                         }
-                        <Typography className={classes.typo} color="primary">Giúp đỡ</Typography>
                     </div>
                 </Toolbar>
                 <header className={classes.menuBar}>
                     <div className={classes.logoWrapper}>
-                        <Link to="/">
-                            <img className={classes.logo} src={logo} alt="" />
-                        </Link>
+                        <img onClick={() => { history.push('/') }} className={classes.logo} src={logo} alt="" />
                     </div>
                     <DropdownMenu />
-                    <RightHeaderBar quantityCart={!cart.loading ? quantityCart: 0} />
+                    <RightHeaderBar quantityCart={!cart.loading ? quantityCart : 0} />
                 </header>
             </AppBar>
         </div>

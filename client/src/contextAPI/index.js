@@ -6,6 +6,9 @@ import ThemeContextProvider from './ThemeContext';
 import ProductDetailContextProvider from './ProductDetailContext'
 import CartContextProvider from './CartContext';
 import UserContextProvider from './UserContext';
+import AddressContextProvider from './AddressContext';
+import OrderContextProvider from './OrderContext';
+import OrderAdminContextProvider from './OrderAdminContext';
 
 const AppContextProvider = (props) => {
     return (
@@ -16,7 +19,13 @@ const AppContextProvider = (props) => {
                         <ProductContextProvider>
                             <ProductDetailContextProvider>
                                 <CartContextProvider>
-                                    {props.children}
+                                    <AddressContextProvider>
+                                        <OrderContextProvider>
+                                            <OrderAdminContextProvider>
+                                                {props.children}
+                                            </OrderAdminContextProvider>
+                                        </OrderContextProvider>
+                                    </AddressContextProvider>
                                 </CartContextProvider>
                             </ProductDetailContextProvider>
                         </ProductContextProvider>

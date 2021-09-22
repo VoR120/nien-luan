@@ -1,4 +1,3 @@
-import { useHistory } from 'react-router-dom';
 import axios from '../helper/axios';
 
 export const userLogin = async (dispatch, payload) => {

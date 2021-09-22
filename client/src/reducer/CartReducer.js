@@ -27,9 +27,9 @@ const CartReducer = (state, action) => {
             }
         case 'ADD_TO_CART_SUCCESS':
             let cartState = [...state.cartObj];
-            const { product, quantity, price, _id } = action.payload.cartItem;
+            const { product, quantity, price } = action.payload.cartItem;
             if (cartState.length === 0) {
-                cartState.push({ product, quantity, price, _id });
+                cartState.push({ product, quantity, price });
             } else {
                 let index = cartState.findIndex(c => c.product._id === product._id);
                 if (index > -1) {
@@ -39,9 +39,10 @@ const CartReducer = (state, action) => {
                         price: cartState[index].price + price
                     }
                 } else {
-                    cartState.push({ product, quantity, price, _id });
+                    cartState.push({ product, quantity, price });
                 }
             }
+            // localStorage.setItem("cart", JSON.stringify(cartState));
             return {
                 ...state,
                 cartObj: cartState,
@@ -63,6 +64,7 @@ const CartReducer = (state, action) => {
                     price: cartItem.priceUpdate,
                 }
             }
+            // localStorage.setItem("cart", JSON.stringify(cartStateUpdate));
             return {
                 ...state,
                 cartObj: cartStateUpdate,
@@ -74,10 +76,11 @@ const CartReducer = (state, action) => {
                 loading: true
             }
         case 'REMOVE_CART_ITEM_SUCCESS':
+            // localStorage.setItem("cart", JSON.stringify(state.cartObj.filter(item => item.product._id !== action.payload._id)));
             return {
                 ...state,
+                loading: false,
                 cartObj: state.cartObj.filter(item => item.product._id !== action.payload._id),
-                loading: false
             }
         case 'CLEAR_CART_REQUEST':
             return {
@@ -85,6 +88,7 @@ const CartReducer = (state, action) => {
                 loading: true
             }
         case 'CLEAR_CART_SUCCESS':
+            // localStorage.removeItem("cart")
             return {
                 cartObj: [],
                 loading: false,

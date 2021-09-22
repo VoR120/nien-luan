@@ -1,4 +1,5 @@
 import axios from "../helper/axios";
+import aaxios from "../helper/adminAxios";
 
 export const getAllProduct = async (dispatch) => {
     dispatch({ type: 'GET_ALL_PRODUCT_REQUEST' });
@@ -140,7 +141,7 @@ export const addProduct = async (dispatch, payload) => {
             url: '/api/product/add',
             data: data,
         }
-        const res = await axios(config);
+        const res = await aaxios(config);
         console.log("Res: ", res);
         if (res.status === 201) {
             dispatch({
@@ -169,7 +170,7 @@ export const updateProduct = async (dispatch, payload) => {
             url: '/api/product/' + data._id,
             data: data,
         }
-        const res = await axios(config);
+        const res = await aaxios(config);
         if (res.status === 200)
             dispatch({
                 type: 'UPDATE_PRODUCT_SUCCESS',
@@ -187,14 +188,14 @@ export const deleteProduct = async (dispatch, payload) => {
             method: 'DELETE',
             url: '/api/product/' + payload._id,
         }
-        const res = await axios(config);
+        const res = await aaxios(config);
         console.log(res);
         if (res.status === 200) {
             const deleteArray = [];
             payload.image.map(img => {
                 deleteArray.push(img.public_id);
             })
-            const resCloud = await axios.post('/api/delete', { public_id: deleteArray });
+            const resCloud = await aaxios.post('/api/delete', { public_id: deleteArray });
             console.log(resCloud);
             dispatch({
                 type: 'DELETE_PRODUCT_SUCCESS',

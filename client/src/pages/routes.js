@@ -24,6 +24,12 @@ export const routes = [
         component: lazy(() => import('./Admin/ARegister'))
     },
     {
+        path: '/aorder',
+        exact: true,
+        component: lazy(() => import('./Admin/AOrder')),
+        isPrivate: true,
+    },
+    {
         path: '/admin',
         exact: true,
         component: lazy(() => import('./Admin/ADashboard')),
@@ -63,5 +69,15 @@ export const routes = [
         path: '/register',
         exact: true,
         component: lazy(() => import('./User/Register')),
+    },
+    {
+        path: '/info',
+        exact: true,
+        component: lazy(() => import('./User/Info')),
+    },
+    {
+        path: '/myorder',
+        exact: true,
+        component: lazy(() => import('./User/MyOrder')),
     },
 ]

@@ -1,4 +1,4 @@
-import axios from "../helper/axios";
+import axios from "../helper/adminAxios";
 
 export const getInitialData = async (categoryDispatch, productDispatch) => {
     try {

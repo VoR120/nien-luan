@@ -9,7 +9,9 @@ import {
     Typography,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { addOrder } from '../../action/orderAction';
+import { AddressContext } from '../../contextAPI/AddressContext';
 import OrderSummary from '../OrderSummary';
 
 const useStyles = makeStyles(theme => ({
@@ -37,11 +39,21 @@ const useStyles = makeStyles(theme => ({
 
 const CheckOut = (props) => {
     const classes = useStyles();
-    const [checkOut, setCheckOut] = useState("paymentAfterArrival")
+    const [checkOut, setCheckOut] = useState("paymentAfterArrival");
+    const [totalAmount, setTotalAmount] = useState(0);
+    const { address } = useContext(AddressContext);
+    let addressChoose = address.address.filter(a => a._id === props.addressId);
     const handleSubmit = () => {
-        props.setCheckout(checkOut);
+        const newData = {...props.data, totalAmount};
+        addOrder(newData);
         props.nextStep();
     }
+
+    const handleChange = (e) => {
+        setCheckOut(e.target.value)
+        props.setPaymentMethod(e.target.value);
+    }
+
     return (
         <Grid container spacing={2}>
             <Grid xs={12}>
@@ -51,7 +63,7 @@ const CheckOut = (props) => {
             </Grid>
             <Grid item xs={8} fullWidth>
                 <FormControl component="fieldset">
-                    <RadioGroup aria-label="checkout" name="checkout" value={checkOut} onChange={e => setCheckOut(e.target.value)}>
+                    <RadioGroup aria-label="checkout" name="checkout" value={checkOut} onChange={handleChange}>
                         <FormControlLabel
                             value="paymentAfterArrival"
                             control={<Radio color="primary" />}
@@ -74,7 +86,12 @@ const CheckOut = (props) => {
                 </FormControl>
             </Grid>
             <Grid item xs={4}>
-                <OrderSummary delivery />
+                <OrderSummary
+                    delivery
+                    addressChoose={addressChoose}
+                    addressId={props.addressId}
+                    setTotalAmount={setTotalAmount}
+                />
                 <Button onClick={handleSubmit} className={classes.mainBtn} fullWidth>Đặt hàng</Button>
             </Grid>
         </Grid>

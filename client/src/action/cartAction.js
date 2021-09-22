@@ -2,9 +2,9 @@ import axios from "../helper/axios";
 
 export const getCart = async (dispatch) => {
     try {
-        dispatch({ type: 'GET_CART_REQUEST' });
         const user = localStorage.getItem('user');
         if (user != null) {
+            dispatch({ type: 'GET_CART_REQUEST' });
             let config = {
                 method: 'GET',
                 url: '/api/cart/get',
@@ -22,6 +22,7 @@ export const getCart = async (dispatch) => {
 export const addToCart = async (dispatch, payload) => {
     console.log("Payload card: ", payload);
     try {
+        dispatch({ type: 'ADD_TO_CART_REQUEST' });
         const user = localStorage.getItem('user');
         if (user != null) {
             let config = {
@@ -32,11 +33,10 @@ export const addToCart = async (dispatch, payload) => {
             const res = await axios(config);
             console.log(res);
         }
-        dispatch({ type: 'ADD_TO_CART_REQUEST' });
         dispatch({
             type: 'ADD_TO_CART_SUCCESS',
             payload: {
-                cartItem:  payload.cartItem
+                cartItem: payload.cartItem
             }
         })
     } catch (error) {
@@ -47,6 +47,7 @@ export const addToCart = async (dispatch, payload) => {
 export const updateCart = async (dispatch, payload) => {
     console.log("Payload card: ", payload);
     try {
+        dispatch({ type: 'UPDATE_CART_ITEM_REQUEST' });
         const user = localStorage.getItem('user');
         if (user != null) {
             let config = {
@@ -64,7 +65,6 @@ export const updateCart = async (dispatch, payload) => {
             const res = await axios(config);
             console.log(res);
         }
-        dispatch({ type: 'UPDATE_CART_ITEM_REQUEST' });
         dispatch({
             type: 'UPDATE_CART_ITEM_SUCCESS',
             payload: {
@@ -77,15 +77,17 @@ export const updateCart = async (dispatch, payload) => {
 }
 
 export const removeCartItem = async (dispatch, payload) => {
-    console.log(payload);
     try {
-        let config = {
-            method: 'DELETE',
-            url: '/api/cart/' + payload._id,
-        }
-        const res = await axios(config);
-        console.log("Res cart: ", res)
         dispatch({ type: 'REMOVE_CART_ITEM_REQUEST' });
+        const user = localStorage.getItem('user');
+        if (user != null) {
+            let config = {
+                method: 'DELETE',
+                url: '/api/cart/' + payload._id,
+            }
+            const res = await axios(config);
+            console.log("Res cart: ", res)
+        }
         dispatch({
             type: 'REMOVE_CART_ITEM_SUCCESS',
             payload: {
@@ -100,12 +102,15 @@ export const removeCartItem = async (dispatch, payload) => {
 export const clearCart = async (dispatch) => {
     try {
         dispatch({ type: 'CLEAR_CART_REQUEST' });
-        let config = {
-            method: 'DELETE',
-            url: '/api/cart/destroy',
+        const user = localStorage.getItem('user');
+        if (user != null) {
+            let config = {
+                method: 'DELETE',
+                url: '/api/cart/destroy',
+            }
+            const res = await axios(config);
+            console.log("Res cart: ", res)
         }
-        const res = await axios(config);
-        console.log("Res cart: ", res)
         dispatch({
             type: 'CLEAR_CART_SUCCESS',
         })

@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom';
-import axios from '../helper/axios';
+import axios from '../helper/adminAxios';
 
 export const adminLogin = async (dispatch, payload) => {
     try {

@@ -22,6 +22,12 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: theme.palette.primary.dark,
             color: theme.palette.secondary.main,
         }
+    },
+    viewBtn: {
+        margin: '20px 0',
+        padding: '10px 0',
+        width: '30%',
+        marginRight: '8px'
     }
 }))
 
@@ -36,12 +42,13 @@ const OrderSuccess = () => {
         return () => {
             clearCart(cartDispatch);
         }
-    })
+    }, [])
     return (
         <Paper className={classes.paper} elevation={0}>
             <Typography className={classes.header} variant="h2">Bạn đã đặt hàng thành công!</Typography>
             <Typography variant="h5">Đơn hàng sẽ được giao trong khoảng 7 ngày</Typography>
             <Typography variant="h5">Cảm ơn bạn đã tin tưởng và ủng hộ!</Typography>
+            <Button variant="outlined" className={classes.viewBtn} fullWidth>Xem đơn hàng</Button>
             <Button onClick={handleRedirect} className={classes.mainBtn} fullWidth>Tiếp tục mua sắm</Button>
         </Paper>
     );
