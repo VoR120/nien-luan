@@ -37,7 +37,7 @@ exports.getCategory = async (req, res) => {
 exports.addCategory = async (req, res) => {
     try {
         const { name, parentId } = req.body;
-        const slug = slugify(name);
+        const slug = slugify(name, { lower: true });
         const cate = new Category(parentId === '' ? { name, slug } : { name, slug, parentId });
 
         await cate.save((error, data) => {
@@ -59,7 +59,7 @@ exports.addCategory = async (req, res) => {
 exports.updateCategory = async (req, res) => {
     const { name, parentId } = req.body;
     try {
-        const slug = slugify(name);
+        const slug = slugify(name, { lower: true });
         const cate_db = await Category.findByIdAndUpdate(
             { _id: req.params.id },
             parentId === "" ? { name, slug } : { name, slug, parentId },

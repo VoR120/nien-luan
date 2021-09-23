@@ -17,7 +17,7 @@ class APIfeatures {
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(/\b(gte|gt|lt|lte|regex)\b/g, match => '$' + match);
 
-        this.query.find(JSON.parse(queryStr));
+        this.query.find(JSON.parse(queryStr)).populate("category");
 
         return this;
     }
@@ -50,7 +50,7 @@ exports.getProduct = async (req, res) => {
 exports.addProduct = async (req, res) => {
     try {
         const { name, category, price, quantity, description, size, weight, brand, magnet, productImages } = req.body;
-        const slug = slugify(name);
+        const slug = slugify(name, { lower: true });
         const categoryFull = await Category.findById(category);
 
         const product = new Product({
@@ -86,7 +86,7 @@ exports.updateProduct = async (req, res) => {
             }
         }
         let updateArr = new Object();
-        updateArr = { ...noUnArr, slug: slugify(name) }
+        updateArr = { ...noUnArr, slug: slugify(name, { lower: true }) }
         updateArr.productImages = JSON.parse(productImages);
 
         const product = await Product.findByIdAndUpdate(

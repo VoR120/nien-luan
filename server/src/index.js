@@ -17,6 +17,7 @@ app.use(cors());
 const { connectDB } = require('./configs/db');
 connectDB();
 
+
 // Route
 const route = require('./routes/index');
 route(app);

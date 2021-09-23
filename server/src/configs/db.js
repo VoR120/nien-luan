@@ -5,7 +5,7 @@ const connectDB = async () => {
         useCreateIndex: true,
         useFindAndModify: false,
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
     }, err => {
         if (err) throw err;
         console.log('Connected to MongoDB');

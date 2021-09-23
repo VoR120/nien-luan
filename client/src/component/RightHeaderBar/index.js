@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import SearchForm from '../SearchForm';
 
 const useStyles = makeStyles((theme) => ({
     rightBarWrapper: {
@@ -63,28 +64,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const getCartBadge = () => {
-
-}
-
 const RightHeaderBar = (props) => {
     const classes = useStyles();
     return (
         <div className={classes.rightBarWrapper}>
-            <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                    <SearchIcon color="primary" />
-                </div>
-                <InputBase
-                    placeholder="Search…"
-                    classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                    }}
-                    color="primary"
-                    inputProps={{ 'aria-label': 'search' }}
-                />
-            </div>
+            <SearchForm />
             <NavLink to="/cart">
                 <IconButton size="large">
                     <Badge badgeContent={props.quantityCart} color="primary">

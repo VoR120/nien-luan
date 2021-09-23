@@ -215,3 +215,16 @@ export const removeProductDetail = (dispatch) => {
         console.log(error);
     }
 }
+
+export const searchProduct = async (payload) => {
+    try {
+        let config = {
+            method: 'GET',
+            url: '/api/product/get?slug[regex]=' + payload.key.toLowerCase(),
+        }
+        const res = await aaxios(config);
+        return res.data.product_db
+    } catch (error) {
+
+    }
+}
