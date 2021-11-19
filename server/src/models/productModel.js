@@ -17,10 +17,10 @@ const productSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-      brand: { type: String },
-      weight: { type: Number },
-      size: { type: Number },
-      magnet: { type: Boolean },
+    brand: { type: String },
+    weight: { type: Number },
+    size: { type: Number },
+    magnet: { type: Boolean },
     description: {
       type: String,
       required: true,
@@ -42,6 +42,12 @@ const productSchema = new mongoose.Schema(
       {
         userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         review: String,
+      },
+    ],
+    ratings: [
+      {
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        rating: String,
       },
     ],
     category: {

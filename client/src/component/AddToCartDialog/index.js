@@ -106,8 +106,8 @@ const AddToCartDialog = (props) => {
                             Xem giỏ hàng
                         </Button>
                     </Link>
-                    <Button className={classes.btn2} variant="outlined" onClick={handleSubmit}>
-                        Thanh toán
+                    <Button className={classes.btn2} variant="outlined" onClick={() => { history.push('/') }}>
+                        Tiếp tục mua sắm
                     </Button>
                 </DialogActions>
             </Dialog>

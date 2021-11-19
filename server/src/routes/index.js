@@ -12,6 +12,8 @@ const route = (app) => {
     app.use('/api', require('./cartRouter'));
     app.use('/api', require('./initialDataRouter'));
     app.use('/api', require('./upload'));
+    app.use('/api', require('./customerRouter'));
+    app.use('/api', require('./statisticsRouter'));
 }
 
 module.exports = route;

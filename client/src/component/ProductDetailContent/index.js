@@ -5,9 +5,11 @@ import React, { useContext, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { addToCart } from '../../action/cartAction';
 import { CartContext } from '../../contextAPI/CartContext';
+import { UserContext } from '../../contextAPI/UserContext';
 import { ProductDetailContext } from '../../contextAPI/ProductDetailContext';
 import AddToCartDialog from '../AddToCartDialog';
 import ProductMeta from '../ProductMeta';
+import ContentDialog from '../ContentDialog';
 
 const useStyle = makeStyles(theme => ({
     header: {
@@ -45,19 +47,24 @@ const useStyle = makeStyles(theme => ({
     }
 }))
 
-const ProductDetailContent = () => {
-    const { productDetail } = useContext(ProductDetailContext);
+const ProductDetailContent = (props) => {
     const [open, setOpen] = useState(false);
-    const { _id, slug, name, category, price, quantity, description, size, weight, brand, magnet, productImages } = productDetail.product
+    const [loginOpen, setLoginOpen] = useState(false);
+    const { _id, slug, name, category, price, quantity, description, size, weight, brand, magnet, productImages, ratingView } = props.productDetail
     const classes = useStyle();
-    const [value, setValue] = useState(3);
+    const [value, setValue] = useState(ratingView.rate);
     const [quantityOrder, setQuantityOrder] = useState(1);
     const { cart, cartDispatch } = useContext(CartContext);
+    const { user } = useContext(UserContext);
     const cartItem = { product: { _id, slug, name, price, productImages }, price: price * quantityOrder, quantity: quantityOrder }
-    
+
     const handleAddToCart = () => {
-        addToCart(cartDispatch, { cartItem: cartItem });
-        setOpen(true)
+        if (user.isAuthenticated) {
+            addToCart(cartDispatch, { cartItem: cartItem });
+            setOpen(true)
+        } else {
+            setLoginOpen(true)
+        }
     }
 
     const getM = (magnet) => {
@@ -76,15 +83,21 @@ const ProductDetailContent = () => {
             <div className={classes.starrating}>
                 <Rating size="small" name="read-only" value={value} readOnly />
                 <Typography className={classes.mountRating} variant="h6" color="textSecondary" component="h2">
-                    (2 đánh giá)
+                    ({ratingView.rate})
+                </Typography>
+                <Typography className={classes.mountRating} variant="h6" color="textSecondary" component="h2">
+                    ({ratingView.quantity} đánh giá)
                 </Typography>
             </div>
             <Typography className={classes.price} variant="h3" component="h2" color="primary">
                 <NumberFormat value={price} displayType="text" thousandSeparator={true} suffix="₫" />
             </Typography>
+            <Typography variant="h5" component="h2" color="primary">
+                Kho: {quantity}
+            </Typography>
             {quantity > 0 ? (
                 <div className={classes.quantity}>
-                    <TextField value={quantityOrder} onChange={(e) => setQuantityOrder(e.target.value)} size="small" type="number" className={classes.number} />
+                    <TextField value={quantityOrder} onChange={(e) => setQuantityOrder(e.target.value)} size="small" type="number" inputProps={{ min: 1, max: quantity }} className={classes.number} />
                     <Button
                         onClick={handleAddToCart}
                         variant="outlined"
@@ -123,6 +136,7 @@ const ProductDetailContent = () => {
                 </Typography>
             </div>
             <AddToCartDialog cartItem={cartItem} open={open} setOpen={setOpen} />
+            <ContentDialog open={loginOpen} setOpen={setLoginOpen} />
         </div>
     )
 }

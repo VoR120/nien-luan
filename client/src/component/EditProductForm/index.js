@@ -25,6 +25,7 @@ import { updateProduct } from '../../action/productAction';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
 import { ProductContext } from '../../contextAPI/ProductContext';
 import axios from '../../helper/axios';
+import { SnackbarContext } from '../../contextAPI/SnackbarContext';
 const useStyles = makeStyles(theme => ({
     button: {
         marginBottom: theme.spacing(2),
@@ -108,6 +109,7 @@ const EditProductForm = (props) => {
     const classes = useStyles();
     const { product, productDispatch } = useContext(ProductContext);
     const { category, categoryDispatch } = useContext(CategoryContext);
+    const { openSnackbarDispatch } = useContext(SnackbarContext);
     const { categoryId, name, _id, image, price, size, quantity, brand, description, weight, magnet } = props.form;
     const [open, setOpen] = useState(false);
     const [nameUpdate, setNameUpdate] = useState(name);
@@ -180,7 +182,7 @@ const EditProductForm = (props) => {
         formData.append("magnet", magnetUpdate);
         formData.append("description", desUpdate);
         formData.append("productImages", JSON.stringify(imageUpload));
-        updateProduct(productDispatch, formData);
+        updateProduct(productDispatch, formData, openSnackbarDispatch);
         handleClose();
     }
     return (
@@ -264,8 +266,8 @@ const EditProductForm = (props) => {
                         <FormControl margin="dense" component="fieldset">
                             <FormLabel component="legend">Nam châm</FormLabel>
                             <RadioGroup style={{ display: 'inline' }} aria-label="magnet" name="magnet" value={magnetUpdate} onChange={e => { setMagnetUpdate(e.target.value) }}>
-                                <FormControlLabel value="true" control={<Radio color="primary" />} label="Có" />
-                                <FormControlLabel value="false" control={<Radio color="primary" />} label="Không" />
+                                <FormControlLabel value={true} control={<Radio color="primary" />} label="Có" />
+                                <FormControlLabel value={false} control={<Radio color="primary" />} label="Không" />
                             </RadioGroup>
                         </FormControl>
                         <FormControl margin="dense" fullWidth>

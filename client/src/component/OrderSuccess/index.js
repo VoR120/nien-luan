@@ -48,7 +48,7 @@ const OrderSuccess = () => {
             <Typography className={classes.header} variant="h2">Bạn đã đặt hàng thành công!</Typography>
             <Typography variant="h5">Đơn hàng sẽ được giao trong khoảng 7 ngày</Typography>
             <Typography variant="h5">Cảm ơn bạn đã tin tưởng và ủng hộ!</Typography>
-            <Button variant="outlined" className={classes.viewBtn} fullWidth>Xem đơn hàng</Button>
+            <Button onClick={() => {history.push('/myorder')}} variant="outlined" className={classes.viewBtn} fullWidth>Xem đơn hàng</Button>
             <Button onClick={handleRedirect} className={classes.mainBtn} fullWidth>Tiếp tục mua sắm</Button>
         </Paper>
     );

@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { getAllProduct } from '../../action/productAction';
+import React, { useContext, useEffect, useState } from 'react';
+import { getAllProduct, getNewestProduct, getPopulateProduct } from '../../action/productAction';
 import CarouselSlider from '../../component/Carousel';
 import Section from '../../component/Section';
 import SectionCategory from '../../component/SectionCategory';
@@ -9,18 +9,30 @@ import lubeImage from '../../public/img/cosmic-lubes-1_1024x.jpg';
 import stickerImage from '../../public/img/stickers-2_1024x.jpg';
 
 const Main = () => {
-    const { product, productDispatch } = useContext(ProductContext);
+
+    const { product } = useContext(ProductContext);
+    const [newProducts, setNewProducts] = useState([]);
+    const [populateProducts, setPopulateProducts] = useState([]);
 
     useEffect(() => {
-        getAllProduct(productDispatch);
-    }, [])
+        const fetchNewProducts = async () => {
+            const res = await getNewestProduct();
+            setNewProducts(res)
+        }
+        fetchNewProducts();
+        const fetchPopulateProducts = async () => {
+            const res = await getPopulateProduct();
+            setPopulateProducts(res)
+        }
+        fetchPopulateProducts();
+    }, []);
 
     return (
         <>
             <CarouselSlider />
             <div style={{ padding: '0 48px' }}>
-                <Section loading={product.loading} title={"Sản phẩm mới"} products={product.products} />
-                <Section loading={product.loading} title={"Sản phẩm phổ biến"} products={product.products} />
+                <Section loading={product.loading} title={"Sản phẩm mới"} products={newProducts} />
+                <Section loading={product.loading} title={"Sản phẩm phổ biến"} products={populateProducts} />
                 <SectionCategory
                     link={"/collection/Cosmic-Lube"}
                     image={lubeImage}

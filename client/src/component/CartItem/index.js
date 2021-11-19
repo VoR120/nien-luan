@@ -60,9 +60,11 @@ const CartItem = (props) => {
     }
 
     const handleChangeUpdate = (e) => {
+        setLoading(true);
         setQuantityCart(e.target.value);
         const cartItem = { productUpdate: product, priceUpdate: product.price * e.target.value, quantityUpdate: Number(e.target.value) }
         updateCart(cartDispatch, { cartItem: cartItem });
+        setLoading(false);
     }
 
     return (
@@ -83,7 +85,20 @@ const CartItem = (props) => {
                     </Typography>
                     <div className={classes.quantitySpan}>
                         <Typography className={classes.price}>Số lượng: </Typography>
-                        <TextField value={quantityCart} onChange={handleChangeUpdate} size="small" type="number" className={classes.number} />
+
+                        <TextField
+                            value={quantityCart}
+                            onChange={handleChangeUpdate}
+                            size="small"
+                            type="number"
+                            inputProps={{ min: 1 }}
+                            className={classes.number}
+                            disabled={cart.loading}
+                        />
+                        {cart.loading && (
+                            <LoadingButton loading></LoadingButton>
+                        )}
+
                     </div>
                 </div>
             </Grid>

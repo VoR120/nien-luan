@@ -42,7 +42,7 @@ const CartReducer = (state, action) => {
                     cartState.push({ product, quantity, price });
                 }
             }
-            // localStorage.setItem("cart", JSON.stringify(cartState));
+            
             return {
                 ...state,
                 cartObj: cartState,

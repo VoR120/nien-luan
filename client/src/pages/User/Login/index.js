@@ -13,10 +13,13 @@ import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Redirect, useHistory } from 'react-router-dom';
+import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import { adminLogin } from '../../../action/authAction';
 import { UserContext } from '../../../contextAPI/UserContext';
+import { SnackbarContext } from '../../../contextAPI/SnackbarContext';
+import { CartContext } from '../../../contextAPI/CartContext';
 import { userLogin } from '../../../action/userAction';
+import { getCart } from '../../../action/cartAction';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -45,6 +48,8 @@ const useStyles = makeStyles((theme) => ({
 export const Login = () => {
   const classes = useStyles();
   const { user, dispatch } = useContext(UserContext);
+  const { cart, cartDispatch } = useContext(CartContext);
+  const { openSnackbarDispatch } = useContext(SnackbarContext);
   const history = useHistory();
 
   const {
@@ -85,8 +90,7 @@ export const Login = () => {
   }, [user.loading])
 
   const onSubmit = (data) => {
-
-    userLogin(dispatch, data);
+    userLogin(dispatch, data, openSnackbarDispatch);
   }
 
   return (
@@ -135,10 +139,10 @@ export const Login = () => {
             error={Boolean(errors.password)}
             helperText={errors.password?.message}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remenber" color="primary" />}
             label="Nhớ mật khẩu"
-          />
+          /> */}
           <Button
             type="submit"
             fullWidth
@@ -150,15 +154,15 @@ export const Login = () => {
             Đăng nhập
           </Button>
           <Grid container>
-            <Grid item xs>
+            {/* <Grid item xs>
               <Link href="#" variant="body2">
                 Quên mật khẩu
               </Link>
-            </Grid>
+            </Grid> */}
             <Grid item>
-              <Link href="#" variant="body2">
+              <NavLink to="/register" variant="body2">
                 {"Chưa có tài khoản? Đăng ký"}
-              </Link>
+              </NavLink>
             </Grid>
           </Grid>
         </form>

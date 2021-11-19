@@ -73,7 +73,7 @@ const CheckOut = (props) => {
                                 </Paper>
                             }
                         />
-                        <FormControlLabel
+                        {/* <FormControlLabel
                             value="paypal"
                             control={<Radio color="primary" />}
                             label={
@@ -81,7 +81,7 @@ const CheckOut = (props) => {
                                     <Typography variant="h5">Paypal</Typography>
                                 </Paper>
                             }
-                        />
+                        /> */}
                     </RadioGroup>
                 </FormControl>
             </Grid>

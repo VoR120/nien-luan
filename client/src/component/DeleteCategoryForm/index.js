@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useContext, useState } from 'react';
 import { deleteCategory } from '../../action/categoryAction';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
+import { SnackbarContext } from '../../contextAPI/SnackbarContext';
 const useStyles = makeStyles(theme => ({
     dialogContent: {
         marginBottom: theme.spacing(2),
@@ -36,13 +37,14 @@ const createCategoryList = (categories, options = []) => {
 const DeleteCategoryForm = (props) => {
     const classes = useStyles();
     const { category, categoryDispatch } = useContext(CategoryContext);
+    const { openSnackbarDispatch } = useContext(SnackbarContext);
     const { name, _id } = props.form;
     const [open, setOpen] = useState(false);
     const handleClose = () => {
         setOpen(false);
     }
     const handleSubmit = () => {
-        deleteCategory(categoryDispatch, { _id })
+        deleteCategory(categoryDispatch, { _id }, openSnackbarDispatch)
         handleClose();
     }
     return (
@@ -51,14 +53,14 @@ const DeleteCategoryForm = (props) => {
             <Dialog fullWidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Edit Category</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
-                    Do you want delete "{name}" category and all subcategory?
+                    Bạn có muốn xóa danh mục "{name}"?
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary" >
-                        Cancel
+                        Hủy
                     </Button>
                     <Button className={classes.deleteBtn} color="secondary" onClick={handleSubmit}>
-                        Delete
+                        Xóa
                     </Button>
                 </DialogActions>
             </Dialog>

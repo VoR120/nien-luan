@@ -5,13 +5,13 @@ export const routes = [
         path: '/product',
         exact: false,
         component: lazy(() => import('./Admin/AProduct')),
-        isPrivate: true,
+        isPrivateAdmin: true,
     },
     {
         path: '/category',
         exact: false,
         component: lazy(() => import('./Admin/ACategory')),
-        isPrivate: true,
+        isPrivateAdmin: true,
     },
     {
         path: '/admin/login',
@@ -27,13 +27,19 @@ export const routes = [
         path: '/aorder',
         exact: true,
         component: lazy(() => import('./Admin/AOrder')),
-        isPrivate: true,
+        isPrivateAdmin: true,
+    },
+    {
+        path: '/customer',
+        exact: true,
+        component: lazy(() => import('./Admin/ACustomer')),
+        isPrivateAdmin: true,
     },
     {
         path: '/admin',
         exact: true,
         component: lazy(() => import('./Admin/ADashboard')),
-        isPrivate: true,
+        isPrivateAdmin: true,
     },
     {
         path: '/',
@@ -59,6 +65,7 @@ export const routes = [
         path: '/order',
         exact: true,
         component: lazy(() => import('./User/Order')),
+        isPrivate: true
     },
     {
         path: '/login',
@@ -74,10 +81,12 @@ export const routes = [
         path: '/info',
         exact: true,
         component: lazy(() => import('./User/Info')),
+        isPrivate: true
     },
     {
         path: '/myorder',
         exact: true,
         component: lazy(() => import('./User/MyOrder')),
+        isPrivate: true
     },
 ]

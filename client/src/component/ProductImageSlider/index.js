@@ -4,8 +4,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { ProductDetailContext } from '../../contextAPI/ProductDetailContext';
 import './styles.css';
 
-const ProductImageSlider = () => {
-    const { productDetail } = useContext(ProductDetailContext);
+const ProductImageSlider = (props) => {
+    const { productDetail } = props
     return (
         <div className="product-detail-slider" style={{ width: '100%' }}>
             <Carousel
@@ -13,7 +13,7 @@ const ProductImageSlider = () => {
                 showArrows={false}
                 showIndicators={false}
             >
-                {productDetail.product.productImages.map(image => {
+                {productDetail.productImages.map(image => {
                     return (
                         <div>
                             <img src={image.url} />

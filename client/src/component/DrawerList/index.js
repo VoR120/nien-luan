@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
     },
     list: {
         overflow: 'hidden',
-        paddingTop: '20px'
+        paddingTop: '20px',
+        paddingBottom: '20px'
     }
 }))
 // const useStyleBase = makeStyles(theme => ({
@@ -60,38 +61,40 @@ const DrawerList = () => {
                 <div className={`${classes.toolbarMixins} + ${classes.toolbar}`}></div>
             </Paper>
             <List className={classes.list}>
-                <NavLink to={"/admin"}>
+                {/* <NavLink to={"/admin"}>
                     <ListItem button>
                         <HomeIcon className={classes.icon} />
                         <ListItemText primary="Dashboard" />
                     </ListItem>
-                </NavLink>
+                </NavLink> */}
                 <NavLink to={"/product"}>
                     <ListItem button>
                         <ListIcon className={classes.icon} />
-                        <ListItemText primary="Product" />
+                        <ListItemText primary="Sản phẩm" />
                     </ListItem>
                 </NavLink>
                 <NavLink to={"/category"}>
                     <ListItem button>
                         <CategoryIcon className={classes.icon} />
-                        <ListItemText primary="Category" />
+                        <ListItemText primary="Danh mục" />
+                    </ListItem>
+                </NavLink>
+                <NavLink to={"/customer"}>
+                    <ListItem button>
+                        <PeopleAltIcon className={classes.icon} />
+                        <ListItemText primary="Khách hàng" />
                     </ListItem>
                 </NavLink>
                 <NavLink to={"/aorder"}>
                     <ListItem button>
                         <ShoppingCartIcon className={classes.icon} />
-                        <ListItemText primary="Order" />
+                        <ListItemText primary="Đơn hàng" />
                     </ListItem>
                 </NavLink>
-                <ListItem button>
-                    <PeopleAltIcon className={classes.icon} />
-                    <ListItemText primary="Customer" />
-                </ListItem>
-                <ListItem button>
+                {/* <ListItem button>
                     <LocalAtmIcon className={classes.icon} />
                     <ListItemText primary="Revenue" />
-                </ListItem>
+                </ListItem> */}
             </List>
         </>
     );

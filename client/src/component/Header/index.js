@@ -2,7 +2,7 @@ import { Toolbar } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { CartContext } from '../../contextAPI/CartContext';
 import logo from '../../public/img/V-logos_transparent.png';
@@ -11,6 +11,8 @@ import RightHeaderBar from '../RightHeaderBar';
 import { UserContext } from '../../contextAPI/UserContext';
 import { adminLogout } from '../../action/authAction';
 import { userLogout } from '../../action/userAction';
+import MySnackBar from '../UI/MySnackBar';
+import { SnackbarContext } from '../../contextAPI/SnackbarContext';
 
 const useStyles = makeStyles(theme => ({
     headerBar: {
@@ -58,15 +60,19 @@ const useStyles = makeStyles(theme => ({
 
 const Header = () => {
     const classes = useStyles();
-    const { cart } = useContext(CartContext);
+    const [open, setOpen] = useState(false);
+    const { cart, cartDispatch } = useContext(CartContext);
     const { user, dispatch } = useContext(UserContext);
+    const { openSnackbarDispatch } = useContext(SnackbarContext)
+
     const history = useHistory()
     const quantityCart = cart.cartObj.reduce((sum, next) => {
         return Number(sum) + Number(next.quantity);
     }, 0);
 
     const handleLogout = () => {
-        userLogout(dispatch);
+        userLogout(dispatch, openSnackbarDispatch);
+        cartDispatch({ type: 'CLEAR_CART_SUCCESS' })
         history.push('/');
     }
 
@@ -84,14 +90,14 @@ const Header = () => {
                                 <>
                                     <Typography color="primary" className={classes.typo}>{user.userDetails.fullName}</Typography>
                                     <Typography onClick={handleLogout} color="primary" className={classes.typo} className={classes.typo}>Đăng xuất</Typography>
-                                    <Typography onClick={() => {history.push('/info')}} color="primary" className={classes.typo}>Thông tin</Typography>
-                                    <Typography onClick={() => {history.push('/myorder')}} color="primary" className={classes.typo}>Đơn hàng</Typography>
+                                    <Typography onClick={() => { history.push('/info') }} color="primary" className={classes.typo}>Thông tin</Typography>
+                                    <Typography onClick={() => { history.push('/myorder') }} color="primary" className={classes.typo}>Đơn hàng</Typography>
                                 </>
                             )
                             : (
                                 <>
                                     <Typography onClick={handleLogin} className={classes.typo} color="primary">Đăng nhập</Typography>
-                                    <Typography className={classes.typo} color="primary">Đăng ký</Typography>
+                                    <Typography onClick={() => { history.push('/register') }} className={classes.typo} color="primary">Đăng ký</Typography>
                                 </>
                             )
                         }

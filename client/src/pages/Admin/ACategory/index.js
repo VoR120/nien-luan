@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Paper, TableContainer, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -9,6 +9,7 @@ import DeleteCategoryForm from '../../../component/DeleteCategoryForm';
 import EditCategoryForm from '../../../component/EditCategoryForm';
 import LayoutAdmin from '../../../component/LayoutAdmin/LayoutAdmin';
 import { CategoryContext } from '../../../contextAPI/CategoryContext';
+import MaterialTable from '@material-table/core';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -16,10 +17,9 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(4)
     },
     table: {
-        height: '450px',
         width: '100%',
-        backgroundColor: theme.palette.secondary.light,
-        marginTop: '20px',
+        backgroundColor: 'white',
+        marginTop: '18px',
     },
     icon: {
         cursor: 'pointer',
@@ -84,22 +84,22 @@ const ACategory = () => {
         return rowsList;
     }
 
-    const [rowData] = useState(getAllCate(category.categories));
+    const [rows] = useState(getAllCate(category.categories));
 
-    const [columnDefs] = useState([
-        { field: 'id', headerName: 'STT', width: 120 },
-        { field: 'name', headerName: 'Name', width: 150 },
+    const [columns] = useState([
+        { field: 'id', title: 'STT', width: 120 },
+        { field: 'name', title: 'Name', width: 150 },
         {
             field: 'parent',
-            headerName: 'Category',
+            title: 'Category',
             width: 150
         },
         {
             field: 'button',
-            headerName: 'Button',
+            title: 'Button',
             width: 150,
-            cellRendererFramework: (params) => {
-                const { name, parentId, _id } = params.data
+            render: (params) => {
+                const { name, parentId, _id } = params
                 return (
                     <>
                         <DeleteCategoryForm form={{ name, _id }} />
@@ -110,30 +110,27 @@ const ACategory = () => {
         },
     ]);
 
-    const gridOptions = {
-        defaultColDef: {
-            resizable: true,
-        },
-        columnDefs: columnDefs,
-        rowData: rowData,
-        defaultColDef: {
-            sortable: true,
-        },
-        pagination: true,
-        paginationPageSize: "10",
-
-    }
-
     return (
         <LayoutAdmin sidebar>
             <Typography className={classes.title} variant="h3" color="primary">Nhóm hàng hóa</Typography>
             <AddCategoryForm />
-            <div className={`${classes.table} ag-theme-alpine`}>
-                <AgGridReact
-                    gridOptions={gridOptions}
-                    rowHeight={54}
+            <TableContainer style={{ maxWidth: "1170px", }} >
+                <MaterialTable
+                    components={{
+                        Container: (props) => <Paper
+                            {...props}
+                            className={classes.table}
+                            variant="outlined"
+                        />
+                    }}
+                    title={""}
+                    columns={columns}
+                    data={rows}
+                    options={{
+                        padding: 'normal'
+                    }}
                 />
-            </div>
+            </TableContainer>
         </LayoutAdmin>
     );
 };

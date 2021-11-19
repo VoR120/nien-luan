@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useContext, useState } from 'react';
 import { deleteProduct } from '../../action/productAction';
 import { ProductContext } from '../../contextAPI/ProductContext';
+import { SnackbarContext } from '../../contextAPI/SnackbarContext';
 const useStyles = makeStyles(theme => ({
     dialogContent: {
         marginBottom: theme.spacing(2),
@@ -36,13 +37,14 @@ const createCategoryList = (categories, options = []) => {
 const DeleteProductForm = (props) => {
     const classes = useStyles();
     const { product, productDispatch } = useContext(ProductContext);
+    const { openSnackbarDispatch } = useContext(SnackbarContext);
     const { name, _id, image } = props.form;
     const [open, setOpen] = useState(false);
     const handleClose = () => {
         setOpen(false);
     }
     const handleSubmit = () => {
-        deleteProduct(productDispatch, { _id, image })
+        deleteProduct(productDispatch, { _id, image }, openSnackbarDispatch)
         handleClose();
     }
     return (
@@ -51,14 +53,14 @@ const DeleteProductForm = (props) => {
             <Dialog fullWidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Edit Category</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
-                    Do you want delete "{name}" product?
+                    Bạn muốn xóa sản phẩm "{name}"?
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary" >
-                        Cancel
+                        Hủy
                     </Button>
                     <Button className={classes.deleteBtn} color="secondary" onClick={handleSubmit}>
-                        Delete
+                        xóa
                     </Button>
                 </DialogActions>
             </Dialog>

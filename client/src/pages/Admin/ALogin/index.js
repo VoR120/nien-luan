@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Redirect, useHistory } from 'react-router-dom';
+import { NavLink, Redirect, useHistory } from 'react-router-dom';
 import { adminLogin } from '../../../action/authAction';
 import { AuthContext } from '../../../contextAPI/AuthContext';
 
@@ -56,7 +56,7 @@ export const ALogin = () => {
 
   useEffect(() => {
     if (aUser.isAuthenticated == true)
-        history.push('/admin')
+        history.push('/product')
   }, [aUser.isAuthenticated])
 
   useEffect(() => {
@@ -150,15 +150,15 @@ export const ALogin = () => {
             Đăng nhập
           </Button>
           <Grid container>
-            <Grid item xs>
+            {/* <Grid item xs>
               <Link href="#" variant="body2">
                 Quên mật khẩu
               </Link>
-            </Grid>
+            </Grid> */}
             <Grid item>
-              <Link href="#" variant="body2">
+              <NavLink color="primary" to="/register" variant="body2">
                 {"Chưa có tài khoản? Đăng ký"}
-              </Link>
+              </NavLink>
             </Grid>
           </Grid>
         </form>

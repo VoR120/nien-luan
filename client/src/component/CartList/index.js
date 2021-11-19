@@ -43,25 +43,21 @@ const CartList = () => {
     return (
         <div className="cart-list">
             {
-                !cart.loading ?
-                    cart.cartObj.length > 0 ?
-                        (<>
-                            {cart.cartObj.map((cartItem, index) => {
-                                console.log("CartItem: ", cartItem);
-                                return <CartItem key={index} cartDispatch={cartDispatch} cartItem={cartItem} />
-                            })}
+                cart.cartObj.length > 0 ?
+                    (
+                        <>
+                            {cart.cartObj.map((cartItem, index) =>
+                                <CartItem key={index} cartDispatch={cartDispatch} cartItem={cartItem} />)}
                             <Typography onClick={handleRemoveAll} className={classes.removeALl} variant="h5">Xóa tất cả</Typography>
                         </>
-                        ) : (
-                            <>
-                                <Typography variant="h4">
-                                    Giỏ hàng của bạn đang trống
-                                </Typography>
-                                <Button onClick={handleRedirect} className={classes.mainBtn}>Mua sắm ngay</Button>
-                            </>)
-                    : (
+                    )
+                    :
+                    (
                         <>
-                            <Skeleton variant="rectangular" width="760px" height="163px"></Skeleton>
+                            <Typography variant="h4">
+                                Giỏ hàng của bạn đang trống
+                            </Typography>
+                            <Button onClick={handleRedirect} className={classes.mainBtn}>Mua sắm ngay</Button>
                         </>
                     )
             }

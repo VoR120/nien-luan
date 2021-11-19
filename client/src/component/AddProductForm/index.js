@@ -23,6 +23,7 @@ import React, { useContext, useState } from 'react';
 import { addProduct } from '../../action/productAction';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
 import { ProductContext } from '../../contextAPI/ProductContext';
+import { SnackbarContext } from '../../contextAPI/SnackbarContext';
 import axios from '../../helper/axios';
 const useStyles = makeStyles(theme => ({
     button: {
@@ -107,6 +108,7 @@ const AddCategoryForm = () => {
     const classes = useStyles();
     const { product, productDispatch } = useContext(ProductContext);
     const { category, categoryDispatch } = useContext(CategoryContext);
+    const { openSnackbarDispatch } = useContext(SnackbarContext);
     const [open, setOpen] = useState(false);
 
     const [name, setName] = useState('');
@@ -171,7 +173,7 @@ const AddCategoryForm = () => {
         formData.append("magnet", magnet);
         formData.append("description", des);
         formData.append("productImages", JSON.stringify(imageUpload));
-        addProduct(productDispatch, formData);
+        addProduct(productDispatch, formData, openSnackbarDispatch);
         handleClose();
     }
     return (

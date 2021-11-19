@@ -1,15 +1,16 @@
-import { Typography } from '@mui/material';
+import { Paper, TableContainer, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AddProductForm from '../../../component/AddProductForm';
 import DeleteProductForm from '../../../component/DeleteProductForm';
 import EditProductForm from '../../../component/EditProductForm';
 import ImageZoom from '../../../component/ImageZoom';
 import LayoutAdmin from '../../../component/LayoutAdmin/LayoutAdmin';
 import { ProductContext } from '../../../contextAPI/ProductContext';
+import MaterialTable from '@material-table/core';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -17,10 +18,9 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(4)
     },
     table: {
-        height: '450px',
         width: '100%',
-        backgroundColor: theme.palette.secondary.light,
-        marginTop: '20px',
+        backgroundColor: 'white',
+        marginTop: '18px',
     },
     image: {
         height: '52px',
@@ -48,41 +48,54 @@ const AProduct = () => {
     const classes = useStyles();
     const { product, productDispatch } = useContext(ProductContext);
 
-    const [rowData] = useState(product.products.map((product, index) => {
+    const [rows, setRows] = useState(product.products.map((product, index) => {
         const { _id, name, category, price, quantity, brand, description, weight, size, magnet, productImages } = product;
         return {
             id: index + 1,
             _id,
             name,
+            price,
+            quantity,
             category: category.name,
             categoryId: category._id,
             price, quantity, brand, description, weight, magnet, size,
             image: productImages,
         };
     }));
-    const [columnDefs] = useState([
-        { field: 'id', headerName: 'STT', width: 120 },
-        { field: 'name', headerName: 'Tên', width: 150 },
+    const [columns] = useState([
+        { field: 'id', title: 'STT', width: 50 },
+        { field: 'name', title: 'Tên', width: 200 },
         {
             field: 'category',
-            headerName: 'Danh mục',
+            title: 'Danh mục',
             width: 150
         },
         {
             field: 'brand',
-            headerName: 'Thương hiệu',
+            title: 'Thương hiệu',
+            width: 150
+        },
+        {
+            field: 'price',
+            title: 'Giá',
+            width: 150
+        },
+        {
+            field: 'quantity',
+            title: 'Kho',
             width: 150
         },
         {
             field: 'image',
-            headerName: 'Hình ảnh',
+            title: 'Hình ảnh',
             width: 150,
-            cellRendererFramework: (params) => {
+            render: (params) => {
+                console.log(params);
                 return (
                     <>
                         {
-                            params.data.image.length > 0 ? (
-                                <ImageZoom images={params.data.image} />
+                            params.image.length > 0 ? (
+                                <ImageZoom images={params.image} />
                             )
                                 : ''
                         }
@@ -92,10 +105,10 @@ const AProduct = () => {
         },
         {
             field: 'button',
-            headerName: 'Chức năng',
+            title: 'Chức năng',
             width: 150,
-            cellRendererFramework: (params) => {
-                const { name, categoryId, _id, image, price, quantity, brand, description, size, weight, magnet } = params.data
+            render: (params) => {
+                const { name, categoryId, _id, image, price, quantity, brand, description, size, weight, magnet } = params
                 return (
                     <>
                         <DeleteProductForm form={{ name, _id, image }} />
@@ -106,30 +119,28 @@ const AProduct = () => {
         },
     ]);
 
-    const gridOptions = {
-        defaultColDef: {
-            resizable: true,
-        },
-        columnDefs: columnDefs,
-        rowData: rowData,
-        defaultColDef: {
-            sortable: true,
-        },
-        pagination: true,
-        paginationPageSize: "10",
-
-    }
-
     return (
         <LayoutAdmin sidebar>
             <Typography className={classes.title} variant="h3" color="primary">Sản phẩm</Typography>
             <AddProductForm />
-            <div className={`${classes.table} ag-theme-alpine`}>
-                <AgGridReact
-                    gridOptions={gridOptions}
-                    rowHeight={54}
+            <TableContainer style={{ maxWidth: "1170px", }} >
+                <MaterialTable
+                    components={{
+                        Container: (props) => <Paper
+                            {...props}
+                            className={classes.table}
+                            variant="outlined"
+                        />
+                    }}
+                    title={""}
+                    columns={columns}
+                    data={rows}
+                    options={{
+                        padding: 'normal'
+                    }}
+                    isLoading={product.loading}
                 />
-            </div>
+            </TableContainer>
         </LayoutAdmin>
     );
 };

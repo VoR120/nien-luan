@@ -27,7 +27,7 @@ export const getAllCategory = async (dispatch) => {
     }
 }
 
-export const addCategory = async (dispatch, payload) => {
+export const addCategory = async (dispatch, payload, open) => {
     let data = {};
     payload.forEach((value, key) => {
         data[key] = value
@@ -46,6 +46,13 @@ export const addCategory = async (dispatch, payload) => {
                 type: 'ADD_NEW_CATEGORY_SUCCESS',
                 payload: { category: res.data.category }
             });
+            open({
+                type: 'SET_OPEN',
+                payload: {
+                    msg: "Đã cập nhật!",
+                    type: "success"
+                }
+            })
         }
     } catch (error) {
         dispatch({
@@ -54,15 +61,23 @@ export const addCategory = async (dispatch, payload) => {
                 error: error.response.data
             }
         })
+        open({
+            type: 'SET_OPEN',
+            payload: {
+                msg: "Đã xảy ra lỗi!",
+                type: "error"
+            }
+        })
     }
 }
 
-export const updateCategory = async (dispatch, payload) => {
+export const updateCategory = async (dispatch, payload, open) => {
     let data = {};
     payload.forEach((value, key) => {
         data[key] = value
     })
     try {
+        dispatch({ type: 'UPDATE_CATEGORY_REQUEST' });
         let config = {
             method: 'PUT',
             url: '/api/category/' + data._id,
@@ -73,13 +88,28 @@ export const updateCategory = async (dispatch, payload) => {
             type: 'UPDATE_CATEGORY_SUCCESS',
             payload: { category: res.data.category }
         })
+        open({
+            type: 'SET_OPEN',
+            payload: {
+                msg: "Đã cập nhật!",
+                type: "success"
+            }
+        })
     } catch (error) {
         console.log(error);
+        open({
+            type: 'SET_OPEN',
+            payload: {
+                msg: "Đã xảy ra lỗi!",
+                type: "error"
+            }
+        })
     }
 }
 
-export const deleteCategory = async (dispatch, payload) => {
+export const deleteCategory = async (dispatch, payload, open) => {
     try {
+        dispatch({ type: 'DELETE_CATEGORY_REQUEST' });
         let config = {
             method: 'DELETE',
             url: '/api/category/' + payload._id,
@@ -92,9 +122,23 @@ export const deleteCategory = async (dispatch, payload) => {
                 type: 'DELETE_CATEGORY_SUCCESS',
                 payload: { _id: res.data.data._id }
             })
+            open({
+                type: 'SET_OPEN',
+                payload: {
+                    msg: "Đã cập nhật!",
+                    type: "success"
+                }
+            })
         }
 
     } catch (error) {
         console.log(error);
+        open({
+            type: 'SET_OPEN',
+            payload: {
+                msg: "Đã xảy ra lỗi!",
+                type: "error"
+            }
+        })
     }
 }

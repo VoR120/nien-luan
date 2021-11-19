@@ -8,6 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import React, { useContext, useState } from 'react';
 import { addCategory } from '../../action/categoryAction';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
+import { SnackbarContext } from '../../contextAPI/SnackbarContext';
 const useStyles = makeStyles(theme => ({
     button: {
         marginBottom: theme.spacing(2),
@@ -62,6 +63,7 @@ const createCategoryList = (categories, options = []) => {
 const AddCategoryForm = () => {
     const classes = useStyles();
     const { category, categoryDispatch } = useContext(CategoryContext);
+    const { openSnackbarDispatch } = useContext(SnackbarContext);
     const [open, setOpen] = useState(false);
     const [name, setName] = useState('');
     const [categoryParent, setCategoryParent] = useState('');
@@ -75,7 +77,7 @@ const AddCategoryForm = () => {
         let formData = new FormData();
         formData.append("name", name);
         formData.append("parentId", categoryParent);
-        addCategory(categoryDispatch, formData);
+        addCategory(categoryDispatch, formData, openSnackbarDispatch);
         handleClose();
     }
     return (
@@ -93,7 +95,7 @@ const AddCategoryForm = () => {
                                 select
                                 value={categoryParent}
                                 onChange={(e) => setCategoryParent(e.target.value)}
-                                label="Nhóm hàng hóa"
+                                label="Nhóm hàng hóa lớn"
                                 size="small"
                             >
                                 <MenuItem value="">

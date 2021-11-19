@@ -4,6 +4,7 @@ import AppBar from '@mui/material/AppBar';
 import React from 'react';
 import ProcessTab from '../../../component/ProcessTab';
 import logo from '../../../public/img/V-logos_transparent.png';
+import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     headerBar: {
@@ -34,9 +35,9 @@ const Order = () => {
             <AppBar position="static" className={classes.headerBar}>
                 <header className={classes.menuBar}>
                     <div className={classes.logoWrapper}>
-                        <Link href="/">
+                        <NavLink to="/">
                             <img className={classes.logo} src={logo} alt="" />
-                        </Link>
+                        </NavLink>
                     </div>
                 </header>
             </AppBar>

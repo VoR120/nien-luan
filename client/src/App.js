@@ -2,7 +2,7 @@ import { Backdrop, CircularProgress } from "@mui/material";
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useContext, useEffect } from "react";
 import { Suspense } from "react";
-import { BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Switch, useHistory } from "react-router-dom";
 import { isAdminLogin } from "./action/authAction";
 import { getAllCategory } from "./action/categoryAction";
 import { getAllOrder } from "./action/orderAction";
@@ -19,6 +19,7 @@ import { ProductContext } from "./contextAPI/ProductContext";
 import { OrderAdminContext } from "./contextAPI/OrderAdminContext";
 import { UserContext } from "./contextAPI/UserContext";
 import { routes } from "./pages/routes";
+import MySnackBar from "./component/UI/MySnackBar";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -32,8 +33,8 @@ function App() {
   const classes = useStyles();
   const { aUser, aDispatch } = useContext(AuthContext);
   const { user, dispatch } = useContext(UserContext);
-  const { category, categoryDispatch } = useContext(CategoryContext);
-  const { orderAdmin, orderAdminDispatch } = useContext(OrderAdminContext);
+  const { categoryDispatch } = useContext(CategoryContext);
+  const { orderAdminDispatch } = useContext(OrderAdminContext);
   const { cart, cartDispatch } = useContext(CartContext);
   const { productDispatch } = useContext(ProductContext);
 
@@ -45,7 +46,15 @@ function App() {
   }, [])
 
   useEffect(() => {
+    if (aUser.isAuthenticated) {
+      getInitialData(categoryDispatch, productDispatch);
+      getAllOrder(orderAdminDispatch);
+    }
+  }, [aUser.isAuthenticated])
+
+  useEffect(() => {
     isUserLogin(dispatch)
+    // getAllProduct(productDispatch);
     getCart(cartDispatch)
     if (!user.isAuthenticated) {
       return <Redirect to="/login" />
@@ -53,22 +62,15 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (aUser.isAuthenticated)
-      getInitialData(categoryDispatch, productDispatch);
-      getAllOrder(orderAdminDispatch);
-  }, [aUser.isAuthenticated])
-
-  useEffect(() => {
     if (user.isAuthenticated) {
       getCart(cartDispatch)
-    } else
-      localStorage.setItem('cart', JSON.stringify(cart.cartObj));
+    }
   }, [user])
 
-  useEffect(() => {
-    if (!user.isAuthenticated)
-      localStorage.setItem("cart", JSON.stringify(cart.cartObj))
-  }, [cart.cartObj])
+  // useEffect(() => {
+  //   if (!user.isAuthenticated)
+  //     localStorage.setItem("cart", JSON.stringify(cart.cartObj))
+  // }, [cart.cartObj])
 
   return (
     <div className="App">

@@ -3,6 +3,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import AdminDrawer from '../AdminDrawer';
 import AdminHeader from '../AdminHeader';
+import CustomizedSnackbars from '../MySnackbar'
 
 const useStyle = makeStyles(theme => ({
     content: {
@@ -31,6 +32,7 @@ const LayoutAdmin = (props) => {
                 props.children
             )
             }
+            <CustomizedSnackbars />
         </>
     );
 };

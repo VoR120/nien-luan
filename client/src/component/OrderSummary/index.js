@@ -52,7 +52,7 @@ const OrderSummary = (props) => {
     const sumPrice = cart.cartObj.reduce((sum, next) => sum + next.price, 0);
 
     useEffect(() => {
-        if(provinceChoose === "Thành phố Hà Nội" || sumPrice >= 300000) {
+        if (provinceChoose === "Thành phố Hà Nội" || sumPrice >= 300000) {
             setDeliveryPrice(0);
             props.setDeliveryPrice && props.setDeliveryPrice(0);
         } else {
@@ -82,23 +82,15 @@ const OrderSummary = (props) => {
                 return (
                     <div className={classes.sub}>
                         <span className={classes.sumName}>
-                            {!cart.loading ?
-                                (<>{cartItem.product.name}</>) :
-                                (<><Skeleton variant="rectangular" width="125px" height="20px"></Skeleton></>)}
-
+                            {cartItem.product.name}
                         </span>
                         <div className={classes.numberSpan}>
                             <span>
-                                {!cart.loading ?
-                                    (<>x
-                                        {cartItem.quantity}</>) :
-                                    (<><Skeleton variant="rectangular" width="20px" height="20px"></Skeleton></>)}
+                                x
+                                {cartItem.quantity}
                             </span>
                             <span>
-                                {!cart.loading ?
-                                    (<><NumberFormat value={cartItem.price} displayType="text" thousandSeparator={true} suffix="₫" /></>) :
-                                    (<><Skeleton variant="rectangular" width="67px" height="20px"></Skeleton></>)}
-
+                                <NumberFormat value={cartItem.price} displayType="text" thousandSeparator={true} suffix="₫" />
                             </span>
                         </div>
                     </div>
@@ -120,14 +112,9 @@ const OrderSummary = (props) => {
             <Divider />
             <div className={classes.subTotal}>
                 <span className={classes.sumName}>Tổng</span>
-                {!cart.loading ? (
-                    <Typography variant="h3">
-                        <NumberFormat className="sum-price" value={delivery ? sumPrice + deliveryPrice : sumPrice } displayType="text" thousandSeparator={true} suffix="₫" />
-                    </Typography>
-                ) : (
-                    <Skeleton variant="rectangular" width="107px" height="30px"></Skeleton>
-                )
-                }
+                <Typography variant="h3">
+                    <NumberFormat className="sum-price" value={delivery ? sumPrice + deliveryPrice : sumPrice} displayType="text" thousandSeparator={true} suffix="₫" />
+                </Typography>
             </div>
         </Paper>
     );

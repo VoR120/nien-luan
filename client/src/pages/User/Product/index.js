@@ -1,8 +1,8 @@
 import { Grid } from '@mui/material';
 import { Skeleton } from '@mui/material';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getProductDetail, getProductRelate, removeProductDetail } from '../../../action/productAction';
+import { getProductDetail, getProductRelate, getRelateProduct, removeProductDetail } from '../../../action/productAction';
 import BreadcrumbsDiv from '../../../component/BreadcrumbsDiv';
 import Layout from '../../../component/Layout';
 import ProductDetailContent from '../../../component/ProductDetailContent';
@@ -10,55 +10,67 @@ import ProductImageSlider from '../../../component/ProductImageSlider';
 import Section from '../../../component/Section';
 import { ProductContext } from '../../../contextAPI/ProductContext';
 import { ProductDetailContext } from '../../../contextAPI/ProductDetailContext';
+import ProductSkeleton from './ProductSkeleton';
 
 
 const ProductDetail = () => {
-    const { product, productDispatch } = useContext(ProductContext);
-    const { productDetail, productDetailDispatch } = useContext(ProductDetailContext)
+    const [productDetail, setProductDetail] = useState(null);
+    const [productRelate, setProductRelate] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [loading2, setLoading2] = useState(true);
     const location = useLocation();
     const slug = location.pathname.slice(15);
 
     useEffect(() => {
         const fetchAPI = async () => {
-            await getProductDetail(productDetailDispatch, { slug });
+            const res = await getProductDetail(slug);
+            setProductDetail(res)
+            setLoading(false)
         }
+        setLoading(true);
         fetchAPI();
-        return () => {
-            removeProductDetail(productDetailDispatch)
-        }
     }, [])
 
     useEffect(() => {
-        if (productDetail.product != null) {
-            const data = Object.assign({}, { slug: productDetail.product.category.slug }, { _id: productDetail.product._id })
-            getProductRelate(productDispatch, { data })
+        const fetchAPI = async () => {
+            const res = await getRelateProduct({ slug: productDetail.category.name, id: productDetail._id })
+            setProductRelate(res)
+            setLoading2(false)
         }
+        if (productDetail)
+            fetchAPI();
     }, [productDetail])
+
+    useEffect(() => {
+        const fetchAPI = async () => {
+            const res = await getProductDetail(slug);
+            setProductDetail(res)
+            setLoading(false)
+        }
+        setLoading(true)
+        setProductRelate([])
+        fetchAPI();
+    }, [slug])
 
     return (
         <Layout headfoot>
             <BreadcrumbsDiv link={"/productdetail"} content={"Product Detail"} />
             <div style={{ padding: '0 48px' }}>
                 <Grid container direction="column">
-                    {productDetail.product !== null ? (
+                    {(productDetail && !loading) ?
                         <Grid item container sm={12} spacing={6}>
                             <Grid item sm={6}>
-                                <ProductImageSlider />
+                                <ProductImageSlider productDetail={productDetail} />
                             </Grid>
                             <Grid item sm={6}>
-                                <ProductDetailContent />
+                                <ProductDetailContent productDetail={productDetail} />
                             </Grid>
                         </Grid>
-                    ) :
-                        (
-                            <div style={{ display: 'flex' }}>
-                                <Skeleton width="50%" style={{ marginRight: '20px' }} height="398.5px" variant="rectangular" />
-                                <Skeleton width="50%" height="595px" variant="rectangular" />
-                            </div>
-                        )
+                        :
+                        <ProductSkeleton />
                     }
                 </Grid>
-                <Section loading={product.loading} title="Sản phẩm liên quan" products={product.products} />
+                <Section loading={loading2} title="Sản phẩm liên quan" products={productRelate} />
             </div>
         </Layout>
     );

@@ -11,14 +11,13 @@ class APIfeatures {
     filtering() {
         const queryObj = { ...this.queryString };
 
-        const excludedFields = ['sort']
+        const excludedFields = ['sort', 'limit']
         excludedFields.forEach(el => delete (queryObj[el]))
 
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(/\b(gte|gt|lt|lte|regex)\b/g, match => '$' + match);
 
         this.query.find(JSON.parse(queryStr)).populate("category");
-
         return this;
     }
     sorting() {
@@ -39,8 +38,7 @@ exports.getProduct = async (req, res) => {
         if (req.query.category)
             req.query.category = await Category.findOne({ slug: req.query.category });
         const features = new APIfeatures(Product.find(), req.query).filtering().sorting();
-        const product_db = await features.query
-
+        const product_db = await features.query;
         res.status(200).json({ product_db })
     } catch (error) {
         return res.status(400).json({ msg: error.message });
@@ -57,7 +55,7 @@ exports.addProduct = async (req, res) => {
             name, slug, price, description, quantity, size, weight, brand, magnet,
             category: categoryFull,
             productImages: JSON.parse(productImages),
-            createdBy: req.user._id
+            createdBy: req.user.id
         })
         await product.save((error, data) => {
             if (error) {

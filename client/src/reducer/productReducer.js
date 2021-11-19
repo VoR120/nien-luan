@@ -52,9 +52,11 @@ const ProductReducer = (state, action) => {
                 loading: true,
             }
         case 'ADD_NEW_PRODUCT_SUCCESS':
+            let newProduct = [...state.products];
+            newProduct.unshift(action.payload.product);
             return {
                 ...state,
-                products: [...state.products, action.payload.product],
+                products: newProduct,
                 loading: false,
             }
         case 'ADD_NEW_PRODUCT_FAILED':

@@ -9,29 +9,32 @@ import UserContextProvider from './UserContext';
 import AddressContextProvider from './AddressContext';
 import OrderContextProvider from './OrderContext';
 import OrderAdminContextProvider from './OrderAdminContext';
+import SnackbarContextProvider from './SnackbarContext';
 
 const AppContextProvider = (props) => {
     return (
         <ThemeContextProvider>
-            <AuthContextProvider>
-                <UserContextProvider>
-                    <CategoryContextProvider>
-                        <ProductContextProvider>
-                            <ProductDetailContextProvider>
-                                <CartContextProvider>
-                                    <AddressContextProvider>
-                                        <OrderContextProvider>
-                                            <OrderAdminContextProvider>
-                                                {props.children}
-                                            </OrderAdminContextProvider>
-                                        </OrderContextProvider>
-                                    </AddressContextProvider>
-                                </CartContextProvider>
-                            </ProductDetailContextProvider>
-                        </ProductContextProvider>
-                    </CategoryContextProvider>
-                </UserContextProvider>
-            </AuthContextProvider>
+            <SnackbarContextProvider>
+                <AuthContextProvider>
+                    <UserContextProvider>
+                        <CategoryContextProvider>
+                            <ProductContextProvider>
+                                <ProductDetailContextProvider>
+                                    <CartContextProvider>
+                                        <AddressContextProvider>
+                                            <OrderContextProvider>
+                                                <OrderAdminContextProvider>
+                                                    {props.children}
+                                                </OrderAdminContextProvider>
+                                            </OrderContextProvider>
+                                        </AddressContextProvider>
+                                    </CartContextProvider>
+                                </ProductDetailContextProvider>
+                            </ProductContextProvider>
+                        </CategoryContextProvider>
+                    </UserContextProvider>
+                </AuthContextProvider>
+            </SnackbarContextProvider>
         </ThemeContextProvider>
     );
 };

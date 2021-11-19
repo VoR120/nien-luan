@@ -1,6 +1,7 @@
 import React from 'react';
 import Footer from '../Footer';
 import Header from '../Header';
+import CustomizedSnackbars from '../MySnackbar';
 
 const Layout = (props) => {
     return (
@@ -17,9 +18,9 @@ const Layout = (props) => {
                 <>
                     {props.children}
                 </>
-
             )
             }
+            <CustomizedSnackbars />
         </>
     );
 };

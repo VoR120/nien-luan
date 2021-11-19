@@ -1,4 +1,7 @@
 import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
     Button,
     Checkbox,
     Divider,
@@ -38,7 +41,6 @@ const useStyles = makeStyles(theme => ({
         margin: '0 4px'
     },
     sortMenu: {
-        marginTop: '44px',
     },
     formControl: {
         width: '100%',
@@ -60,12 +62,12 @@ const ProductCollection = () => {
     const classes = useStyles();
     const { product, productDispatch } = useContext(ProductContext);
     const [sortExpand, setSortExpand] = useState(null);
+    const [sortSl, setSortSl] = useState(null);
     const [magnetSl, setMagnetSl] = useState(null);
     const [priceSl, setPriceSl] = useState(null);
     const [brandSl, setBrandSl] = useState(null);
     const location = useLocation();
     const category = location.pathname.slice(12);
-    console.log(category);
 
     useEffect(() => {
         let filterArr = [];
@@ -75,9 +77,15 @@ const ProductCollection = () => {
 
     useEffect(() => {
         let filterArr = [];
-        filterArr.push({ magnet: magnetSl }, { price: priceSl }, { brand: brandSl }, { category: category })
+        filterArr.push({ category: category })
+        getProduct(productDispatch, { filterArr: filterArr })
+    }, [category])
+
+    useEffect(() => {
+        let filterArr = [];
+        filterArr.push({ magnet: magnetSl }, { price: priceSl }, { brand: brandSl }, { category: category }, { sort: sortSl })
         getProduct(productDispatch, { filterArr })
-    }, [magnetSl, priceSl, brandSl])
+    }, [magnetSl, priceSl, brandSl, sortSl])
 
     const magnetList = [
         { value: "0", label: 'Không' },
@@ -91,11 +99,18 @@ const ProductCollection = () => {
         { value: 'gt10', label: 'trên 1.000.000 VND' },
     ]
     const brandList = [
-        { value: 'gan', label: 'GAN', },
-        { value: 'yuxin', label: 'Yuxin', }
+        { value: 'GAN', label: 'GAN', },
+        { value: 'Yuxin', label: 'Yuxin', },
+        { value: 'QiYi', label: 'QiYi', },
+        { value: 'MoYu', label: 'MoYu', },
+        { value: 'MoFang', label: 'MoFang', },
     ]
     const handleClose = () => {
         setSortExpand(null);
+    }
+
+    const handleSort = (e, value) => {
+        setSortSl(value);
     }
 
     const handleClick = (e) => {
@@ -103,7 +118,7 @@ const ProductCollection = () => {
     };
 
     const handleChangeValue = (e, setValue) => {
-        e.target.checked === true ? setValue(e.target.value) : setValue(null);
+        e.target.checked ? setValue(e.target.value) : setValue(null);
     }
 
     return (
@@ -111,7 +126,7 @@ const ProductCollection = () => {
             <BreadcrumbsDiv link={"/collection"} content={"Collection"} />
             <div style={{ padding: '0 48px' }}>
                 <header className={classes.header}>
-                    <Typography variant="h3">Dầu bôi trơn</Typography>
+                    <Typography variant="h3">Collection</Typography>
                     <div className={classes.sortSpan}>
                         <Button
                             className={classes.sortBtn}
@@ -132,21 +147,25 @@ const ProductCollection = () => {
                             open={Boolean(sortExpand)}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={handleClose}>A - Z</MenuItem>
-                            <MenuItem onClick={handleClose}>Z - A</MenuItem>
-                            <MenuItem onClick={handleClose}>Price: Hight - Low</MenuItem>
-                            <MenuItem onClick={handleClose}>Price: Low - Hight</MenuItem>
+                            <MenuItem onClick={(e) => handleSort(e, "name")}>A - Z</MenuItem>
+                            <MenuItem onClick={(e) => handleSort(e, "-name")}>Z - A</MenuItem>
+                            <MenuItem onClick={(e) => handleSort(e, "-price")}>Giá cao đến thấp</MenuItem>
+                            <MenuItem onClick={(e) => handleSort(e, "price")}>Giá thấp đến cao</MenuItem>
                         </Menu>
                     </div>
                 </header>
                 <Grid container>
                     <Grid item xs={2}>
-                        <div>
-                            <FormControl component="fieldset" className={classes.formControl}>
-                                <FormLabel className={classes.filterLabel}>
-                                    Nam châm
-                                    <ExpandMoreIcon className={classes.expandIcon} />
-                                </FormLabel>
+                        {/* < */}
+                        <Accordion defaultExpanded={true}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography>Nam châm</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
                                 <FormGroup>
                                     {magnetList.map((m) => {
                                         return (<FormControlLabel
@@ -157,15 +176,17 @@ const ProductCollection = () => {
                                         />)
                                     })}
                                 </FormGroup>
-                            </FormControl>
-                            <Divider />
-                        </div>
-                        <div>
-                            <FormControl component="fieldset" className={classes.formControl}>
-                                <FormLabel className={classes.filterLabel}>
-                                    Giá
-                                    <ExpandMoreIcon className={classes.expandIcon} />
-                                </FormLabel>
+                            </AccordionDetails>
+                        </Accordion>
+                        <Accordion defaultExpanded={true}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography>Giá</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
                                 <FormGroup>
                                     {priceList.map((price) => {
                                         return (<FormControlLabel
@@ -176,36 +197,39 @@ const ProductCollection = () => {
                                         />)
                                     })}
                                 </FormGroup>
-                            </FormControl>
-                            <Divider />
-                        </div>
-                        <div>
-                            <FormControl component="fieldset" className={classes.formControl}>
-                                <FormLabel className={classes.filterLabel}>
-                                    Thương hiệu
-                                    <ExpandMoreIcon className={classes.expandIcon} />
-                                </FormLabel>
-                                <FormGroup>
-                                    {brandList.map((brand) => {
-                                        return (<FormControlLabel
-                                            key={brand.value}
-                                            control={<Checkbox color="primary" value={brand.value} checked={brandSl === brand.value} onChange={(e) => handleChangeValue(e, setBrandSl)} />}
-                                            label={brand.label}
-                                            color="primary"
-                                        />)
-                                    })}
-                                </FormGroup>
-                            </FormControl>
-                            <Divider />
-                        </div>
+                            </AccordionDetails>
+                        </Accordion>
+                        <Accordion defaultExpanded={true}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography>Thương hiệu</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                            <FormGroup>
+                                {brandList.map((brand) => {
+                                    return (<FormControlLabel
+                                        key={brand.value}
+                                        control={<Checkbox color="primary" value={brand.value} checked={brandSl === brand.value} onChange={(e) => handleChangeValue(e, setBrandSl)} />}
+                                        label={brand.label}
+                                        color="primary"
+                                    />)
+                                })}
+                            </FormGroup>
+                            </AccordionDetails>
+                        </Accordion>
                     </Grid>
                     <Grid item xs={10} style={{ paddingLeft: '40px', marginTop: '24px' }}>
                         {
-                            product.loading ? (
+                            product.loading ?
                                 <Loading loading={true} />
-                            ) : (
-                                <ProductList product={product.products} />
-                            )
+                                :
+                                product.products.length > 0 ?
+                                    <ProductList product={product.products} />
+                                    :
+                                    <>Không có sản phẩm</>
                         }
                     </Grid>
                 </Grid>

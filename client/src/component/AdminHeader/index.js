@@ -113,14 +113,14 @@ const AdminHeader = (props) => {
                 </div>
                 <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
-                    <IconButton color="primary" size="large">
+                    {/* <IconButton color="primary" size="large">
                         <Badge badgeContent={4} color="error">
                             <MailIcon />
                         </Badge>
                     </IconButton>
                     <IconButton color="primary" size="large">
                         <MailIcon />
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton
                         color="primary"
                         ref={anchorRef}
@@ -139,8 +139,8 @@ const AdminHeader = (props) => {
                                 <Paper>
                                     <ClickAwayListener onClickAway={handleClose}>
                                         <MenuList className={classes.menuList} autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                                            <MenuItem onClick={handleClose}>My account</MenuItem>
-                                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                                            <MenuItem onClick={handleClose}>Đổi mật khẩu</MenuItem>
+                                            <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
                                         </MenuList>
                                     </ClickAwayListener>
                                 </Paper>

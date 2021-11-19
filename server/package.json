@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/VoR120/nien-luan#readme",
   "dependencies": {
+    "async": "^3.2.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cloudinary": "^1.26.3",

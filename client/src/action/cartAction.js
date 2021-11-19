@@ -2,18 +2,17 @@ import axios from "../helper/axios";
 
 export const getCart = async (dispatch) => {
     try {
-        const user = localStorage.getItem('user');
-        if (user != null) {
-            dispatch({ type: 'GET_CART_REQUEST' });
-            let config = {
-                method: 'GET',
-                url: '/api/cart/get',
-            }
-            const res = await axios(config);
-            console.log("Res cart: ", res.data);
-            if (res.status === 200)
-                dispatch({ type: 'GET_CART_SUCCESS', payload: { cartItems: res.data.cart_db.cartItems } })
+        // const user = localStorage.getItem('user');
+        // console.log(user);
+        dispatch({ type: 'GET_CART_REQUEST' });
+        let config = {
+            method: 'GET',
+            url: '/api/cart/get',
         }
+        const res = await axios(config);
+        console.log("Res cart: ", res.data);
+        if (res.status === 200)
+            dispatch({ type: 'GET_CART_SUCCESS', payload: { cartItems: res.data.cart_db.cartItems } })
     } catch (error) {
         console.log(error)
     }

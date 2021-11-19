@@ -9,6 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import React, { useContext, useState } from 'react';
 import { updateCategory } from '../../action/categoryAction';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
+import { SnackbarContext } from '../../contextAPI/SnackbarContext';
 const useStyles = makeStyles(theme => ({
     editBtn: {
         backgroundColor: theme.palette.success.main,
@@ -72,6 +73,7 @@ const createCategoryList = (categories, options = []) => {
 const EditCategoryForm = (props) => {
     const classes = useStyles();
     const { category, categoryDispatch } = useContext(CategoryContext);
+    const { openSnackbarDispatch } = useContext(SnackbarContext);
     const { name, parentId, _id } = props.form;
     const [nameUpdate, setNameUpdate] = useState(name);
     const [categoryParent, setCategoryParent] = useState(parentId || '');
@@ -86,7 +88,7 @@ const EditCategoryForm = (props) => {
         formData.append("name", nameUpdate);
         formData.append("parentId", categoryParent);
         formData.append("_id", _id);
-        updateCategory(categoryDispatch, formData)
+        updateCategory(categoryDispatch, formData, openSnackbarDispatch)
         handleClose();
     }
     return (
@@ -105,7 +107,7 @@ const EditCategoryForm = (props) => {
                                 size="small"
                                 value={categoryParent}
                                 onChange={(e) => setCategoryParent(e.target.value)}
-                                label="Nhóm hàng hóa cha"
+                                label="Nhóm hàng hóa lớn"
                             >
                                 <MenuItem value="">
                                     <em>Không</em>
