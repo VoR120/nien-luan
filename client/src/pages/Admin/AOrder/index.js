@@ -131,11 +131,18 @@ const AOrder = () => {
         {
             title: 'Trạng thái', field: 'paymentStatus', width: 140,
             render: (params) => {
-                return (
-                    <span style={{ color: getColor(getOrderStatus(params.orderStatus)) }}>
-                        {getStatus(getOrderStatus(params.orderStatus))}
-                    </span>
-                )
+                if (params.paymentStatus == "cancelled")
+                    return (
+                        <span style={{ color: "red" }}>
+                            Đã hủy
+                        </span>
+                    )
+                else
+                    return (
+                        <span style={{ color: getColor(getOrderStatus(params.orderStatus)) }}>
+                            {getStatus(getOrderStatus(params.orderStatus))}
+                        </span>
+                    )
             }
         },
         {
@@ -143,6 +150,7 @@ const AOrder = () => {
             render: (params) => {
                 return (
                     <Button
+                        disabled={params.paymentStatus == "cancelled"}
                         onClick={() => handleSubmit(params)}
                         size="small"
                         variant="contained" color="info"

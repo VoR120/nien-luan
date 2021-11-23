@@ -15,6 +15,8 @@ import { UserContext } from '../../../contextAPI/UserContext';
 import { userRegister } from '../../../action/userAction';
 import { SnackbarContent } from '@mui/material';
 import { SnackbarContext } from '../../../contextAPI/SnackbarContext';
+import MySnackBar from '../../../component/UI/MySnackBar';
+import CustomizedSnackbars from '../../../component/MySnackbar';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -62,7 +64,6 @@ export const Register = () => {
 
     const onSubmit = data => {
         userRegister(dispatch, data, openSnackbarDispatch);
-        history.push('/')
     };
 
     useEffect(() => {
@@ -114,7 +115,6 @@ export const Register = () => {
                                 id="fullName"
                                 label="Họ và tên"
                                 name="fullName"
-                                value="Vo Nguyen"
                                 autoComplete="fullName"
                                 error={Boolean(errors.fullName)}
                                 helperText={errors.fullName?.message}
@@ -133,7 +133,6 @@ export const Register = () => {
                                 id="birth"
                                 label="Ngày sinh"
                                 name="birth"
-                                value="1991-02-02"
                                 autoComplete="birth"
                                 InputLabelProps={{
                                     shrink: true
@@ -153,7 +152,6 @@ export const Register = () => {
                                 fullWidth
                                 id="address"
                                 label="Địa chỉ"
-                                value="abc"
                                 name="address"
                                 autoComplete="address"
                                 error={Boolean(errors.address)}
@@ -274,6 +272,7 @@ export const Register = () => {
             {/* <Box mt={8}>
         <Copyright />
       </Box> */}
+            <CustomizedSnackbars />
         </Container>
     );
 }

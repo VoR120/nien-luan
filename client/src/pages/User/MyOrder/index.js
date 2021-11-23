@@ -1,12 +1,13 @@
 import { circularProgressClasses, Grid, Paper, Skeleton, Typography, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useContext, useEffect, useState } from 'react';
-import { getOrder } from '../../../action/orderAction';
+import { cancelOrder, getOrder, updateOrder } from '../../../action/orderAction';
 import BreadcrumbsDiv from '../../../component/BreadcrumbsDiv';
 import Layout from '../../../component/Layout';
 import { OrderContext } from '../../../contextAPI/OrderContext'
 import NumberFormat from 'react-number-format';
 import RatingForm from '../../../component/RatingForm';
+import { OrderAdminContext } from '../../../contextAPI/OrderAdminContext';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -58,11 +59,19 @@ const getColor = (color) => {
 const MyOrder = () => {
     const classes = useStyles();
     const { order, orderDispatch } = useContext(OrderContext);
+    const { orderAdmin, orderAdminDispatch } = useContext(OrderAdminContext);
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
         getOrder(orderDispatch);
     }, [])
+
+    const handleCancelOrder = async (data) => {
+        console.log(data);
+        const res = await cancelOrder({ id: data._id }, "cancelled")
+        if (res.status == 200)
+            getOrder(orderDispatch);
+    }
 
     return (
         <Layout headfoot>
@@ -128,10 +137,15 @@ const MyOrder = () => {
                                         <Grid item style={{ marginTop: 14 }} sm={2}>
                                             {
                                                 item.paymentStatus == "completed" &&
-                                                <>
-                                                    <RatingForm products={item.items} />
-                                                    {/* <Button style={{ margin: '2px 0px' }} variant="outlined">Mua lại</Button> */}
-                                                </>
+                                                <RatingForm products={item.items} />
+                                            }
+                                            {
+                                                (item.paymentStatus == "cancelled") &&
+                                                <Button style={{ cursor: 'none !important' }} style={{ margin: '2px 0px' }} color="error" variant="outlined">Đã hủy</Button>
+                                            }
+                                            {
+                                                item.paymentStatus == "pending" &&
+                                                <Button onClick={() => handleCancelOrder(item)} style={{ margin: '2px 0px' }} color="error" variant="contained">Hủy đơn</Button>
                                             }
                                         </Grid>
                                     </Grid>

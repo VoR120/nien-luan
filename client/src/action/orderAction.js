@@ -80,3 +80,14 @@ export const updateOrder = async (dispatch, payload) => {
         console.log(error.response.data)
     }
 }
+
+export const cancelOrder = async (payload, type) => {
+    try {
+        const res = await axios.put('/api/cancelOrder', { _id: payload.id, type })
+        console.log(res);
+        if (res.status == 200)
+            return res;
+    } catch (error) {
+        console.log(error.response.data)
+    }
+}

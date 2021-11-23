@@ -63,16 +63,38 @@ exports.getAllOrder = async (req, res) => {
     }
 }
 
-exports.updateOrder = async (req, res) => {
-    const { _id, items, type } = req.body;
-    try {
-        const order_db = await Order.findOneAndUpdate({ _id, "orderStatus.type": type },
-            {
+const getTypeStatus = (type) => {
+    switch (type) {
+        case "delivered":
+            return {
+                "$set": {
+                    "orderStatus.$": [{ type: type, date: new Date(), isCompleted: true }],
+                    paymentStatus: "completed"
+                }
+            }
+            break;
+        case "cancelled":
+            return {
+                "$set": {
+                    paymentStatus: "cancelled"
+                }
+            }
+        default:
+            return {
                 "$set": {
                     "orderStatus.$": [{ type: type, date: new Date(), isCompleted: true }],
                 }
             }
-            , { new: true })
+            break;
+    }
+}
+
+exports.updateOrder = async (req, res) => {
+    const { _id, items, type } = req.body;
+    try {
+        const setValue = getTypeStatus(type);
+        console.log(setValue);
+        const order_db = await Order.findOneAndUpdate({ _id, "orderStatus.type": type }, setValue, { new: true })
             .populate("items.productId", "_id name productImages")
             .populate("user", "_id fullName email")
 
@@ -91,6 +113,24 @@ exports.updateOrder = async (req, res) => {
                 }))
             }
             res.status(200).json({ msg: "Thành công", order: order_db })
+        }
+    } catch (error) {
+        return res.status(400).json({ msg: error.message })
+    }
+}
+
+exports.cancelOrder = async (req, res) => {
+    const { _id, type } = req.body;
+    try {
+        const setValue = getTypeStatus(type);
+        console.log(setValue);
+        const order_db = await Order.findOneAndUpdate({ _id }, setValue, { new: true })
+        // .populate("items.productId", "_id name productImages")
+        // .populate("user", "_id fullName email")
+
+        console.log(order_db);
+        if (order_db) {
+            res.status(200).json({ msg: "Thành công" })
         }
     } catch (error) {
         return res.status(400).json({ msg: error.message })
