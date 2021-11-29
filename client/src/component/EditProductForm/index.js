@@ -24,7 +24,7 @@ import React, { useContext, useState } from 'react';
 import { updateProduct } from '../../action/productAction';
 import { CategoryContext } from '../../contextAPI/CategoryContext';
 import { ProductContext } from '../../contextAPI/ProductContext';
-import axios from '../../helper/axios';
+import aaxios from '../../helper/adminAxios';
 import { SnackbarContext } from '../../contextAPI/SnackbarContext';
 const useStyles = makeStyles(theme => ({
     button: {
@@ -143,7 +143,7 @@ const EditProductForm = (props) => {
             const formData = new FormData();
             file.forEach(f => formData.append('file', f))
             setLoading(true);
-            const res = await axios.post('/api/upload', formData);
+            const res = await aaxios.post('/api/upload', formData);
             setLoading(false)
             const imageArr = [];
             res.data.file.map((file) => {
@@ -161,7 +161,7 @@ const EditProductForm = (props) => {
             const removeImage = [];
             imageUpload.map(image => removeImage.push(image.public_id))
             setLoading(true);
-            const res = await axios.post('/api/delete', { public_id: removeImage });
+            const res = await aaxios.post('/api/delete', { public_id: removeImage });
             setLoading(false);
             if (res.status === 200)
                 setImageUpload([]);

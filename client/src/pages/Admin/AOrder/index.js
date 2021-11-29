@@ -125,10 +125,17 @@ const AOrder = () => {
         },
         { title: "Email", field: "email" },
         {
+            title: "Số điện thoại", field: "phoneNumber",
+            render: (params) => params.address.phoneNumber
+        },
+        {
             title: 'Tổng', field: 'totalAmount', width: 130, align: 'right',
             render: (params) => <NumberFormat value={params.totalAmount} displayType="text" thousandSeparator={true} suffix="₫" />
         },
-        { title: 'Địa chỉ', field: 'address', width: 500 },
+        {
+            title: 'Địa chỉ', field: 'address', width: 500,
+            render: (params) => params.address.address + ", " + params.address.district + ", " + params.address.province
+        },
         { title: 'Ngày đặt', field: 'createdAt', width: 150, align: 'right' },
         {
             title: 'Trạng thái', field: 'paymentStatus', width: 140,
@@ -169,7 +176,8 @@ const AOrder = () => {
             id: index + 1,
             _id,
             items,
-            address: address.address + ", " + address.district + ", " + address.province ,
+            phoneNumber: user.phoneNumber,
+            address: address,
             orderStatus,
             fullName: user.fullName,
             email: user.email,
@@ -200,7 +208,7 @@ const AOrder = () => {
     return (
         <LayoutAdmin sidebar>
             <Typography className={classes.title} variant="h3" color="primary">Đơn hàng</Typography>
-            <TableContainer style={{ maxWidth: "1170px", }} >
+            <TableContainer className="order-table" style={{ maxWidth: "1170px", }} >
                 <MaterialTable
                     components={{
                         Container: (props) => <Paper
@@ -239,6 +247,42 @@ const AOrder = () => {
                                     </Grid>
                                     <Grid item xs={7}>
                                         {orderDetail.email}
+                                    </Grid>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Divider className={classes.divider} />
+                                </Grid>
+                                <b>Thông tin người nhận hàng</b>
+                                <Grid item xs={12} container >
+                                    <Grid item xs={5}>
+                                        Họ tên
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        {orderDetail.address.name}
+                                    </Grid>
+                                </Grid>
+                                <Grid item xs={12} container>
+                                    <Grid item xs={5}>
+                                        Email
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        {orderDetail.email}
+                                    </Grid>
+                                </Grid>
+                                <Grid item xs={12} container>
+                                    <Grid item xs={5}>
+                                        Số điện thoại
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        {orderDetail.address.phoneNumber}
+                                    </Grid>
+                                </Grid>
+                                <Grid item xs={12} container>
+                                    <Grid item xs={5}>
+                                        Địa chỉ
+                                    </Grid>
+                                <Grid item xs={7}>
+                                        {orderDetail.address.address + ", " + orderDetail.address.district + ", " + orderDetail.address.province}
                                     </Grid>
                                 </Grid>
                                 <Grid item xs={12}>

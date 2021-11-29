@@ -1,0 +1,29 @@
+.MuiTable-root {
+    & .MuiTableCell-root {
+      white-space: nowrap;
+    }
+  }
+
+  .order-table {
+    table:first-child {
+      & tr {
+        &:hover {
+          background-color: #fff !important
+        };
+        & td:last-child,
+        th:last-child {
+          background-color: #fff;
+          position: sticky;
+          right: 0;
+          z-index: 10;
+        }
+        & td:nth-child(9),
+        th:nth-child(9) {
+          background-color: #fff;
+          position: sticky;
+          right: 137.1px;
+          z-index: 10;
+        }
+      }
+    }
+  }

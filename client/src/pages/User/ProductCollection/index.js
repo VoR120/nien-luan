@@ -111,6 +111,7 @@ const ProductCollection = () => {
     }
 
     const handleSort = (e, value) => {
+        handleClose()
         setSortSl(value);
     }
 

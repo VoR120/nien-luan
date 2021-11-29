@@ -53,7 +53,7 @@ exports.getAllOrder = async (req, res) => {
     try {
         const order_db = await Order.find({})
             .populate("items.productId", "_id name productImages").sort({ createdAt: -1 })
-            .populate("user", "_id fullName email")
+            .populate("user", "_id fullName email phoneNumber")
         console.log(order_db);
         if (order_db) {
             res.status(200).json({ msg: "Thành công", order: order_db })
@@ -96,7 +96,7 @@ exports.updateOrder = async (req, res) => {
         console.log(setValue);
         const order_db = await Order.findOneAndUpdate({ _id, "orderStatus.type": type }, setValue, { new: true })
             .populate("items.productId", "_id name productImages")
-            .populate("user", "_id fullName email")
+            .populate("user", "_id fullName email phoneNumber")
 
         console.log(order_db);
         if (order_db) {

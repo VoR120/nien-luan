@@ -32,10 +32,15 @@ export const getOrder = async (dispatch) => {
             url: '/api/getOrder/',
         }
         const res = await axios(config);
-        console.log(res);
+        const result = [...res.data.order];
+        await Promise.all((res.data.order.map(async (el, index) => {
+            const res = await aaxios.get('/api/user/address/getbyid/' + el.addressId);
+            result[index].address = res.data.address[0]
+        })))
+        console.log(result);
         dispatch({
             type: "GET_ORDER_SUCCESS",
-            payload: { orders: res.data.order }
+            payload: { orders: result }
         });
     } catch (error) {
         console.log(error)
@@ -53,7 +58,7 @@ export const getAllOrder = async (dispatch) => {
         const result = [...res.data.order];
         await Promise.all((res.data.order.map(async (el, index) => {
             const res = await aaxios.get('/api/user/address/getbyid/' + el.addressId);
-                result[index].address = res.data.address[0]
+            result[index].address = res.data.address[0]
         })))
         console.log(result);
         dispatch({
@@ -73,11 +78,14 @@ export const updateOrder = async (dispatch, payload) => {
         dispatch({ type: "UPDATE_ORDER_REQUEST" });
         const res = await aaxios.put('/api/updateOrder', { _id, items, type })
         console.log(res);
+        const result = {...res.data.order};
+        const res1 = await aaxios.get('/api/user/address/getbyid/' + result.addressId);
+        result.address = res1.data.address[0]
         if (res.status == 200) {
             dispatch({
                 type: "UPDATE_ORDER_SUCCESS",
                 payload: {
-                    order: res.data.order
+                    order: result
                 }
             })
         }

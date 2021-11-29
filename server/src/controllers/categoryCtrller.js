@@ -1,4 +1,5 @@
 const Category = require("../models/categoryModel");
+const Product = require("../models/productModel");
 const slugify = require('slugify');
 
 // Hàm tạo Category có thêm key chidren chứa các obj có parentId == _id
@@ -26,7 +27,7 @@ const createChildCategory = (categories, parentId = null) => {
 
 exports.getCategory = async (req, res) => {
     try {
-        const cate_db = await Category.find();
+        const cate_db = await Category.find().sort({ name: 1 });;
         const category_db = createChildCategory(cate_db);
         res.status(200).json({ category_db });
     } catch (error) {
@@ -73,8 +74,15 @@ exports.updateCategory = async (req, res) => {
 
 exports.deleteCategory = async (req, res) => {
     try {
-        const cate_db = await Category.findByIdAndDelete({ _id: req.params.id });
-        res.status(200).json({ msg: "Thành công!", data: cate_db })
+        const categoryFind = await Category.find({ parentId: req.params.id });
+        const productFind = await Product.find({ category: req.params.id })
+
+        if (categoryFind.length || productFind.length) {
+            res.status(400).json({ msg: "Danh mục này đang được sử dụng, không thể xóa!" });
+        } else {
+            const cate_db = await Category.findByIdAndDelete({ _id: req.params.id });
+            res.status(200).json({ msg: "Thành công!", data: cate_db })
+        }
     } catch (error) {
         return res.status(400).json({ msg: error.message });
     }

@@ -1,7 +1,8 @@
 import { Paper, Grid, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
+import NumberFormat from 'react-number-format';
 const useStyles = makeStyles(theme => ({
     paper: (props) => ({
         display: props.open ? 'block' : 'none',
@@ -59,11 +60,12 @@ const SearchFormContainer = (props) => {
                     {props.result.length > 0 ?
                         props.result.map(item => {
                             return (
-                                <Grid style={{cursor: 'pointer'}} onClick={() => handleRedirect(item.slug)} className={classes.item} item>
+                                <Grid style={{ cursor: 'pointer' }} onClick={() => handleRedirect(item.slug)} className={classes.item} item>
                                     <img className={classes.image} src={item.productImages[0].url} />
                                     <div>
-                                        {item.name}
-                                        {item.category.name}
+                                        {item.name}<br />
+                                        {item.category.name}<br />
+                                        <NumberFormat value={item.price} displayType="text" thousandSeparator={true} suffix="₫" />
                                     </div>
                                 </Grid>
                             )

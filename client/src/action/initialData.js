@@ -9,6 +9,8 @@ const getRate = (ratings) => {
 
 export const getInitialData = async (categoryDispatch, productDispatch) => {
     try {
+        categoryDispatch({ type: 'GET_ALL_CATEGORY_REQUEST' });
+        productDispatch({ type: 'GET_ALL_PRODUCT_REQUEST' });
         const res = await axios.get('/api/initialData/get')
 
         if (res.status === 200) {

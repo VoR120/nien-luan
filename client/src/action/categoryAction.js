@@ -133,10 +133,14 @@ export const deleteCategory = async (dispatch, payload, open) => {
 
     } catch (error) {
         console.log(error);
+        dispatch({
+            type: 'DELETE_CATEGORY_FAILED',
+            payload: { error: error.response.data.msg }
+        })
         open({
             type: 'SET_OPEN',
             payload: {
-                msg: "Đã xảy ra lỗi!",
+                msg: error.response.data.msg,
                 type: "error"
             }
         })

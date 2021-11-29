@@ -37,7 +37,7 @@ exports.getProduct = async (req, res) => {
         // console.log(req.query.category);
         if (req.query.category)
             req.query.category = await Category.findOne({ slug: req.query.category });
-        const features = new APIfeatures(Product.find(), req.query).filtering().sorting();
+        const features = new APIfeatures(Product.find({ isDeleted: false }), req.query).filtering().sorting();
         const product_db = await features.query;
         res.status(200).json({ product_db })
     } catch (error) {
@@ -106,7 +106,7 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
     try {
-        const product_db = await Product.findByIdAndDelete({ _id: req.params.id });
+        const product_db = await Product.findByIdAndUpdate({ _id: req.params.id }, { isDeleted: true });
         res.status(200).json({ msg: "Thành công!", data: product_db })
     } catch (error) {
         return res.status(400).json({ msg: error.message });

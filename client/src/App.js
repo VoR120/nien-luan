@@ -1,25 +1,22 @@
 import { Backdrop, CircularProgress } from "@mui/material";
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useContext, useEffect } from "react";
-import { Suspense } from "react";
-import { BrowserRouter as Router, Redirect, Switch, useHistory } from "react-router-dom";
+import React, { Suspense, useContext, useEffect } from "react";
+import { BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 import { isAdminLogin } from "./action/authAction";
-import { getAllCategory } from "./action/categoryAction";
-import { getAllOrder } from "./action/orderAction";
+import { getCart } from "./action/cartAction";
 import { getInitialData } from "./action/initialData";
-import { getAllProduct } from "./action/productAction";
-import { clearCart, getCart } from "./action/cartAction";
+import { getAllOrder } from "./action/orderAction";
 import { isUserLogin } from "./action/userAction";
 import ScrollToTop from "./component/HOC/ScrollToTop";
 import RouteList from "./config/routesConfig";
 import { AuthContext } from "./contextAPI/AuthContext";
 import { CartContext } from "./contextAPI/CartContext";
 import { CategoryContext } from "./contextAPI/CategoryContext";
-import { ProductContext } from "./contextAPI/ProductContext";
 import { OrderAdminContext } from "./contextAPI/OrderAdminContext";
+import { ProductContext } from "./contextAPI/ProductContext";
 import { UserContext } from "./contextAPI/UserContext";
 import { routes } from "./pages/routes";
-import MySnackBar from "./component/UI/MySnackBar";
+import './App.scss'
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {

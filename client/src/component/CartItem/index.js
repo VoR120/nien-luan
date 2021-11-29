@@ -8,6 +8,7 @@ import { removeCartItem, updateCart } from '../../action/cartAction';
 import { CartContext } from '../../contextAPI/CartContext';
 import img from '../../public/img/GAN-11-M-Pro-Mini-3x3-Stickerless-Bright_1024x1024.jpg';
 import { getProductDetail } from '../../action/productAction';
+import { ProductContext } from '../../contextAPI/ProductContext';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -50,6 +51,9 @@ const CartItem = (props) => {
     const { product, quantity, price, _id } = props.cartItem;
     const [quantityCart, setQuantityCart] = useState(quantity);
     const { cart, cartDispatch } = useContext(CartContext);
+    const product1 = useContext(ProductContext).product;
+    const quantityMax = product1.products.filter(el => el._id == product._id)
+
     const [loading, setLoading] = useState(false);
     const classes = useStyles();
 
@@ -91,7 +95,7 @@ const CartItem = (props) => {
                             onChange={handleChangeUpdate}
                             size="small"
                             type="number"
-                            inputProps={{ min: 1 }}
+                            inputProps={{ min: 1, max: quantityMax[0]?.quantity || 9999 }}
                             className={classes.number}
                             disabled={cart.loading}
                         />

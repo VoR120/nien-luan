@@ -1,5 +1,5 @@
 import { Menu, MenuItem, InputBase } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import SearchIcon from '@mui/icons-material/Search';
 import SearchFormContainer from '../SearchFormContainer';
@@ -50,17 +50,25 @@ const SearchForm = () => {
     const classes = useStyles()
     const [open, setOpen] = useState(false);
     const [result, setResult] = useState([]);
+    const [query, setQuery] = useState("");
     const handleChangeValue = async (e) => {
-        console.log(e.target.value);
-        if (e.target.value == "") {
-            setOpen(false);
-            setResult([])
-        } else {
-            let result = await searchProduct({ key: e.target.value });
-            setResult(result)
-            setOpen(true);
-        }
+        setQuery(e.target.value);
     }
+
+    useEffect(() => {
+        const fetchAPI = async () => {
+            let result = await searchProduct({ key: query });
+            setResult(result)
+        }
+        if (query == "") {
+            setOpen(false);
+            setResult([]);
+        } else {
+            setOpen(true);
+            fetchAPI();
+        }
+    }, [query])
+
     return (
         <>
             <div className={classes.search}>
@@ -78,7 +86,7 @@ const SearchForm = () => {
                     inputProps={{ 'aria-label': 'search' }}
                 />
             </div>
-            <SearchFormContainer result={result} open={open} setOpen={setOpen} />
+            <SearchFormContainer result={result} setResult={setResult} open={open} setOpen={setOpen} />
         </>
     );
 };
