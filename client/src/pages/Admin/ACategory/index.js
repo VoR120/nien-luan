@@ -129,6 +129,7 @@ const ACategory = () => {
                     options={{
                         padding: 'normal'
                     }}
+                    isLoading={category.loading}
                 />
             </TableContainer>
         </LayoutAdmin>

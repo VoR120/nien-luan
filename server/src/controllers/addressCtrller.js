@@ -56,3 +56,14 @@ exports.getAddress = async (req, res) => {
         return res.status(400).json({ msg: error.message })
     }
 }
+
+exports.getAddressById = async (req, res) => {
+    try {
+        const address_db = await UserAddress.findOne({ "address._id": req.params.id })
+        if (address_db) {
+            return res.status(200).json({ address: address_db.address.filter(el => el._id == req.params.id) })
+        }
+    } catch (error) {
+        return res.status(400).json({ msg: error.message })
+    }
+}

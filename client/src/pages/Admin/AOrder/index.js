@@ -15,6 +15,7 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(4)
     },
     table: {
+        display: 'block',
         width: '100%',
         backgroundColor: 'white',
         marginTop: '18px',
@@ -102,9 +103,9 @@ const AOrder = () => {
 
     const [columns] = useState([
         { title: 'STT', field: 'id', width: 20 },
-        { title: 'Khách hàng', field: 'fullName', maxWidth: 500 },
+        { title: 'Khách hàng', field: 'fullName', width: 500 },
         {
-            title: 'Đơn hàng', field: 'items', maxWidth: 500,
+            title: 'Đơn hàng', field: 'items', width: 700,
             render: (params) => {
                 return (
                     <>
@@ -127,6 +128,7 @@ const AOrder = () => {
             title: 'Tổng', field: 'totalAmount', width: 130, align: 'right',
             render: (params) => <NumberFormat value={params.totalAmount} displayType="text" thousandSeparator={true} suffix="₫" />
         },
+        { title: 'Địa chỉ', field: 'address', width: 500 },
         { title: 'Ngày đặt', field: 'createdAt', width: 150, align: 'right' },
         {
             title: 'Trạng thái', field: 'paymentStatus', width: 140,
@@ -162,11 +164,12 @@ const AOrder = () => {
         },
     ]);
     const [rows, setRows] = useState(orderAdmin.orders.map((order, index) => {
-        const { paymentStatus, totalAmount, _id, items, createdAt, user, orderStatus } = order;
+        const { paymentStatus, totalAmount, _id, items, createdAt, user, orderStatus, address } = order;
         return {
             id: index + 1,
             _id,
             items,
+            address: address.address + ", " + address.district + ", " + address.province ,
             orderStatus,
             fullName: user.fullName,
             email: user.email,

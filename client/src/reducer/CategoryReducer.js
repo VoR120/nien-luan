@@ -106,12 +106,12 @@ const CategoryReducer = (state, action) => {
             }
         case 'ADD_NEW_CATEGORY_FAILED':
             return {
-                ...initialState,
+                ...state,
                 error: action.payload.error
             }
         case 'UPDATE_CATEGORY_REQUEST':
             return {
-                ...initialState,
+                ...state,
                 loading: true,
             }
         case 'UPDATE_CATEGORY_SUCCESS':
@@ -126,7 +126,7 @@ const CategoryReducer = (state, action) => {
             }
         case 'UPDATE_CATEGORY_FAILED':
             return {
-                ...initialState,
+                ...state,
                 error: action.payload.error
             }
         case 'DELETE_CATEGORY_REQUEST':

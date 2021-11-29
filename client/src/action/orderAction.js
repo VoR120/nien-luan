@@ -50,10 +50,15 @@ export const getAllOrder = async (dispatch) => {
             url: '/api/getAllOrder/',
         }
         const res = await aaxios(config);
-        console.log(res);
+        const result = [...res.data.order];
+        await Promise.all((res.data.order.map(async (el, index) => {
+            const res = await aaxios.get('/api/user/address/getbyid/' + el.addressId);
+                result[index].address = res.data.address[0]
+        })))
+        console.log(result);
         dispatch({
             type: "GET_ALL_ORDER_SUCCESS",
-            payload: { orders: res.data.order }
+            payload: { orders: result }
         });
     } catch (error) {
         console.log(error)

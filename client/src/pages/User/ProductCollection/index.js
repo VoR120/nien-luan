@@ -72,13 +72,13 @@ const ProductCollection = () => {
     useEffect(() => {
         let filterArr = [];
         filterArr.push({ category: category })
-        getProduct(productDispatch, { filterArr: filterArr })
+        getProduct(productDispatch, { filterArr })
     }, [])
 
     useEffect(() => {
         let filterArr = [];
         filterArr.push({ category: category })
-        getProduct(productDispatch, { filterArr: filterArr })
+        getProduct(productDispatch, { filterArr })
     }, [category])
 
     useEffect(() => {
@@ -104,6 +104,7 @@ const ProductCollection = () => {
         { value: 'QiYi', label: 'QiYi', },
         { value: 'MoYu', label: 'MoYu', },
         { value: 'MoFang', label: 'MoFang', },
+        { value: 'YJ', label: 'YJ', },
     ]
     const handleClose = () => {
         setSortExpand(null);
