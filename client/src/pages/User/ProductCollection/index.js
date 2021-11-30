@@ -73,6 +73,9 @@ const ProductCollection = () => {
         let filterArr = [];
         filterArr.push({ category: category })
         getProduct(productDispatch, { filterArr })
+        return () => {
+            getAllProduct(productDispatch)
+        }
     }, [])
 
     useEffect(() => {

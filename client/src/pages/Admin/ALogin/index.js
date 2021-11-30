@@ -112,7 +112,6 @@ export const ALogin = () => {
             fullWidth
             id="email"
             label="Email"
-            value="gionguyen@gmail.com"
             name="email"
             autoComplete="email"
             error={Boolean(errors.email)}

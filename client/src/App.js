@@ -17,6 +17,7 @@ import { ProductContext } from "./contextAPI/ProductContext";
 import { UserContext } from "./contextAPI/UserContext";
 import { routes } from "./pages/routes";
 import './App.scss'
+import { getAllProduct } from "./action/productAction";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -51,7 +52,7 @@ function App() {
 
   useEffect(() => {
     isUserLogin(dispatch)
-    // getAllProduct(productDispatch);
+    getAllProduct(productDispatch);
     getCart(cartDispatch)
     if (!user.isAuthenticated) {
       return <Redirect to="/login" />

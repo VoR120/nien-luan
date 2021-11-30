@@ -30,7 +30,7 @@ export const userLogin = async (dispatch, payload, open) => {
     }
 };
 
-export const userRegister = async (dispatch, payload, open) => {
+export const userRegister = async (dispatch, payload, open, history) => {
     payload.role = "user"
     try {
         dispatch({ type: 'REGISTER_REQUEST' });
@@ -53,16 +53,17 @@ export const userRegister = async (dispatch, payload, open) => {
                     type: "success"
                 }
             })
+            history.push('/')
         }
     } catch (error) {
         dispatch({ type: 'REGISTER_FAILED', payload: { error: error.response.data } });
-        open({
-            type: 'SET_OPEN',
-            payload: {
-                msg: "Đã xảy ra lỗi, vui lòng thử lại!",
-                type: "error"
-            }
-        })
+        // open({
+        //     type: 'SET_OPEN',
+        //     payload: {
+        //         msg: "Đã xảy ra lỗi, vui lòng thử lại!",
+        //         type: "error"
+        //     }
+        // })
     }
 }
 

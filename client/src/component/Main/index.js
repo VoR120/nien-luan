@@ -42,7 +42,7 @@ const Main = () => {
                     Dễ sử dụng, thời gian duy trì lâu.`}
                 />
                 <SectionCategory
-                    link={"/collection/3x3"}
+                    link={"/collection/Phu-kien-chinh-sua"}
                     image={stickerImage}
                     title={"Bạn muốn trang trí khối rubik của bạn?"}
                     content={`Hãy mua sticker về và trang trí cho rubik bạn 

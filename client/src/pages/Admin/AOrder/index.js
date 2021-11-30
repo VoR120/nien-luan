@@ -155,7 +155,7 @@ const AOrder = () => {
             }
         },
         {
-            title: 'Xử lý', field: 'action', width: 150,
+            title: 'Xử lý', field: 'action', minWidth: 150,
             render: (params) => {
                 return (
                     <Button
@@ -187,6 +187,7 @@ const AOrder = () => {
         };
     }));
 
+    
     // useEffect(() => {
     //     getAllOrder(orderAdminDispatch);
     // }, [])

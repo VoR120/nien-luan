@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import React, { useContext, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { UserContext } from '../../../contextAPI/UserContext';
 import { userRegister } from '../../../action/userAction';
 import { SnackbarContent } from '@mui/material';
@@ -63,7 +63,7 @@ export const Register = () => {
     password.current = watch("password", "");
 
     const onSubmit = data => {
-        userRegister(dispatch, data, openSnackbarDispatch);
+        userRegister(dispatch, data, openSnackbarDispatch, history);
     };
 
     useEffect(() => {
@@ -256,15 +256,15 @@ export const Register = () => {
                         Đăng ký
                     </Button>
                     <Grid container>
-                        <Grid item xs>
+                        {/* <Grid item xs>
                             <Link href="#" variant="body2">
                                 Quên mật khẩu
                             </Link>
-                        </Grid>
+                        </Grid> */}
                         <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Chưa có tài khoản? Đăng ký"}
-                            </Link>
+                            <NavLink to="/login" variant="body2">
+                                {"Đã có tài khoản? Đăng nhập"}
+                            </NavLink>
                         </Grid>
                     </Grid>
                 </form>

@@ -79,7 +79,7 @@ const SectionCategory = (props) => {
                         >
                             {props.content}
                         </Typography>
-                        <Button className={classes.button}>
+                        <Button onClick={handleRedirect} className={classes.button}>
                             Mua ngay
                         </Button>
                     </Grid>

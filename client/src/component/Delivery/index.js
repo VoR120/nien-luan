@@ -25,6 +25,7 @@ import { AddressContext } from '../../contextAPI/AddressContext';
 import { getAddress, clearAddress, addAddress } from '../../action/addressAction';
 import NumberFormat from 'react-number-format';
 import './style.scss'
+import Loading from '../Loading';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -75,6 +76,7 @@ const Delivery = (props) => {
     const [addressChoose, setAddressChoose] = useState(null);
     const [deliveryPrice, setDeliveryPrice] = useState(30000);
     const [provinceChoose, setProvinceChoose] = useState(null);
+    const [loading, setLoading] = useState(false);
     const {
         register,
         handleSubmit,
@@ -86,6 +88,7 @@ const Delivery = (props) => {
     } = useForm();
 
     const handleAddAddress = (data) => {
+        setLoading(true);
         const provinceName = provinceAPI.filter(p => p.code === data.province);
         const districtName = districtArr.filter(d => d.code === data.district);
         addAddress(addressDispatch,
@@ -103,6 +106,7 @@ const Delivery = (props) => {
             }
         )
         setShowForm(false);
+        setLoading(false)
     }
 
     const onSubmit = () => {
@@ -141,96 +145,97 @@ const Delivery = (props) => {
     }, [province])
 
     return (
-        <Grid className="delivery-page" container spacing={2}>
-            <Grid xs={12}>
-                <Typography className={classes.header} variant="h2">
-                    Thông tin giao hàng
-                </Typography>
-            </Grid>
-            <Grid item container xs={8} fullWidth>
-                <div className={classes.address}>
-                    <FormControl component="fieldset" style={{ width: '100%' }}>
-                        <RadioGroup onChange={(e) => setAddressChoose(e.target.value)} value={addressChoose} aria-label="checkout" name="checkout">
-                            {address &&
-                                address.address.map((a) => {
-                                    return (
-                                        <FormControlLabel
-                                            onClick={(e) => handleChangeAddress(e, a)}
-                                            key={a._id}
-                                            className={classes.formRadio}
-                                            value={a._id}
-                                            control={<Radio color="primary" />}
-                                            label={
-                                                <Paper style={{ width: '100%' }} className={classes.paper} square variant="outlined">
-                                                    <Typography>Họ tên: {a.name}</Typography>
-                                                    <Typography>Địa chỉ: {a.address + ", " + a.district + ", " + a.province}</Typography>
-                                                    <Typography>Số điện thoại: {a.phoneNumber} </Typography>
-                                                </Paper>
+        <>
+            <Grid className="delivery-page" container spacing={2}>
+                <Grid xs={12}>
+                    <Typography className={classes.header} variant="h2">
+                        Thông tin giao hàng
+                    </Typography>
+                </Grid>
+                <Grid item container xs={8} fullWidth>
+                    <div className={classes.address}>
+                        <FormControl component="fieldset" style={{ width: '100%' }}>
+                            <RadioGroup onChange={(e) => setAddressChoose(e.target.value)} value={addressChoose} aria-label="checkout" name="checkout">
+                                {address &&
+                                    address.address.map((a) => {
+                                        return (
+                                            <FormControlLabel
+                                                onClick={(e) => handleChangeAddress(e, a)}
+                                                key={a._id}
+                                                className={classes.formRadio}
+                                                value={a._id}
+                                                control={<Radio color="primary" />}
+                                                label={
+                                                    <Paper style={{ width: '100%' }} className={classes.paper} square variant="outlined">
+                                                        <Typography>Họ tên: {a.name}</Typography>
+                                                        <Typography>Địa chỉ: {a.address + ", " + a.district + ", " + a.province}</Typography>
+                                                        <Typography>Số điện thoại: {a.phoneNumber} </Typography>
+                                                    </Paper>
+                                                }
+                                            />
+                                        )
+                                    })
+                                }
+                                <FormControlLabel
+                                    className={classes.formRadio}
+                                    onClick={() => setShowForm(true)}
+                                    value=""
+                                    control={<Radio color="primary" />}
+                                    label={
+                                        <Paper style={{ width: '100%', display: 'flex', alignItems: 'center' }} className={classes.paper} square variant="outlined">
+                                            <AddIcon style={{ marginRight: '8px' }} />
+                                            Thêm thông tin giao hàng
+                                        </Paper>
+                                    }
+                                />
+                            </RadioGroup>
+                        </FormControl>
+                    </div>
+                    {showForm && (
+                        <form>
+                            <FormControl margin="dense" fullWidth>
+                                <Grid container spacing={2}>
+                                    <Grid className={classes.input} item xs={6}>
+                                        <Controller
+                                            name={"firstName"}
+                                            control={control}
+                                            errors={errors}
+                                            defaultValue=""
+                                            rules={{ required: "Vui lòng nhập trường này" }}
+                                            render={({ field }) =>
+                                                <TextField
+                                                    label="Tên"
+                                                    {...field}
+                                                    fullWidth
+                                                    variant="outlined"
+                                                    error={!!errors.firstName}
+                                                    helperText={errors.firstName?.message}
+                                                />
+
                                             }
                                         />
-                                    )
-                                })
-                            }
-                            <FormControlLabel
-                                className={classes.formRadio}
-                                onClick={() => setShowForm(true)}
-                                value=""
-                                control={<Radio color="primary" />}
-                                label={
-                                    <Paper style={{ width: '100%', display: 'flex', alignItems: 'center' }} className={classes.paper} square variant="outlined">
-                                        <AddIcon style={{ marginRight: '8px' }} />
-                                        Thêm địa chỉ
-                                    </Paper>
-                                }
-                            />
-                        </RadioGroup>
-                    </FormControl>
-                </div>
-                {showForm && (
-                    <form>
-                        <FormControl margin="dense" fullWidth>
-                            <Grid container spacing={2}>
-                                <Grid className={classes.input} item xs={6}>
-                                    <Controller
-                                        name={"firstName"}
-                                        control={control}
-                                        errors={errors}
-                                        defaultValue=""
-                                        rules={{ required: "Vui lòng nhập trường này" }}
-                                        render={({ field }) =>
-                                            <TextField
-                                                label="Tên"
-                                                {...field}
-                                                fullWidth
-                                                variant="outlined"
-                                                error={!!errors.firstName}
-                                                helperText={errors.firstName?.message}
-                                            />
 
-                                        }
-                                    />
+                                    </Grid>
+                                    <Grid className={classes.input} item xs={6}>
+                                        <Controller
+                                            name={"lastName"}
+                                            control={control}
+                                            errors={errors}
+                                            defaultValue=""
+                                            rules={{ required: "Vui lòng nhập trường này" }}
+                                            render={({ field }) =>
+                                                <TextField
+                                                    label="Họ"
+                                                    {...field}
+                                                    fullWidth
+                                                    variant="outlined"
+                                                    error={!!errors.lastName}
+                                                    helperText={errors.lastName?.message}
+                                                />
 
-                                </Grid>
-                                <Grid className={classes.input} item xs={6}>
-                                    <Controller
-                                        name={"lastName"}
-                                        control={control}
-                                        errors={errors}
-                                        defaultValue=""
-                                        rules={{ required: "Vui lòng nhập trường này" }}
-                                        render={({ field }) =>
-                                            <TextField
-                                                label="Họ"
-                                                {...field}
-                                                fullWidth
-                                                variant="outlined"
-                                                error={!!errors.lastName}
-                                                helperText={errors.lastName?.message}
-                                            />
-
-                                        }
-                                    />
-                                    {/* <TextField
+                                            }
+                                        />
+                                        {/* <TextField
                                         {...register("lastName", {
                                             required: true,
                                             pattern: /^[A-Za-z]+$/i,
@@ -242,45 +247,45 @@ const Delivery = (props) => {
                                     {errors?.lastName?.type === "required" &&
                                         <FormHelperText error>Vui lòng nhập trường này!</FormHelperText>
                                     } */}
-                                </Grid>
-                                <Grid className={classes.input} item xs={6}>
-                                    <Controller
-                                        name={"province"}
-                                        control={control}
-                                        errors={errors}
-                                        defaultValue="0"
-                                        rules={{
-                                            validate: value =>
-                                                value != "0" || "Vui lòng nhập trường này!"
-                                        }}
-                                        render={({ field }) => (
-                                            <TextField
-                                                select
-                                                {...field}
-                                                onChange={handleChangeProvince}
-                                                // value={value}
-                                                fullWidth
-                                                variant="outlined"
-                                                error={!!errors.province}
-                                                helperText={errors.province?.message}
-                                                SelectProps={{
-                                                    MenuProps: {
-                                                        MenuListProps: {
-                                                            className: classes.menuList
+                                    </Grid>
+                                    <Grid className={classes.input} item xs={6}>
+                                        <Controller
+                                            name={"province"}
+                                            control={control}
+                                            errors={errors}
+                                            defaultValue="0"
+                                            rules={{
+                                                validate: value =>
+                                                    value != "0" || "Vui lòng nhập trường này!"
+                                            }}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    select
+                                                    {...field}
+                                                    onChange={handleChangeProvince}
+                                                    // value={value}
+                                                    fullWidth
+                                                    variant="outlined"
+                                                    error={!!errors.province}
+                                                    helperText={errors.province?.message}
+                                                    SelectProps={{
+                                                        MenuProps: {
+                                                            MenuListProps: {
+                                                                className: classes.menuList
+                                                            }
                                                         }
-                                                    }
-                                                }}
-                                            >
-                                                <MenuItem value="0">Tỉnh</MenuItem>
-                                                {provinceAPI.map((pro) =>
-                                                (
-                                                    <MenuItem key={pro.code} value={pro.code}>{pro.name}</MenuItem>
-                                                )
-                                                )}
-                                            </TextField>
-                                        )}
-                                    />
-                                    {/* <Controller
+                                                    }}
+                                                >
+                                                    <MenuItem value="0">Tỉnh</MenuItem>
+                                                    {provinceAPI.map((pro) =>
+                                                    (
+                                                        <MenuItem key={pro.code} value={pro.code}>{pro.name}</MenuItem>
+                                                    )
+                                                    )}
+                                                </TextField>
+                                            )}
+                                        />
+                                        {/* <Controller
                                         control={control}
                                         {...register("province", { required: true })}
                                         defaultValue="0"
@@ -300,45 +305,45 @@ const Delivery = (props) => {
                                     {errors?.province?.type === "required" &&
                                         <FormHelperText error>Vui lòng nhập trường này!</FormHelperText>
                                     } */}
-                                </Grid>
-                                <Grid className={classes.input} item xs={6}>
-                                    <Controller
-                                        name={"district"}
-                                        control={control}
-                                        errors={errors}
-                                        defaultValue="0"
-                                        rules={{
-                                            validate: value =>
-                                                value != "0" || "Vui lòng nhập trường này!"
-                                        }}
-                                        render={({ field }) => (
-                                            <TextField
-                                                select
-                                                {...field}
-                                                onChange={handleChangeDistrict}
-                                                // value={value}
-                                                fullWidth
-                                                variant="outlined"
-                                                error={!!errors.district}
-                                                helperText={errors.district?.message}
-                                                SelectProps={{
-                                                    MenuProps: {
-                                                        MenuListProps: {
-                                                            className: classes.menuList
+                                    </Grid>
+                                    <Grid className={classes.input} item xs={6}>
+                                        <Controller
+                                            name={"district"}
+                                            control={control}
+                                            errors={errors}
+                                            defaultValue="0"
+                                            rules={{
+                                                validate: value =>
+                                                    value != "0" || "Vui lòng nhập trường này!"
+                                            }}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    select
+                                                    {...field}
+                                                    onChange={handleChangeDistrict}
+                                                    // value={value}
+                                                    fullWidth
+                                                    variant="outlined"
+                                                    error={!!errors.district}
+                                                    helperText={errors.district?.message}
+                                                    SelectProps={{
+                                                        MenuProps: {
+                                                            MenuListProps: {
+                                                                className: classes.menuList
+                                                            }
                                                         }
+                                                    }}
+                                                >
+                                                    <MenuItem value="0">Huyện</MenuItem>
+                                                    {districtArr &&
+                                                        districtArr.map((pro) =>
+                                                            <MenuItem key={pro.code} value={pro.code}>{pro.name}</MenuItem>
+                                                        )
                                                     }
-                                                }}
-                                            >
-                                                <MenuItem value="0">Huyện</MenuItem>
-                                                {districtArr &&
-                                                    districtArr.map((pro) =>
-                                                        <MenuItem key={pro.code} value={pro.code}>{pro.name}</MenuItem>
-                                                    )
-                                                }
-                                            </TextField>
-                                        )}
-                                    />
-                                    {/* <Controller
+                                                </TextField>
+                                            )}
+                                        />
+                                        {/* <Controller
                                         control={control}
                                         defaultValue="0"
                                         {...register("district", { required: true })}
@@ -358,27 +363,27 @@ const Delivery = (props) => {
                                     {errors?.district?.type === "required" &&
                                         <FormHelperText error>Vui lòng nhập trường này!</FormHelperText>
                                     } */}
-                                </Grid>
-                                <Grid className={classes.input} item xs={12}>
-                                    <Controller
-                                        name={"locality"}
-                                        control={control}
-                                        errors={errors}
-                                        defaultValue=""
-                                        rules={{ required: "Vui lòng nhập trường này" }}
-                                        render={({ field }) =>
-                                            <TextField
-                                                label="Địa chỉ cụ thể"
-                                                {...field}
-                                                fullWidth
-                                                variant="outlined"
-                                                error={!!errors.locality}
-                                                helperText={errors.locality?.message}
-                                            />
+                                    </Grid>
+                                    <Grid className={classes.input} item xs={12}>
+                                        <Controller
+                                            name={"locality"}
+                                            control={control}
+                                            errors={errors}
+                                            defaultValue=""
+                                            rules={{ required: "Vui lòng nhập trường này" }}
+                                            render={({ field }) =>
+                                                <TextField
+                                                    label="Địa chỉ cụ thể"
+                                                    {...field}
+                                                    fullWidth
+                                                    variant="outlined"
+                                                    error={!!errors.locality}
+                                                    helperText={errors.locality?.message}
+                                                />
 
-                                        }
-                                    />
-                                    {/* <TextField
+                                            }
+                                        />
+                                        {/* <TextField
                                         {...register("locality", {
                                             required: true,
                                             pattern: /^[A-Za-z]+$/i,
@@ -390,33 +395,33 @@ const Delivery = (props) => {
                                     {errors?.locality?.type === "required" &&
                                         <FormHelperText error>Vui lòng nhập trường này!</FormHelperText>
                                     } */}
-                                </Grid>
-                                <Grid className={classes.input} item xs={12}>
-                                    <Controller
-                                        name={"phone"}
-                                        control={control}
-                                        errors={errors}
-                                        defaultValue=""
-                                        rules={{
-                                            required: "Vui lòng nhập trường này",
-                                            pattern: {
-                                                value: /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/,
-                                                message: "Số điện thoại không hợp lệ"
-                                            }
-                                        }}
-                                        render={({ field }) =>
-                                            <TextField
-                                                label="Số điện thoại"
-                                                {...field}
-                                                fullWidth
-                                                variant="outlined"
-                                                error={!!errors.phone}
-                                                helperText={errors.phone?.message}
-                                            />
+                                    </Grid>
+                                    <Grid className={classes.input} item xs={12}>
+                                        <Controller
+                                            name={"phone"}
+                                            control={control}
+                                            errors={errors}
+                                            defaultValue=""
+                                            rules={{
+                                                required: "Vui lòng nhập trường này",
+                                                pattern: {
+                                                    value: /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/,
+                                                    message: "Số điện thoại không hợp lệ"
+                                                }
+                                            }}
+                                            render={({ field }) =>
+                                                <TextField
+                                                    label="Số điện thoại"
+                                                    {...field}
+                                                    fullWidth
+                                                    variant="outlined"
+                                                    error={!!errors.phone}
+                                                    helperText={errors.phone?.message}
+                                                />
 
-                                        }
-                                    />
-                                    {/* <TextField
+                                            }
+                                        />
+                                        {/* <TextField
                                         {...register("phone", {
                                             required: true,
                                             pattern: /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/,
@@ -431,44 +436,46 @@ const Delivery = (props) => {
                                     {errors?.phone?.type === "pattern" &&
                                         <FormHelperText error>Số điện thoại không hợp lệ!</FormHelperText>
                                     } */}
+                                    </Grid>
+                                    <Grid className={classes.input} item xs={12}>
+                                        <Button onClick={handleSubmit(handleAddAddress)} className={classes.mainBtn} fullWidth>Thêm</Button>
+                                    </Grid>
                                 </Grid>
-                                <Grid className={classes.input} item xs={12}>
-                                    <Button onClick={handleSubmit(handleAddAddress)} className={classes.mainBtn} fullWidth>Thêm địa chỉ</Button>
-                                </Grid>
-                            </Grid>
-                        </FormControl>
-                    </form>
-                )}
+                            </FormControl>
+                        </form>
+                    )}
 
-                <Grid xs={12}>
-                    <Typography className={classes.header} variant="h2">
-                        Vận chuyển
-                    </Typography>
-                    <Paper className={classes.paper} square variant="outlined">
-                        <Typography className={classes.header} variant="h5">Giao hàng tiêu chuẩn
-                            <span className={classes.priceSpan}>
-                                {deliveryPrice === 0 ?
-                                    <span>Miễn phí</span>
-                                    :
-                                    <span><NumberFormat value={deliveryPrice} displayType="text" thousandSeparator={true} suffix="₫" /></span>
-                                }
-                            </span>
+                    <Grid xs={12}>
+                        <Typography className={classes.header} variant="h2">
+                            Vận chuyển
                         </Typography>
-                        <Typography variant="h5">Vận chuyển trong khu vực tỉnh Cần Thơ: Miễn phí</Typography>
-                        <Typography variant="h5">Vận chuyển ngoài tỉnh với đơn &gt; 300.000 VND: Miễn phí</Typography>
-                        <Typography variant="h5">Vận chuyển ngoài tỉnh: 30.000 VND</Typography>
-                    </Paper>
+                        <Paper className={classes.paper} square variant="outlined">
+                            <Typography className={classes.header} variant="h5">Giao hàng tiêu chuẩn
+                                <span className={classes.priceSpan}>
+                                    {deliveryPrice === 0 ?
+                                        <span>Miễn phí</span>
+                                        :
+                                        <span><NumberFormat value={deliveryPrice} displayType="text" thousandSeparator={true} suffix="₫" /></span>
+                                    }
+                                </span>
+                            </Typography>
+                            <Typography variant="h5">Vận chuyển trong khu vực tỉnh Cần Thơ: Miễn phí</Typography>
+                            <Typography variant="h5">Vận chuyển ngoài tỉnh với đơn &gt; 300.000 VND: Miễn phí</Typography>
+                            <Typography variant="h5">Vận chuyển ngoài tỉnh: 30.000 VND</Typography>
+                        </Paper>
+                    </Grid>
+                </Grid>
+                <Grid item xs={4}>
+                    <OrderSummary
+                        delivery
+                        setDeliveryPrice={setDeliveryPrice}
+                        provinceChoose={provinceChoose}
+                    />
+                    <Button disabled={addressChoose == null || showForm} onClick={handleSubmit(onSubmit)} className={classes.mainBtn} fullWidth>Thanh toán</Button>
                 </Grid>
             </Grid>
-            <Grid item xs={4}>
-                <OrderSummary
-                    delivery
-                    setDeliveryPrice={setDeliveryPrice}
-                    provinceChoose={provinceChoose}
-                />
-                <Button disabled={addressChoose == null || showForm} onClick={handleSubmit(onSubmit)} className={classes.mainBtn} fullWidth>Thanh toán</Button>
-            </Grid>
-        </Grid>
+            <Loading loading={loading} />
+        </>
     );
 };
 

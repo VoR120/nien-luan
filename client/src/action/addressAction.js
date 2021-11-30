@@ -21,6 +21,7 @@ export const getAddress = async (dispatch) => {
 }
 
 export const addAddress = async (dispatch, payload) => {
+    console.log(payload);
     try {
         dispatch({ type: 'ADD_USER_ADDRESS_REQUEST' });
         let config = {

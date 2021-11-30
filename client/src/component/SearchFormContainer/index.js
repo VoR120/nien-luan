@@ -47,6 +47,7 @@ const SearchFormContainer = (props) => {
     const classes = useStyles(props);
     const history = useHistory();
     const handleRedirect = (slug) => {
+        props.setOpen(false);
         history.push('/productdetail/' + slug)
     }
 

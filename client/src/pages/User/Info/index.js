@@ -128,7 +128,7 @@ const Info = () => {
                             <Typography className={classes.headerAcc}>Thông tin giao hàng</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            {address?.address.length > 0 &&
+                            {address?.address.length > 0 ?
                                 address.address.map((el, index) =>
                                     <Grid className={classes.item} key={index} container>
                                         <Grid item xs={3}>{index + 1}</Grid>
@@ -151,7 +151,10 @@ const Info = () => {
                                         </Grid>
                                     </Grid>
 
-                                )}
+                                )
+                                :
+                                <Typography alignItems="center">Không có thông tin giao hàng</Typography>
+                            }
                         </AccordionDetails>
                     </Accordion>
                     <Accordion variant="outlined" square>
