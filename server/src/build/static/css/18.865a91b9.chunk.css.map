@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/component/Delivery/style.scss"],"names":[],"mappings":"AAAA,6BACI,qBAAsB","file":"18.865a91b9.chunk.css","sourcesContent":[".delivery-page .Mui-disabled {\r\n    background-color: gray;\r\n}"]}

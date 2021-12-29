@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/VoR120/nien-luan.git"
+    "url": "git+https://github.com/VoR120/rubik-shop-mern.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/VoR120/nien-luan/issues"
+    "url": "https://github.com/VoR120/rubik-shop-mern/issues"
   },
-  "homepage": "https://github.com/VoR120/nien-luan#readme",
+  "homepage": "https://github.com/VoR120/rubik-shop-mern#readme",
   "dependencies": {
     "async": "^3.2.2",
     "bcryptjs": "^2.4.3",
