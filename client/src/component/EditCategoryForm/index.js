@@ -17,6 +17,9 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: theme.palette.success.dark,
         }
     },
+    icon: {
+        cursor: 'pointer'
+    },
     button: {
         marginBottom: theme.spacing(2),
     },

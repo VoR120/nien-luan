@@ -51,7 +51,8 @@ const useStyles = makeStyles(theme => ({
     },
     btns: {
         display: 'flex',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        paddingBottom: '20px'
     },
     xBtn: {
         position: 'absolute',
@@ -59,7 +60,7 @@ const useStyles = makeStyles(theme => ({
         right: '0px',
         backgroundColor: theme.palette.secondary.main,
         boxShadow: 'none'
-    }
+    },
 }))
 
 const AddToCartDialog = (props) => {
@@ -75,7 +76,7 @@ const AddToCartDialog = (props) => {
 
     return (
         <>
-            <Dialog PaperProps={{ style: { maxWidth: '360px' } }} fullWidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <Dialog PaperProps={{ style: { maxWidth: '400px' } }} fullWidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle>
                     <Fab onClick={handleClose} size="small" className={classes.xBtn}>
                         <ClearIcon />

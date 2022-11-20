@@ -1,11 +1,10 @@
 import axios from 'axios';
-import { api } from '../config/urlConfig';
 
 const token = JSON.parse(window.localStorage.getItem('token'));
 console.log(token);
 
 const axiosIntance = axios.create({
-  baseURL: api,
+  baseURL: 'http://localhost:5000',
 });
 
 export default axiosIntance;

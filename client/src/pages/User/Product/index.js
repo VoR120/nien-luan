@@ -70,7 +70,10 @@ const ProductDetail = () => {
                         <ProductSkeleton />
                     }
                 </Grid>
-                <Section loading={loading2} title="Sản phẩm liên quan" products={productRelate} />
+                {
+                    productRelate.length > 0 &&
+                    <Section loading={loading2} title="Sản phẩm liên quan" products={productRelate} />
+                }
             </div>
         </Layout>
     );

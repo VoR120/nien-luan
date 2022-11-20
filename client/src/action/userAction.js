@@ -14,13 +14,13 @@ export const userLogin = async (dispatch, payload, open) => {
             const { token, user } = res.data
             console.log(res.data);
             dispatch({ type: 'LOGIN_SUCCESS', payload: { token, user } });
-            open({
-                type: 'SET_OPEN',
-                payload: {
-                    msg: "Đã đăng nhập!",
-                    type: "success"
-                }
-            })
+            // open({
+            //     type: 'SET_OPEN',
+            //     payload: {
+            //         msg: "Đã đăng nhập!",
+            //         type: "success"
+            //     }
+            // })
             localStorage.setItem('token', JSON.stringify(token));
             localStorage.setItem('user', JSON.stringify(user));
             axios.defaults.headers.common['Authorization'] = token;
@@ -85,13 +85,13 @@ export const isUserLogin = (dispatch) => {
 
 export const userLogout = async (dispatch, open) => {
     dispatch({ type: 'LOGOUT' });
-    open({
-        type: 'SET_OPEN',
-        payload: {
-            msg: "Đã đăng xuất!",
-            type: "success"
-        }
-    })
+    // open({
+    //     type: 'SET_OPEN',
+    //     payload: {
+    //         msg: "Đã đăng xuất!",
+    //         type: "success"
+    //     }
+    // })
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 }

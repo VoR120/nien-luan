@@ -30,6 +30,9 @@ const useStyles = makeStyles(theme => ({
     button: {
         marginBottom: theme.spacing(2),
     },
+    icon: {
+        cursor: 'pointer'
+    },
     dialogContent: {
         marginBottom: theme.spacing(2),
         display: 'flex',

@@ -89,7 +89,7 @@ const Header = () => {
                             (
                                 <>
                                     <Typography color="primary" className={classes.typo}>{user.userDetails.fullName}</Typography>
-                                    <Typography onClick={handleLogout} color="primary" className={classes.typo} className={classes.typo}>Đăng xuất</Typography>
+                                    <Typography onClick={handleLogout} color="primary" className={classes.typo}>Đăng xuất</Typography>
                                     <Typography onClick={() => { history.push('/info') }} color="primary" className={classes.typo}>Thông tin</Typography>
                                     <Typography onClick={() => { history.push('/myorder') }} color="primary" className={classes.typo}>Đơn hàng</Typography>
                                 </>

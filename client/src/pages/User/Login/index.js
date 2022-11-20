@@ -20,13 +20,28 @@ import { SnackbarContext } from '../../../contextAPI/SnackbarContext';
 import { CartContext } from '../../../contextAPI/CartContext';
 import { userLogin } from '../../../action/userAction';
 import { getCart } from '../../../action/cartAction';
+import bg from '../../../public/img/login_banner.webp'
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    backgroundImage: `url(${bg})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center center',
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: '100px'
+  },
   paper: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    background: '#fff',
+    padding: '40px 24px',
+    borderRadius: '16px',
+    width: '396px',
+    height: 'fit-content'
   },
   avatar: {
     margin: theme.spacing(1),
@@ -94,7 +109,7 @@ export const Login = () => {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <div className={classes.container}>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -167,7 +182,7 @@ export const Login = () => {
           </Grid>
         </form>
       </div>
-    </Container>
+    </div>
   );
 }
 
